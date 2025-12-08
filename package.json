@@ -9,6 +9,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.6",
     "astro": "^5.16.3"
   },
   "name": "payday-app",
