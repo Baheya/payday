@@ -5,6 +5,15 @@ export default [
   ...eslintPluginAstro.configs.recommended,
   ...eslintPluginAstro.configs["jsx-a11y-recommended"],
   {
+    languageOptions: {
+      parser: "@typescript-eslint/parser",
+      parserOptions: {
+        project: "./tsconfig.eslint.json",
+        extraFileExtensions: [".astro"],
+      },
+    },
+  },
+  {
     files: ["*.astro"],
     languageOptions: {
       parser: "astro-eslint-parser",
