@@ -3,7 +3,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "prepare": "husky && husky install"
+    "prepare": "husky && husky install",
+    "check": "astro check && tsc --noEmit"
   },
   "dependencies": {
     "astro": "^5.16.3"
@@ -14,7 +15,8 @@
   "devDependencies": {
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
-    "prettier": "3.7.3"
+    "prettier": "3.7.3",
+    "typescript": "^5.9.3"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +24,6 @@
   "description": "",
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown",
-    "*.{js,css,md}": "prettier --write"
+    "*.{js,css,md,ts,tsx,jsx,astro}": "prettier --write"
   }
 }
