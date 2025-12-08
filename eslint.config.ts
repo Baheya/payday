@@ -5,19 +5,13 @@ export default [
     ...eslintPluginAstro.configs.recommended,
     ...eslintPluginAstro.configs["jsx-a11y-recommended"],
     {
-        // files: ["*.astro"],
-        // parser: "astro-eslint-parser",
+        files: ["*.astro"],
+        parser: "astro-eslint-parser",
         // parserOptions: {
         //   parser: "@typescript-eslint/parser",
         //   extraFileExtensions: [".astro"],
         //   project: "./tsconfig.eslint.json",
         // },
         // ...
-    },
-    {
-        rules: {
-            // override/add rules settings here, such as:
-            // "astro/no-set-html-directive": "error"
-        },
     },
 ];
