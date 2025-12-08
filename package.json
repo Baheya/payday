@@ -4,7 +4,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "prepare": "husky && husky install",
-    "check": "astro check && tsc --noEmit"
+    "check": "astro check && tsc --noEmit",
+    "lint": "npm run format && eslint --ext .ts --ext .tsx --ext .js --ext .jsx --ext astro .",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "astro": "^5.16.3"
@@ -13,7 +15,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "devDependencies": {
+    "@typescript-eslint/parser": "^8.48.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-astro": "^1.5.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
     "husky": "^9.1.7",
+    "jiti": "^2.6.1",
     "lint-staged": "^16.2.7",
     "prettier": "3.7.3",
     "typescript": "^5.9.3"
