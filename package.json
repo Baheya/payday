@@ -2,7 +2,8 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "prepare": "husky && husky install"
   },
   "dependencies": {
     "astro": "^5.16.3"
@@ -10,9 +11,17 @@
   "name": "payday-app",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "3.7.3"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown",
+    "*.{js,css,md}": "prettier --write"
+  }
 }
