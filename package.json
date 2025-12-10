@@ -6,7 +6,7 @@
     "prepare": "husky && husky install",
     "check": "astro check && tsc --noEmit",
     "lint": "npm run format && eslint --ext .ts --ext .tsx --ext .js --ext .jsx --ext astro .",
-    "format": "prettier --write ."
+    "format": "prettier --write . && stylelint \"**/*.css\" --fix"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",
@@ -26,6 +26,9 @@
     "jiti": "^2.6.1",
     "lint-staged": "^16.2.7",
     "prettier": "3.7.3",
+    "stylelint": "^16.26.1",
+    "stylelint-config-standard": "^39.0.1",
+    "stylelint-no-unsupported-browser-features": "^8.0.5",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.49.0"
   },
