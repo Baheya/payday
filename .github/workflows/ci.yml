@@ -1,4 +1,4 @@
-name: autofix.ci # needed to securely identify the workflow
+name: CI
 
 on:
   pull_request:
@@ -8,13 +8,16 @@ permissions:
   contents: read
 
 jobs:
-  autofix:
+  lint:
     runs-on: ubuntu-latest
+    continue-on-error: false
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
 
       - run: npm ci
-      - run: npx prettier --write .
-
-      - uses: autofix-ci/action@635ffb0c9798bd160680f18fd73371e355b85f27
+      - run: npm run check
+      - run: npm run lint
