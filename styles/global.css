@@ -1,0 +1,62 @@
+:root {
+  /* Colors */
+  --beige-500: #98908b;
+  --beige-100: #f8f4f0;
+  --grey-900: #201f24;
+  --grey-500: #696868;
+  --grey-300: #b3b3b3;
+  --grey-100: #f2f2f2;
+  --green: #277c78;
+  --yellow: #f2cdac;
+  --cyan: #82c9d7;
+  --navy: #626070;
+  --red: #c94736;
+  --purple: #826cb0;
+  --lavender: #af81ba;
+  --turquoise: #597c7c;
+  --brown: #93674f;
+  --magenta: #934f6f;
+  --blue: #3f82b2;
+  --navy-grey: #97a0ac;
+  --army-green: #7f9161;
+  --gold: #cab361;
+  --orange: #be6c49;
+  --white: #fff;
+
+  /* Fonts */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.25rem;
+  --dont-size-xl: 2rem;
+
+  /* Spacing */
+  --spacing-500: 40px;
+  --spacing-400: 32px;
+  --spacing-300: 24px;
+  --spacing-250: 20px;
+  --spacing-200: 16px;
+  --spacing-150: 12px;
+  --spacing-100: 8px;
+  --spacing-50: 4px;
+
+  @font-face {
+    font-family: "Public Sans";
+    font-display: swap;
+    font-weight: 400;
+    src: url("fonts/PublicSans_Regular.ttf") format("ttf");
+  }
+
+  @font-face {
+    font-family: "Public Sans Bold";
+    font-display: swap;
+    font-weight: 700;
+    src: url("fonts/PublicSans_Bold.ttf") format("ttf");
+  }
+
+  body {
+    font-family: "Public Sans", sans-serif;
+    color: var(--grey-900);
+    font-size: var(--font-size-base);
+  }
+}
