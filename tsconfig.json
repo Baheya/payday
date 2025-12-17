@@ -1,8 +1,13 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*.ts", "**/*.tsx", "**/*.astro"],
+  "include": [".astro/types.d.ts", "**/*.ts", "**/*.tsx", "**/*.astro", "**/*"],
+  "exclude": ["dist"],
   "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "skipLibCheck": true,
     "isolatedModules": true,
+    "verbatimModuleSyntax": true,
     "baseUrl": ".",
     "paths": {
       "@src/*": ["src/*"]

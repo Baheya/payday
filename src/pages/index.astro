@@ -1,5 +1,8 @@
 ---
-import "../../styles/global.css";
+import Card from "@src/components/Card/Card.astro";
+import CardGrid from "@src/components/CardGrid/CardGrid.astro";
+
+import "../styles/global.css";
 ---
 
 <!doctype html>
@@ -20,7 +23,11 @@ import "../../styles/global.css";
   <body>
     Overview Transactions Budgets Pots Recurring Bills Minimize Menu Overview
     Current Balance
-    <!-- Add balance -->
+    <CardGrid>
+      <Card eyebrow="Current Balance" text="$4,836.00" />
+      <Card eyebrow="Income" text="$3,814.25" background="light" />
+      <Card eyebrow="Expenses" text="$1,700.50" background="light" />
+    </CardGrid>
 
     Income
     <!-- Add income -->
