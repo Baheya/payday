@@ -1,0 +1,18 @@
+---
+import style from "./style.module.css";
+
+interface Props {
+  eyebrow: string;
+  text: string;
+  background?: "light" | "dark";
+}
+
+const { eyebrow, text, background = "dark" } = Astro.props;
+---
+
+<li class:list={[style.card, style[background]]}>
+  <div class={style.content}>
+    <span class={style.eyebrow}>{eyebrow}</span>
+    <span class={style.text}>{text}</span>
+  </div>
+</li>

@@ -1,0 +1,38 @@
+.card {
+  padding: 20px;
+  border-radius: 12px;
+  background-color: var(--grey-900);
+  color: var(--white);
+  list-style-type: none;
+
+  @media (--sm-viewport) {
+    padding: 24px;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-150);
+  }
+
+  .eyebrow {
+    @mixin text-sm;
+
+    font-weight: 400;
+  }
+
+  .text {
+    @mixin text-xl;
+
+    font-weight: 700;
+  }
+}
+
+.light {
+  .eyebrow {
+    color: var(--grey-500);
+  }
+
+  background-color: var(--white);
+  color: var(--grey-900);
+}
