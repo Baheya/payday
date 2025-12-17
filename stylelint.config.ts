@@ -6,10 +6,11 @@ export default {
       true,
       {
         severity: "warning",
-        ignore: "css-nesting",
+        ignore: ["css-nesting"],
         ignorePartialSupport: true,
       },
     ],
     "custom-property-empty-line-before": null,
+    "at-rule-no-unknown": null,
   },
 };

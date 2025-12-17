@@ -1,9 +1,10 @@
-import eslintPluginAstro from "eslint-plugin-astro";
-import { defineConfig } from "eslint/config";
 import eslint from "@eslint/js";
-import tseslint from "typescript-eslint";
-import globals from "globals";
+import eslintPluginAstro from "eslint-plugin-astro";
 import compat from "eslint-plugin-compat";
+import perfectionist from "eslint-plugin-perfectionist";
+import { defineConfig } from "eslint/config";
+import globals from "globals";
+import tseslint from "typescript-eslint";
 
 export default defineConfig([
   eslint.configs.recommended,
@@ -17,12 +18,34 @@ export default defineConfig([
     languageOptions: {
       parserOptions: {
         parser: "@typescript-eslint/parser",
-        projectService: "tsconfig.eslint.json",
       },
       globals: {
         ...globals.browser,
         ...globals.node,
       },
+    },
+    plugins: {
+      perfectionist,
+    },
+    rules: {
+      "perfectionist/sort-imports": [
+        "error",
+        {
+          fallbackSort: { type: "type-import-first", order: "asc" },
+          tsconfig: {
+            rootDir: ".",
+          },
+          groups: [
+            "type-import",
+            { newLineBetween: 1 },
+            "value-import",
+            { newLineBetween: 1 },
+            "value-side-effect",
+            { newLineBetween: 1 },
+            "unknown",
+          ],
+        },
+      ],
     },
   },
   {
