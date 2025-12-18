@@ -1,0 +1,36 @@
+.container {
+  padding-inline: var(--spacing-250);
+  border-inline-start: 4px solid var(--green);
+  list-style-type: none;
+
+  &.cyan {
+    border-inline-start-color: var(--cyan);
+  }
+
+  &.yellow {
+    border-inline-start-color: var(--yellow);
+  }
+
+  &.navy {
+    border-inline-start-color: var(--navy);
+  }
+
+  .label {
+    @mixin text-xs;
+
+    font-weight: 400;
+    color: var(--grey-500);
+  }
+
+  .value {
+    @mixin text-sm;
+
+    font-weight: 700;
+  }
+
+  .detail {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-50);
+  }
+}

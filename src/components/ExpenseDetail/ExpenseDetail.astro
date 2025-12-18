@@ -1,0 +1,18 @@
+---
+import style from "./style.module.css";
+
+interface Props {
+  label: string;
+  value: string;
+  color: "green" | "cyan" | "navy" | "yellow";
+}
+
+const { label, value, color } = Astro.props;
+---
+
+<li class:list={[style.container, style[color]]}>
+  <div class={style.detail}>
+    <span class={style.label}>{label}</span>
+    <span class={style.value}>{value}</span>
+  </div>
+</li>

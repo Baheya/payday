@@ -29,23 +29,22 @@ export default defineConfig([
     },
     rules: {
       "perfectionist/sort-imports": [
-        "error",
+        "warn",
         {
           fallbackSort: { type: "type-import-first", order: "asc" },
+          sortSideEffects: true,
           tsconfig: {
             rootDir: ".",
           },
           groups: [
             "type-import",
-            { newlinesBetween: 1 },
-            "value-import",
-            { newlinesBetween: 1 },
-            "value-side-effect",
-            { newlinesBetween: 1 },
+            ["value-import", "named-import"],
+            "value-style",
             "unknown",
           ],
         },
       ],
+      "perfectionist/sort-jsx-props": ["warn"],
     },
   },
   {

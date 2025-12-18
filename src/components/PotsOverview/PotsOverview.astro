@@ -1,0 +1,31 @@
+---
+import ExpenseDetail from "../ExpenseDetail/ExpenseDetail.astro";
+import ChevronRight from "@icons/chevron-right.svg";
+import PotsOverviewIcon from "@icons/pots-overview-icon.svg";
+
+import style from "./style.module.css";
+---
+
+<section class={style.overview}>
+  <div class={style.header}>
+    <h2 class={style.title}>Pots</h2><a
+      class:list={[style.link, style.label]}
+      href="/pots"
+      >See Details<span
+        ><ChevronRight aria-hidden="true" class={style.icon} /></span
+      ></a
+    >
+  </div>
+  <div class={style.total}>
+    <PotsOverviewIcon aria-hidden="true" />
+    <div class={style.text}>
+      <h3 class={style.label}>Total Saved</h3><p class={style.value}>$850</p>
+    </div>
+  </div>
+  <ul class={style.details}>
+    <ExpenseDetail color="green" label="Savings" value="$159" />
+    <ExpenseDetail color="cyan" label="Gift" value="$40" />
+    <ExpenseDetail color="navy" label="Concert Ticket" value="$110" />
+    <ExpenseDetail color="yellow" label="New Laptop" value="$10" />
+  </ul>
+</section>

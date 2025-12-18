@@ -10,7 +10,8 @@
     "verbatimModuleSyntax": true,
     "baseUrl": ".",
     "paths": {
-      "@src/*": ["src/*"]
+      "@src/*": ["src/*"],
+      "@icons/*": ["src/assets/icons/*"]
     }
   }
 }

@@ -12,7 +12,7 @@ const { eyebrow, text, background = "dark" } = Astro.props;
 
 <li class:list={[style.card, style[background]]}>
   <div class={style.content}>
-    <span class={style.eyebrow}>{eyebrow}</span>
-    <span class={style.text}>{text}</span>
+    <h3 class={style.eyebrow}>{eyebrow}</h3>
+    <p class={style.text}>{text}</p>
   </div>
 </li>
