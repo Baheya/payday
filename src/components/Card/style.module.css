@@ -1,13 +1,11 @@
 .card {
   padding: 20px;
   border-radius: 12px;
-  background-color: var(--grey-900);
+
   color: var(--white);
   list-style-type: none;
 
-  @media (--sm-viewport) {
-    padding: 24px;
-  }
+  background-color: var(--grey-900);
 
   .content {
     display: flex;
@@ -26,13 +24,17 @@
 
     font-weight: 700;
   }
+
+  @media (--sm-viewport) {
+    padding: 24px;
+  }
 }
 
 .light {
+  color: var(--grey-900);
+  background-color: var(--white);
+
   .eyebrow {
     color: var(--grey-500);
   }
-
-  background-color: var(--white);
-  color: var(--grey-900);
 }

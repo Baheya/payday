@@ -2,8 +2,9 @@
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: repeat(3, 1fr);
-  padding: 0;
   gap: var(--spacing-150);
+
+  padding: 0;
 
   @media (--md-viewport) {
     grid-template-columns: repeat(3, 1fr);
