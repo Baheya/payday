@@ -18,3 +18,8 @@
 node_modules/
 .astro/**/*
 dist/**/*
+# Local Netlify folder
+.netlify
+
+.env.local
+.env
