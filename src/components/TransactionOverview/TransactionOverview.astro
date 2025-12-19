@@ -1,0 +1,30 @@
+---
+import type { Tables } from "#src/types.ts";
+
+import Transaction from "./Transaction.astro";
+import ChevronRight from "#icons/chevron-right.svg";
+
+import style from "./style.module.css";
+
+interface Props {
+  transactions: Array<Tables<"Transactions">>;
+}
+
+const { transactions } = Astro.props;
+---
+
+<section class={style.overview}>
+  <div class={style.header}>
+    <h2 class={style.title}>Transactions</h2>
+    <a href="/transactions"
+      >See Details <span><ChevronRight aria-hidden="true" /></span></a
+    >
+  </div>
+  <ul class={style.transactions}>
+    {
+      transactions.map((transaction) => (
+        <Transaction transaction={transaction} />
+      ))
+    }
+  </ul>
+</section>

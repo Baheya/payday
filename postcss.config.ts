@@ -12,7 +12,7 @@ export default {
         "./src/styles/mixins.css",
       ],
     }),
-    postcssMixins({ mixinsDir: path.join(__dirname, "src/styles/mixins.css") }),
+    postcssMixins({ mixinsDir: path.join(__dirname, "src/styles") }),
     postcssPresetEnv({
       features: { "nesting-rules": true, "custom-media-queries": true },
     }),

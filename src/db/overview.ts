@@ -1,4 +1,4 @@
-import { supabase } from "./supabase.ts";
+import { supabase } from "../lib/supabase.ts";
 
 export const getOverview = async () => {
   try {

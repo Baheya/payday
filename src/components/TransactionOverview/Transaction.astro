@@ -1,0 +1,34 @@
+---
+import type { Tables } from "#src/types.ts";
+
+import { transformDate } from "#lib/utils.ts";
+
+import style from "./style.module.css";
+
+interface Props {
+  transaction: Tables<"Transactions">;
+}
+
+const { transaction } = Astro.props;
+
+const strippedDate = transaction.date.split("T")[0];
+const transformedDate = transformDate(transaction.date);
+const transformedAmount = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  currencyDisplay: "narrowSymbol",
+}).format(transaction.amount);
+const isIncome = !transformedAmount.includes("-");
+---
+
+<li class={style.transaction}>
+  <p class={style.name}>{transaction.name}</p>
+  <div>
+    <p class:list={[style.amount, isIncome && style.green]}>
+      {`${transformedAmount}`}
+    </p>
+    <time class={style.date} datetime={strippedDate}>
+      {transformedDate}
+    </time>
+  </div>
+</li>
