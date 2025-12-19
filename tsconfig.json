@@ -8,14 +8,6 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
-    "baseUrl": ".",
-    "paths": {
-      "@src/*": ["src/*"],
-      "@icons/*": ["src/assets/icons/*"],
-      "@components/*": ["src/components/*"],
-      "@db/*": ["src/db/*"],
-      "@lib/*": ["src/lib/*"],
-      "@styles/*": ["src/styles/*"]
-    }
+    "baseUrl": "."
   }
 }

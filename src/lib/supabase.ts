@@ -1,4 +1,4 @@
-import type { Database } from "@src/types.ts";
+import type { Database } from "#src/types.ts";
 
 import { createClient } from "@supabase/supabase-js";
 

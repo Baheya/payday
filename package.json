@@ -45,6 +45,14 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.49.0"
   },
+  "imports": {
+    "#src/*": "./src/*",
+    "#icons/*": "./src/assets/icons/*",
+    "#components/*": "./src/components/*",
+    "#db/*": "./src/db/*",
+    "#lib/*": "./src/lib/*",
+    "#styles/*": "./src/styles/*"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
