@@ -17,99 +17,99 @@ export type Database = {
       Balance: {
         Row: {
           created_at: string;
-          current: number | null;
-          expenses: number | null;
+          current: number;
+          expenses: number;
           id: number;
-          income: number | null;
+          income: number;
         };
         Insert: {
           created_at?: string;
-          current?: number | null;
-          expenses?: number | null;
+          current?: number;
+          expenses?: number;
           id?: number;
-          income?: number | null;
+          income?: number;
         };
         Update: {
           created_at?: string;
-          current?: number | null;
-          expenses?: number | null;
+          current?: number;
+          expenses?: number;
           id?: number;
-          income?: number | null;
+          income?: number;
         };
         Relationships: [];
       };
       Budgets: {
         Row: {
-          category: string | null;
+          category: string;
           id: number;
-          maximum: number | null;
-          theme: string | null;
+          maximum: number;
+          theme: string;
         };
         Insert: {
-          category?: string | null;
+          category: string;
           id?: number;
-          maximum?: number | null;
-          theme?: string | null;
+          maximum: number;
+          theme: string;
         };
         Update: {
-          category?: string | null;
+          category?: string;
           id?: number;
-          maximum?: number | null;
-          theme?: string | null;
+          maximum?: number;
+          theme?: string;
         };
         Relationships: [];
       };
       Pots: {
         Row: {
           id: number;
-          name: string | null;
-          target: number | null;
-          theme: string | null;
-          total: number | null;
+          name: string;
+          target: number;
+          theme: string;
+          total: number;
         };
         Insert: {
           id?: number;
-          name?: string | null;
-          target?: number | null;
-          theme?: string | null;
-          total?: number | null;
+          name: string;
+          target: number;
+          theme: string;
+          total: number;
         };
         Update: {
           id?: number;
-          name?: string | null;
-          target?: number | null;
-          theme?: string | null;
-          total?: number | null;
+          name?: string;
+          target?: number;
+          theme?: string;
+          total?: number;
         };
         Relationships: [];
       };
       Transactions: {
         Row: {
-          amount: number | null;
-          avatar: string | null;
-          category: string | null;
-          date: string | null;
+          amount: number;
+          avatar: string;
+          category: string;
+          date: string;
           id: number;
-          name: string | null;
-          recurring: boolean | null;
+          name: string;
+          recurring: boolean;
         };
         Insert: {
-          amount?: number | null;
-          avatar?: string | null;
-          category?: string | null;
-          date?: string | null;
+          amount: number;
+          avatar: string;
+          category: string;
+          date: string;
           id?: number;
-          name?: string | null;
-          recurring?: boolean | null;
+          name: string;
+          recurring: boolean;
         };
         Update: {
-          amount?: number | null;
-          avatar?: string | null;
-          category?: string | null;
-          date?: string | null;
+          amount?: number;
+          avatar?: string;
+          category?: string;
+          date?: string;
           id?: number;
-          name?: string | null;
-          recurring?: boolean | null;
+          name?: string;
+          recurring?: boolean;
         };
         Relationships: [];
       };
