@@ -14,8 +14,18 @@
 
 .header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
+}
+
+.link {
+  @mixin text-sm;
+
+  color: var(--grey-500);
+}
+
+.icon {
+  margin-inline-start: var(--spacing-50);
 }
 
 .transactions {
@@ -42,6 +52,18 @@
 .name,
 .amount {
   margin: 0;
+}
+
+.image {
+  width: var(--spacing-400);
+  height: var(--spacing-400);
+  margin-inline-end: var(--spacing-200);
+  border-radius: 50%;
+
+  @media (--md-viewport) {
+    width: 40px;
+    height: 40px;
+  }
 }
 
 .green {

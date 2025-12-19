@@ -1,6 +1,7 @@
 ---
 import type { Tables } from "#src/types.ts";
 
+import { Image } from "@unpic/astro";
 import { transformDate } from "#lib/utils.ts";
 
 import style from "./style.module.css";
@@ -22,7 +23,15 @@ const isIncome = !transformedAmount.includes("-");
 ---
 
 <li class={style.transaction}>
-  <div>
+  <div class={style.header}>
+    <Image
+      alt=""
+      class={style.image}
+      height={40}
+      layout="fixed"
+      src={transaction.avatar}
+      width={40}
+    />
     <p class={style.name}>{transaction.name}</p>
   </div>
   <div>

@@ -16,8 +16,10 @@ const { transactions } = Astro.props;
 <section class={style.overview}>
   <div class={style.header}>
     <h2 class={style.title}>Transactions</h2>
-    <a href="/transactions"
-      >See Details <span><ChevronRight aria-hidden="true" /></span></a
+    <a class={style.link} href="/transactions"
+      >View All<span
+        ><ChevronRight aria-hidden="true" class={style.icon} /></span
+      ></a
     >
   </div>
   <ul class={style.transactions}>
