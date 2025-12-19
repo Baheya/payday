@@ -2,8 +2,12 @@
 import Card from "@src/components/Card/Card.astro";
 import CardGrid from "@src/components/CardGrid/CardGrid.astro";
 import PotsOverview from "@src/components/PotsOverview/PotsOverview.astro";
+import TransactionOverview from "@src/components/TransactionOverview/TransactionOverview.astro";
+import { getOverview } from "@src/db/overview";
 
 import "../styles/global.css";
+
+const data = await getOverview();
 ---
 
 <!doctype html>
@@ -32,6 +36,12 @@ import "../styles/global.css";
       </CardGrid>
 
       <PotsOverview />
+
+      {
+        data?.transactions && data.transactions.length > 0 && (
+          <TransactionOverview transactions={data.transactions} />
+        )
+      }
 
       Income
       <!-- Add income -->

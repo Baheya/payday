@@ -1,0 +1,56 @@
+.overview {
+  display: flex;
+  flex-direction: column;
+
+  padding: var(--spacing-250);
+  border-radius: 12px;
+
+  background-color: var(--white);
+
+  @media (--md-viewport) {
+    padding: var(--spacing-400);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.transactions {
+  padding: 0;
+}
+
+.transaction {
+  @mixin text-sm;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: var(--spacing-250) 0;
+
+  font-weight: 700;
+  list-style-type: none;
+}
+
+.transaction + .transaction {
+  border-block-start: 1px solid var(--grey-100);
+}
+
+.name,
+.amount {
+  margin: 0;
+}
+
+.green {
+  color: var(--green);
+}
+
+.date {
+  @mixin text-xs;
+
+  font-weight: 400;
+  color: var(--grey-500);
+}
