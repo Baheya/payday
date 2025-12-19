@@ -22,7 +22,9 @@ const isIncome = !transformedAmount.includes("-");
 ---
 
 <li class={style.transaction}>
-  <p class={style.name}>{transaction.name}</p>
+  <div>
+    <p class={style.name}>{transaction.name}</p>
+  </div>
   <div>
     <p class:list={[style.amount, isIncome && style.green]}>
       {`${transformedAmount}`}
