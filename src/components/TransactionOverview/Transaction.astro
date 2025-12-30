@@ -2,7 +2,7 @@
 import type { Tables } from "#src/types.ts";
 
 import { Image } from "@unpic/astro";
-import { transformDate } from "#lib/utils.ts";
+import { setCurrency, transformDate } from "#lib/utils.ts";
 
 import style from "./style.module.css";
 
@@ -14,11 +14,7 @@ const { transaction } = Astro.props;
 
 const strippedDate = transaction.date.split("T")[0];
 const transformedDate = transformDate(transaction.date);
-const transformedAmount = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-  currencyDisplay: "narrowSymbol",
-}).format(transaction.amount);
+const transformedAmount = setCurrency(transaction.amount);
 const isIncome = !transformedAmount.includes("-");
 ---
 

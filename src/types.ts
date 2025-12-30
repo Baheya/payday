@@ -12,6 +12,31 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "14.1";
   };
+  graphql_public: {
+    Tables: {
+      [_ in never]: never;
+    };
+    Views: {
+      [_ in never]: never;
+    };
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json;
+          operationName?: string;
+          query?: string;
+          variables?: Json;
+        };
+        Returns: Json;
+      };
+    };
+    Enums: {
+      [_ in never]: never;
+    };
+    CompositeTypes: {
+      [_ in never]: never;
+    };
+  };
   public: {
     Tables: {
       Balance: {
@@ -43,19 +68,19 @@ export type Database = {
           category: string;
           id: number;
           maximum: number;
-          theme: string;
+          theme: Database["public"]["Enums"]["theme"];
         };
         Insert: {
           category: string;
           id?: number;
           maximum: number;
-          theme: string;
+          theme?: Database["public"]["Enums"]["theme"];
         };
         Update: {
           category?: string;
           id?: number;
           maximum?: number;
-          theme?: string;
+          theme?: Database["public"]["Enums"]["theme"];
         };
         Relationships: [];
       };
@@ -121,7 +146,7 @@ export type Database = {
       [_ in never]: never;
     };
     Enums: {
-      [_ in never]: never;
+      theme: "cyan" | "yellow" | "navy" | "green";
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -250,7 +275,12 @@ export type CompositeTypes<
     : never;
 
 export const Constants = {
-  public: {
+  graphql_public: {
     Enums: {},
+  },
+  public: {
+    Enums: {
+      theme: ["cyan", "yellow", "navy", "green"],
+    },
   },
 } as const;
