@@ -1,0 +1,75 @@
+---
+import type { BudgetExpenseOverview } from "#db/budgets.ts";
+import type { Tables } from "#src/types.ts";
+
+import ExpenseDetail from "#components/ExpenseDetail/ExpenseDetail.astro";
+import ChevronRight from "#icons/chevron-right.svg";
+import { setCurrency } from "#src/lib/utils.ts";
+
+import style from "./style.module.css";
+
+interface Props {
+  budgets: Array<Tables<"Budgets">>;
+  overview: BudgetExpenseOverview;
+}
+
+const { budgets, overview } = Astro.props;
+
+const budgetMaximum = budgets.reduce((acc, budget) => acc + budget.maximum, 0);
+
+const generatedGradientStops = overview.budgetExpenses.reduce(
+  (acc, expense) => {
+    let gradientStart;
+
+    const budgetColor = budgets.find(
+      (budget) => expense.category === budget.category,
+    )?.theme;
+    const gradientEnd =
+      (Math.abs(expense.total) / Math.abs(overview.total)) * 100;
+    const gradient =
+      acc +
+      `${!acc ? "" : ", "}var(--${budgetColor}) ${gradientStart || 0}% ${gradientEnd.toFixed(0)}%`;
+    gradientStart = gradientEnd;
+    return gradient;
+  },
+  "",
+);
+
+const styleAttribute = {
+  style: { background: `conic-gradient(${generatedGradientStops})` },
+};
+---
+
+<section class={style.overview}>
+  <div class={style.header}>
+    <h2 class={style.title}>Budgets</h2>
+    <a class={style.link} href="/budgets"
+      >See Details<span
+        ><ChevronRight aria-hidden="true" class={style.icon} /></span
+      ></a
+    >
+  </div>
+  <div class={style.main}>
+    <div class={style.wrapper}>
+      <div class={style.chart} {...styleAttribute}></div>
+      <div class={style.inner}>
+        <div class={style.text}>
+          <span class={style.emphasis}
+            >{setCurrency(Math.abs(overview.total))}</span
+          > of {setCurrency(budgetMaximum)} limit
+        </div>
+      </div>
+    </div>
+    <ul class={style.details}>
+      {
+        budgets.map((budget) => (
+          <ExpenseDetail
+            color={budget.theme}
+            label={budget.category}
+            value={budget.maximum.toString()}
+          />
+        ))
+      }
+    </ul>
+  </div>
+</section>

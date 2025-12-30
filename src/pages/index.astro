@@ -1,13 +1,17 @@
 ---
+import BudgetOverview from "#components/BudgetOverview/BudgetOverview.astro";
 import Card from "#components/Card/Card.astro";
 import CardGrid from "#components/CardGrid/CardGrid.astro";
 import PotsOverview from "#components/PotsOverview/PotsOverview.astro";
 import TransactionOverview from "#components/TransactionOverview/TransactionOverview.astro";
 import { getOverview } from "#db/overview.ts";
+import { getBudgetExpenses } from "#src/db/budgets.ts";
 
 import "../styles/global.css";
 
 const data = await getOverview();
+
+const currentMonthTransactions = await getBudgetExpenses();
 ---
 
 <!doctype html>
@@ -41,6 +45,17 @@ const data = await getOverview();
         data?.transactions && data.transactions.length > 0 && (
           <TransactionOverview transactions={data.transactions} />
         )
+      }
+
+      {
+        data?.budgets &&
+          data.budgets.length > 0 &&
+          currentMonthTransactions && (
+            <BudgetOverview
+              budgets={data.budgets}
+              overview={currentMonthTransactions}
+            />
+          )
       }
 
       Income
