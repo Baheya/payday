@@ -1,6 +1,7 @@
 ---
 import ExpenseDetail from "../ExpenseDetail/ExpenseDetail.astro";
-import ChevronRight from "#icons/chevron-right.svg";
+import Heading from "#components/Heading/Heading.astro";
+import Link from "#components/Link/Link.astro";
 import PotsOverviewIcon from "#icons/pots-overview-icon.svg";
 
 import style from "./style.module.css";
@@ -8,13 +9,8 @@ import style from "./style.module.css";
 
 <section class={style.overview}>
   <div class={style.header}>
-    <h2 class={style.title}>Pots</h2><a
-      class:list={[style.link, style.label]}
-      href="/pots"
-      >See Details<span
-        ><ChevronRight aria-hidden="true" class={style.icon} /></span
-      ></a
-    >
+    <Heading as="h2" size="lg">Pots</Heading>
+    <Link href="/pots"> See Details </Link>
   </div>
   <div class={style.total}>
     <PotsOverviewIcon aria-hidden="true" />

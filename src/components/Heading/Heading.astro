@@ -1,0 +1,20 @@
+---
+import type { HTMLTag, Polymorphic } from "astro/types";
+
+import style from "./style.module.css";
+
+interface CustomProps {
+  size: "xs" | "sm" | "base" | "xl" | "lg";
+}
+
+type Props<Tag extends HTMLTag = HTMLTag> = Polymorphic<{
+  as: Tag;
+}> &
+  CustomProps;
+
+const { as: Tag = "h1", size = "xl", ...props } = Astro.props;
+---
+
+<Tag class:list={[style.heading, style[size]]} {...props}>
+  <slot />
+</Tag>

@@ -3,7 +3,8 @@ import type { BudgetExpenseOverview } from "#db/budgets.ts";
 import type { Tables } from "#src/types.ts";
 
 import ExpenseDetail from "#components/ExpenseDetail/ExpenseDetail.astro";
-import ChevronRight from "#icons/chevron-right.svg";
+import Heading from "#components/Heading/Heading.astro";
+import Link from "#components/Link/Link.astro";
 import { setCurrency } from "#src/lib/utils.ts";
 
 import style from "./style.module.css";
@@ -42,12 +43,8 @@ const styleAttribute = {
 
 <section class={style.overview}>
   <div class={style.header}>
-    <h2 class={style.title}>Budgets</h2>
-    <a class={style.link} href="/budgets"
-      >See Details<span
-        ><ChevronRight aria-hidden="true" class={style.icon} /></span
-      ></a
-    >
+    <Heading as="h2" size="lg">Budgets</Heading>
+    <Link href="/budgets">See Details</Link>
   </div>
   <div class={style.main}>
     <div class={style.wrapper}>
@@ -66,7 +63,7 @@ const styleAttribute = {
           <ExpenseDetail
             color={budget.theme}
             label={budget.category}
-            value={budget.maximum.toString()}
+            value={setCurrency(budget.maximum)}
           />
         ))
       }

@@ -1,0 +1,40 @@
+---
+import type { RecurringBills } from "#src/db/transactions.ts";
+
+import Heading from "#components/Heading/Heading.astro";
+import Link from "#components/Link/Link.astro";
+import { setCurrency } from "#src/lib/utils.ts";
+
+import style from "./style.module.css";
+
+interface Props {
+  bills: RecurringBills;
+}
+
+const { bills } = Astro.props;
+---
+
+<section class={style.overview}>
+  <div class={style.header}>
+    <Heading as="h2" size="lg">Recurring Bills</Heading><Link href="/recurring"
+      >See Details</Link
+    >
+  </div>
+  <ul class={style.list}>
+    <li class:list={[style.item, style.green]}>
+      Paid Bills<span class={style.amount}
+        >{setCurrency(Math.abs(bills.paid))}</span
+      >
+    </li>
+    <li class:list={[style.item, style.yellow]}>
+      Total Upcoming<span class={style.amount}
+        >{setCurrency(Math.abs(bills.future))}
+      </span>
+      <li class:list={[style.item, style.cyan]}>
+        Due Soon<span class={style.amount}
+          >{setCurrency(Math.abs(bills.dueSoon))}
+        </span>
+      </li>
+    </li>
+  </ul>
+</section>

@@ -1,0 +1,10 @@
+.link {
+  @mixin text-sm;
+
+  color: var(--grey-500);
+  text-decoration: none;
+}
+
+.icon {
+  margin-inline-start: var(--spacing-150);
+}

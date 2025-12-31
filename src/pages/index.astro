@@ -5,13 +5,16 @@ import CardGrid from "#components/CardGrid/CardGrid.astro";
 import PotsOverview from "#components/PotsOverview/PotsOverview.astro";
 import TransactionOverview from "#components/TransactionOverview/TransactionOverview.astro";
 import { getOverview } from "#db/overview.ts";
+import RecurringBillsOverview from "#src/components/RecurringBillsOverview/RecurringBillsOverview.astro";
 import { getBudgetExpenses } from "#src/db/budgets.ts";
+import { getRecurringBillsOverview } from "#src/db/transactions.ts";
 
 import "../styles/global.css";
 
 const data = await getOverview();
 
 const currentMonthTransactions = await getBudgetExpenses();
+const recurringBills = await getRecurringBillsOverview();
 ---
 
 <!doctype html>
@@ -57,6 +60,8 @@ const currentMonthTransactions = await getBudgetExpenses();
             />
           )
       }
+
+      {recurringBills && <RecurringBillsOverview bills={recurringBills} />}
 
       Income
       <!-- Add income -->
