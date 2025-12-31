@@ -19,16 +19,6 @@
   justify-content: space-between;
 }
 
-.link {
-  @mixin text-sm;
-
-  color: var(--grey-500);
-}
-
-.icon {
-  margin-inline-start: var(--spacing-50);
-}
-
 .details {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -1,0 +1,25 @@
+.heading {
+  margin: 0;
+  font-weight: 700;
+  color: var(--grey-900);
+}
+
+.xs {
+  @mixin text-xs;
+}
+
+.sm {
+  @mixin text-xs;
+}
+
+.base {
+  @mixin text-base;
+}
+
+.lg {
+  @mixin text-lg;
+}
+
+.xl {
+  @mixin text-xl;
+}

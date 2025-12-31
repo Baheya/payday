@@ -19,12 +19,6 @@
     }
   }
 
-  .title {
-    @mixin text-lg;
-
-    font-weight: 700;
-  }
-
   .text {
     display: flex;
     flex-direction: column;
@@ -60,10 +54,6 @@
     font-weight: 700;
 
     background-color: var(--beige-100);
-  }
-
-  .icon {
-    margin-inline-start: var(--spacing-200);
   }
 
   .details {

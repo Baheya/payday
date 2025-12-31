@@ -2,7 +2,8 @@
 import type { Tables } from "#src/types.ts";
 
 import Transaction from "./Transaction.astro";
-import ChevronRight from "#icons/chevron-right.svg";
+import Heading from "#components/Heading/Heading.astro";
+import Link from "#components/Link/Link.astro";
 
 import style from "./style.module.css";
 
@@ -15,12 +16,8 @@ const { transactions } = Astro.props;
 
 <section class={style.overview}>
   <div class={style.header}>
-    <h2 class={style.title}>Transactions</h2>
-    <a class={style.link} href="/transactions"
-      >View All<span
-        ><ChevronRight aria-hidden="true" class={style.icon} /></span
-      ></a
-    >
+    <Heading as="h2" size="lg">Transactions</Heading>
+    <Link href="/transactions">View All</Link>
   </div>
   <ul class={style.transactions}>
     {

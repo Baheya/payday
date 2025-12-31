@@ -1,0 +1,16 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import ChevronRight from "#icons/chevron-right.svg";
+
+import style from "./style.module.css";
+
+type Props = Omit<HTMLAttributes<"a">, "class" | "class:list">;
+
+const { ...props } = Astro.props;
+---
+
+<a class={style.link} {...props}>
+  <slot />
+  <ChevronRight aria-hidden="true" class={style.icon} />
+</a>

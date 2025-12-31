@@ -52,7 +52,8 @@
     "#components/*": "./src/components/*",
     "#db/*": "./src/db/*",
     "#lib/*": "./src/lib/*",
-    "#styles/*": "./src/styles/*"
+    "#styles/*": "./src/styles/*",
+    "#icons": "./src/assets/icons/*"
   },
   "keywords": [],
   "author": "",
