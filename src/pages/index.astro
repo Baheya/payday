@@ -8,6 +8,8 @@ import { getOverview } from "#db/overview.ts";
 import RecurringBillsOverview from "#src/components/RecurringBillsOverview/RecurringBillsOverview.astro";
 import { getBudgetExpenses } from "#src/db/budgets.ts";
 import { getRecurringBillsOverview } from "#src/db/transactions.ts";
+import BaseLayout from "#src/layouts/BaseLayout.astro";
+import HomeLayout from "#src/layouts/HomeLayout.astro";
 
 import "../styles/global.css";
 
@@ -17,69 +19,32 @@ const currentMonthTransactions = await getBudgetExpenses();
 const recurringBills = await getRecurringBillsOverview();
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<BaseLayout title="Overview">
+  <h1>Overview</h1>
+  <HomeLayout>
+    <CardGrid>
+      <Card eyebrow="Current Balance" text="$4,836.00" />
+      <Card background="light" eyebrow="Income" text="$3,814.25" />
+      <Card background="light" eyebrow="Expenses" text="$1,700.50" />
+    </CardGrid>
 
-    <link
-      href="./assets/images/favicon-32x32.png"
-      rel="icon"
-      sizes="32x32"
-      type="image/png"
-    />
+    <PotsOverview />
 
-    <title>Frontend Mentor | Personal finance app - Overview</title>
-  </head>
-  <body>
-    Overview Transactions Budgets Pots Recurring Bills Minimize Menu
-    <main>
-      <h1>Overview</h1>
-      <CardGrid>
-        <Card eyebrow="Current Balance" text="$4,836.00" />
-        <Card background="light" eyebrow="Income" text="$3,814.25" />
-        <Card background="light" eyebrow="Expenses" text="$1,700.50" />
-      </CardGrid>
+    {
+      data?.transactions && data.transactions.length > 0 && (
+        <TransactionOverview transactions={data.transactions} />
+      )
+    }
 
-      <PotsOverview />
+    {
+      data?.budgets && data.budgets.length > 0 && currentMonthTransactions && (
+        <BudgetOverview
+          budgets={data.budgets}
+          overview={currentMonthTransactions}
+        />
+      )
+    }
 
-      {
-        data?.transactions && data.transactions.length > 0 && (
-          <TransactionOverview transactions={data.transactions} />
-        )
-      }
-
-      {
-        data?.budgets &&
-          data.budgets.length > 0 &&
-          currentMonthTransactions && (
-            <BudgetOverview
-              budgets={data.budgets}
-              overview={currentMonthTransactions}
-            />
-          )
-      }
-
-      {recurringBills && <RecurringBillsOverview bills={recurringBills} />}
-
-      Income
-      <!-- Add income -->
-
-      Expenses
-      <!-- Add expenses -->
-
-      Pots See Details Total Saved
-      <!-- Add pots data -->
-
-      Budgets See Details
-      <!-- Add budgets data -->
-
-      Transactions View All
-      <!-- Add transactions data -->
-
-      Recurring Bills See Details
-      <!-- Add recurring bills data -->
-    </main>
-  </body>
-</html>
+    {recurringBills && <RecurringBillsOverview bills={recurringBills} />}
+  </HomeLayout>
+</BaseLayout>
