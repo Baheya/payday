@@ -53,7 +53,7 @@
     "#db/*": "./src/db/*",
     "#lib/*": "./src/lib/*",
     "#styles/*": "./src/styles/*",
-    "#icons": "./src/assets/icons/*"
+    "#layouts/*": "./src/layouts/*"
   },
   "keywords": [],
   "author": "",

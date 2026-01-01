@@ -5,30 +5,50 @@ import CardGrid from "#components/CardGrid/CardGrid.astro";
 import PotsOverview from "#components/PotsOverview/PotsOverview.astro";
 import TransactionOverview from "#components/TransactionOverview/TransactionOverview.astro";
 import { getOverview } from "#db/overview.ts";
+import { getRecurringBillsOverview } from "#db/transactions.ts";
+import BaseLayout from "#layouts/BaseLayout.astro";
+import HomeLayout from "#layouts/HomeLayout.astro";
+import { setCurrency } from "#lib/utils.ts";
 import RecurringBillsOverview from "#src/components/RecurringBillsOverview/RecurringBillsOverview.astro";
 import { getBudgetExpenses } from "#src/db/budgets.ts";
-import { getRecurringBillsOverview } from "#src/db/transactions.ts";
-import BaseLayout from "#src/layouts/BaseLayout.astro";
-import HomeLayout from "#src/layouts/HomeLayout.astro";
 
-import "../styles/global.css";
+import "#src/styles/global.css";
 
 const data = await getOverview();
 
 const currentMonthTransactions = await getBudgetExpenses();
 const recurringBills = await getRecurringBillsOverview();
+
+const currentBalance =
+  data?.balance?.[0].current && setCurrency(data.balance[0].current);
+const currentIncome =
+  data?.balance?.[0].income && setCurrency(data.balance[0].income);
+const currentExpenses =
+  data?.balance?.[0].expenses && setCurrency(data.balance[0].expenses);
 ---
 
 <BaseLayout title="Overview">
   <h1>Overview</h1>
   <HomeLayout>
     <CardGrid>
-      <Card eyebrow="Current Balance" text="$4,836.00" />
-      <Card background="light" eyebrow="Income" text="$3,814.25" />
-      <Card background="light" eyebrow="Expenses" text="$1,700.50" />
+      {
+        currentBalance && (
+          <Card eyebrow="Current Balance" text={currentBalance} />
+        )
+      }
+      {
+        currentIncome && (
+          <Card background="light" eyebrow="Income" text={currentIncome} />
+        )
+      }
+      {
+        currentExpenses && (
+          <Card background="light" eyebrow="Expenses" text={currentExpenses} />
+        )
+      }
     </CardGrid>
 
-    <PotsOverview />
+    {data?.pots && data.pots.length > 0 && <PotsOverview pots={data.pots} />}
 
     {
       data?.transactions && data.transactions.length > 0 && (

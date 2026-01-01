@@ -15,6 +15,10 @@
     border-inline-start-color: var(--navy);
   }
 
+  &.purple {
+    border-inline-start-color: var(--purple);
+  }
+
   .label {
     @mixin text-xs;
 
