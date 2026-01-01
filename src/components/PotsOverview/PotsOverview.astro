@@ -1,10 +1,19 @@
 ---
+import type { Tables } from "#src/types.ts";
+
 import ExpenseDetail from "../ExpenseDetail/ExpenseDetail.astro";
 import Heading from "#components/Heading/Heading.astro";
 import Link from "#components/Link/Link.astro";
 import PotsOverviewIcon from "#icons/pots-overview-icon.svg";
+import { setCurrency } from "#src/lib/utils.ts";
 
 import style from "./style.module.css";
+
+interface Props {
+  pots: Array<Tables<"Pots">>;
+}
+
+const { pots } = Astro.props;
 ---
 
 <section class={style.overview}>
@@ -19,9 +28,14 @@ import style from "./style.module.css";
     </div>
   </div>
   <ul class={style.details}>
-    <ExpenseDetail color="green" label="Savings" value="$159" />
-    <ExpenseDetail color="cyan" label="Gift" value="$40" />
-    <ExpenseDetail color="navy" label="Concert Ticket" value="$110" />
-    <ExpenseDetail color="yellow" label="New Laptop" value="$10" />
+    {
+      pots.map((pot) => (
+        <ExpenseDetail
+          color={pot.theme}
+          label={pot.name}
+          value={setCurrency(pot.target)}
+        />
+      ))
+    }
   </ul>
 </section>
