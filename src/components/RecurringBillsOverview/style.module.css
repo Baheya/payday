@@ -3,9 +3,14 @@
   flex-direction: column;
   row-gap: var(--spacing-400);
 
+  padding: var(--spacing-300) var(--spacing-250);
   border-radius: var(--spacing-150);
 
   background-color: var(--white);
+
+  @media (--md-viewport) {
+    padding: var(--spacing-400);
+  }
 }
 
 .header {
