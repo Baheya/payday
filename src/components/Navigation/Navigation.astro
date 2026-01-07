@@ -1,0 +1,31 @@
+---
+import NavigationItem from "./NavigationItem.astro";
+
+import style from "./style.module.css";
+---
+
+<nav class={style.wrapper}>
+  <ul class={style.nav}>
+    <NavigationItem href="/" icon="overview" id="overview-label">
+      Overview
+    </NavigationItem>
+    <NavigationItem
+      href="/transactions"
+      icon="transactions"
+      id="transactions-label"
+      >Transactions
+    </NavigationItem>
+    <NavigationItem href="/budgets" icon="budgets" id="budgets-label"
+      >Budgets
+    </NavigationItem>
+    <NavigationItem href="/pots" icon="pots" id="pots-label"
+      >Pots
+    </NavigationItem>
+    <NavigationItem
+      href="/recurring"
+      icon="recurring"
+      id="recurring-bills-label"
+      >Recurring Bills
+    </NavigationItem>
+  </ul>
+</nav>
