@@ -1,0 +1,23 @@
+---
+import Icon, { type iconName } from "#components/Icon/Icon.astro";
+
+import style from "./style.module.css";
+
+interface Props {
+  href: string;
+  id: string;
+  icon: iconName;
+}
+
+const { href, id, icon } = Astro.props;
+
+const currentPath = Astro.url.pathname;
+---
+
+<li class={style.item}>
+  <a class:list={[style.link, currentPath === href && style.active]} href={href}
+    ><Icon icon={icon} id={id} /><span class={style.label} id={id}
+      ><slot /></span
+    >
+  </a>
+</li>

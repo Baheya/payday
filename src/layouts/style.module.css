@@ -19,14 +19,21 @@
     }
   }
 
-  > :nth-child(5) {
+  > :nth-child(4) {
     @media (--lg-viewport) {
       grid-column: 2 / 3;
-      grid-row: 3 / 5;
+      grid-row: 2 / 4;
     }
   }
 
-  @media (--lg-viewport) {
+  > :nth-child(5) {
+    @media (--lg-viewport) {
+      grid-column: 2 / 3;
+      grid-row: 4 / 5;
+    }
+  }
+
+  @container main (min-width: 900px) {
     display: grid;
     grid-template-columns: 5fr 4fr;
     grid-template-rows: repeat(4, auto);

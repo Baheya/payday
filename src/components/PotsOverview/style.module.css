@@ -1,3 +1,9 @@
+.container {
+  --contained: false;
+
+  container-type: inline-size;
+}
+
 .overview {
   display: flex;
   flex-direction: column;
@@ -8,67 +14,69 @@
 
   background-color: var(--white);
 
-  .header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
+  @container (min-width: 500px) {
+    --contained: true;
 
-    @media (--md-viewport) {
-      grid-column: 1 / 3;
-      grid-row: 1 / 2;
-    }
-  }
-
-  .text {
-    display: flex;
-    flex-direction: column;
-    gap: inherit;
-  }
-
-  .label {
-    @mixin text-sm;
-
-    font-weight: 400;
-    color: var(--grey-500);
-
-    &.small {
-      @mixin text-xs;
-    }
-  }
-
-  .value {
-    margin: 0;
-  }
-
-  .total {
-    @mixin text-xl;
-
-    display: flex;
-    flex-direction: row;
-    gap: var(--spacing-200);
-    align-items: center;
-
-    padding: var(--spacing-200);
-    border-radius: var(--spacing-150);
-
-    font-weight: 700;
-
-    background-color: var(--beige-100);
-  }
-
-  .details {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: var(--spacing-200);
-
-    padding: 0;
-  }
-
-  @media (--md-viewport) {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: repeat(2, auto);
     grid-template-rows: repeat(2, auto);
     padding: var(--spacing-400);
   }
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+
+  @container style(--contained: true) {
+    grid-column: 1 / 3;
+    grid-row: 1 / 2;
+  }
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: inherit;
+}
+
+.label {
+  @mixin text-sm;
+
+  font-weight: 400;
+  color: var(--grey-500);
+
+  &.small {
+    @mixin text-xs;
+  }
+}
+
+.value {
+  margin: 0;
+}
+
+.total {
+  @mixin text-xl;
+
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-200);
+  align-items: center;
+
+  padding: var(--spacing-200);
+  border-radius: var(--spacing-150);
+
+  font-weight: 700;
+
+  background-color: var(--beige-100);
+}
+
+.details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: var(--spacing-200);
+
+  padding: 0;
 }

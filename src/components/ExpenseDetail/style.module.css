@@ -1,5 +1,5 @@
 .container {
-  padding-inline: var(--spacing-250);
+  padding-inline-start: var(--spacing-250);
   border-inline-start: 4px solid var(--green);
   list-style-type: none;
 

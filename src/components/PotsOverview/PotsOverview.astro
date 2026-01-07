@@ -16,26 +16,28 @@ interface Props {
 const { pots } = Astro.props;
 ---
 
-<section class={style.overview}>
-  <div class={style.header}>
-    <Heading as="h2" size="lg">Pots</Heading>
-    <Link href="/pots"> See Details </Link>
-  </div>
-  <div class={style.total}>
-    <PotsOverviewIcon aria-hidden="true" />
-    <div class={style.text}>
-      <h3 class={style.label}>Total Saved</h3><p class={style.value}>$850</p>
+<section class={style.container}>
+  <div class={style.overview}>
+    <div class={style.header}>
+      <Heading as="h2" size="lg">Pots</Heading>
+      <Link href="/pots"> See Details </Link>
     </div>
+    <div class={style.total}>
+      <PotsOverviewIcon aria-hidden="true" />
+      <div class={style.text}>
+        <h3 class={style.label}>Total Saved</h3><p class={style.value}>$850</p>
+      </div>
+    </div>
+    <ul class={style.details}>
+      {
+        pots.map((pot) => (
+          <ExpenseDetail
+            color={pot.theme}
+            label={pot.name}
+            value={setCurrency(pot.target)}
+          />
+        ))
+      }
+    </ul>
   </div>
-  <ul class={style.details}>
-    {
-      pots.map((pot) => (
-        <ExpenseDetail
-          color={pot.theme}
-          label={pot.name}
-          value={setCurrency(pot.target)}
-        />
-      ))
-    }
-  </ul>
 </section>

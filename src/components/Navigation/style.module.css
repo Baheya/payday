@@ -1,0 +1,113 @@
+.wrapper {
+  width: 100%;
+
+  @media (--lg-viewport) {
+    max-width: 300px;
+  }
+}
+
+.nav {
+  --nav-height: 52px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-evenly;
+
+  height: var(--nav-height);
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  padding-block-start: var(--spacing-100);
+  padding-inline: var(--spacing-200);
+  border-top-left-radius: var(--spacing-100);
+  border-top-right-radius: var(--spacing-100);
+
+  color: var(--grey-300);
+  list-style-type: none;
+
+  background-color: var(--grey-900);
+
+  @media (--lg-viewport) {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-inline: 0 var(--spacing-300);
+  }
+}
+
+.item {
+  width: 100%;
+}
+
+.label {
+  display: none;
+
+  @media (--md-viewport) {
+    display: block;
+  }
+}
+
+.link {
+  @mixin text-sm;
+
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--spacing-50);
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+  padding-block: var(--spacing-100);
+  border-block-end: 4px solid transparent;
+
+  font-weight: 700;
+  color: var(--grey-300);
+  text-decoration: none;
+
+  &.active {
+    border-block-end: 4px solid var(--green);
+    border-top-left-radius: var(--spacing-100);
+    border-top-right-radius: var(--spacing-100);
+
+    color: var(--green);
+
+    background-color: var(--beige-100);
+
+    svg {
+      color: var(--green);
+    }
+
+    .label {
+      color: var(--grey-900);
+    }
+
+    @media (--lg-viewport) {
+      border-block-end: none;
+      border-inline-start: 4px solid var(--green);
+      border-top-left-radius: 0;
+      border-top-right-radius: var(--spacing-150);
+      border-bottom-right-radius: var(--spacing-150);
+    }
+  }
+
+  &:not(.active):hover {
+    svg,
+    .label {
+      color: var(--grey-100);
+    }
+  }
+
+  @media (--lg-viewport) {
+    flex-direction: row;
+    gap: var(--spacing-200);
+    align-items: center;
+    justify-content: flex-start;
+
+    width: unset;
+    height: unset;
+    padding-block: var(--spacing-200);
+    padding-inline-start: var(--spacing-300);
+    border-block-end: none;
+    border-inline-start: 4px solid transparent;
+  }
+}
