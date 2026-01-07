@@ -1,13 +1,22 @@
+.container {
+  --contained: false;
+
+  container-type: inline-size;
+}
+
 .overview {
   display: flex;
   flex-direction: column;
 
+  height: 100%;
   padding: var(--spacing-250);
   border-radius: 12px;
 
   background-color: var(--white);
 
-  @media (--md-viewport) {
+  @container (min-width: 430px) {
+    --contained: true;
+
     row-gap: var(--spacing-250);
     padding: var(--spacing-400);
   }
@@ -27,15 +36,17 @@
 
   padding: 0;
 
-  @media (--md-viewport) {
+  @container style(--contained: true) {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(4, auto);
   }
 }
 
 .main {
-  @media (--md-viewport) {
-    display: flex;
+  display: flex;
+  flex-direction: column;
+
+  @container style(--contained: true) {
     flex-direction: row;
   }
 }
@@ -65,7 +76,7 @@
 
   aspect-ratio: 1 / 1;
   width: 100%;
-  max-width: 162px;
+  max-width: 188px;
   margin: auto;
   border: var(--spacing-150) solid rgb(255 255 255 / 25%);
   border-radius: 50%;

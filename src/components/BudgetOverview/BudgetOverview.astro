@@ -41,32 +41,34 @@ const styleAttribute = {
 };
 ---
 
-<section class={style.overview}>
-  <div class={style.header}>
-    <Heading as="h2" size="lg">Budgets</Heading>
-    <Link href="/budgets">See Details</Link>
-  </div>
-  <div class={style.main}>
-    <div class={style.wrapper}>
-      <div class={style.chart} {...styleAttribute}></div>
-      <div class={style.inner}>
-        <div class={style.text}>
-          <span class={style.emphasis}
-            >{setCurrency(Math.abs(overview.total))}</span
-          > of {setCurrency(budgetMaximum)} limit
+<section class={style.container}>
+  <div class={style.overview}>
+    <div class={style.header}>
+      <Heading as="h2" size="lg">Budgets</Heading>
+      <Link href="/budgets">See Details</Link>
+    </div>
+    <div class={style.main}>
+      <div class={style.wrapper}>
+        <div class={style.chart} {...styleAttribute}></div>
+        <div class={style.inner}>
+          <div class={style.text}>
+            <span class={style.emphasis}
+              >{setCurrency(Math.abs(overview.total))}</span
+            > of {setCurrency(budgetMaximum)} limit
+          </div>
         </div>
       </div>
+      <ul class={style.details}>
+        {
+          budgets.map((budget) => (
+            <ExpenseDetail
+              color={budget.theme}
+              label={budget.category}
+              value={setCurrency(budget.maximum)}
+            />
+          ))
+        }
+      </ul>
     </div>
-    <ul class={style.details}>
-      {
-        budgets.map((budget) => (
-          <ExpenseDetail
-            color={budget.theme}
-            label={budget.category}
-            value={setCurrency(budget.maximum)}
-          />
-        ))
-      }
-    </ul>
   </div>
 </section>
