@@ -1,4 +1,8 @@
 ---
+import Navigation from "#src/components/Navigation/Navigation.astro";
+
+import "node_modules/modern-normalize/modern-normalize.css";
+
 interface Props {
   title: string;
 }
@@ -84,7 +88,8 @@ const { title = "Overview" } = Astro.props;
 
     <title>{`Payday | ${title}`}</title>
   </head>
-  <body>
+  <body class="body">
+    <Navigation />
     <main class="main">
       <slot />
     </main>
@@ -94,9 +99,25 @@ const { title = "Overview" } = Astro.props;
 <style>
   .main {
     padding-inline: var(--spacing-200);
+    width: 100%;
+    container: main / inline-size;
 
     @media (--md-viewport) {
       padding-inline: var(--spacing-500);
+    }
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    @media (--md-viewport) {
+      flex-direction: column-reverse;
+    }
+
+    @media (--lg-viewport) {
+      flex-direction: row;
     }
   }
 </style>
