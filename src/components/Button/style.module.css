@@ -1,0 +1,10 @@
+.button {
+  all: unset;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: transparent;
+
+  &:hover {
+    background-color: var(--grey-100);
+  }
+}

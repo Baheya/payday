@@ -3,17 +3,17 @@ import type { HTMLAttributes } from "astro/types";
 
 interface Props extends Omit<HTMLAttributes<"svg">, "aria-labelledby"> {
   icon: iconName;
-  id: string;
+  "aria-labelledby": string;
 }
 
 // prettier-ignore
-export type iconName = "overview" | "transactions" | "budgets" | "recurring" | "pots";
+export type iconName = "overview" | "transactions" | "budgets" | "recurring" | "pots" | "sort" | "filter" | "chevron-right" | "chevron-left";
 
-const { icon, id, ...props } = Astro.props;
+const { icon, ...props } = Astro.props;
 
 const { default: innerHTML } = await import(
   `../../assets/icons/${icon}.svg?raw`
 );
 ---
 
-<span aria-labelledby={id} set:html={innerHTML} {...props} />
+<span set:html={innerHTML} {...props} />

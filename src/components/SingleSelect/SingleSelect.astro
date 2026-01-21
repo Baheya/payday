@@ -1,0 +1,434 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import style from "./style.module.css";
+
+interface Props extends HTMLAttributes<"select"> {
+  options: string[];
+}
+
+const { options, ...props } = Astro.props;
+---
+
+<single-select class={style.container} data-listbox>
+  <div data-single-select-trigger>
+    <slot />
+  </div>
+  <ul
+    class:list={[style.list, "hidden"]}
+    id="ss_elem_list"
+    role="listbox"
+    tabindex="0"
+    {...props}
+  >
+    <li aria-selected="true" class={style.option} id="option_all" role="option">
+      All Transactions
+    </li>
+    {
+      options.map((option, i) => (
+        <li
+          aria-selected="false"
+          class={style.option}
+          id={`option_${i}`}
+          role="option"
+        >
+          {option}
+        </li>
+      ))
+    }
+  </ul>
+</single-select>
+
+<script>
+  import { SingleSelect } from "./SingleSelect.ts";
+
+  if (!customElements.get("single-select")) {
+    customElements.define("single-select", SingleSelect);
+  }
+</script>
+
+<!-- <script>
+  // const registerEvents = () => {
+  //   listboxNode?.addEventListener("focus", () => setupFocus());
+  //   listboxNode?.addEventListener("keydown", (evt) => checkKeyPress(evt));
+  //   listboxNode?.addEventListener("click", (evt) => checkClickItem(evt));
+  //   document.addEventListener("click", (evt) => {
+  //     if (evt.target instanceof Node && !listBox?.contains(evt.target)) {
+  //       listboxNode?.classList.add("hidden");
+  //     }
+  //   });
+  //   singleSelectTrigger?.addEventListener("click", () => {
+  //     listboxNode?.classList.toggle("hidden");
+  //   });
+  // };
+
+  const listBox = document.querySelector("[data-listbox]");
+  const listboxNode = document.getElementById("ss_elem_list");
+  const singleSelectTriggerWrapper = document?.querySelector(
+    "[data-single-select-trigger]"
+  );
+  const singleSelectTrigger =
+    singleSelectTriggerWrapper?.querySelector("button");
+  let activeDescendant = listboxNode?.getAttribute("aria-activedescendant");
+  let startRangeIndex: number | null = 0;
+  let keysSoFar = "";
+  // const handleFocusChange = function () {};
+  // const handleItemChange = function () {};
+  registerEvents();
+
+  const setupFocus = () => {
+    if (activeDescendant) {
+      const listitem = document.getElementById(activeDescendant);
+      listitem?.scrollIntoView({ block: "nearest", inline: "nearest" });
+    } else {
+      focusFirstItem();
+    }
+  };
+
+  const focusFirstItem = () => {
+    const firstItem = listboxNode?.querySelector('[role="option"]');
+
+    if (firstItem && firstItem instanceof HTMLElement) {
+      focusItem(firstItem);
+    }
+  };
+
+  const focusLastItem = () => {
+    const itemList = listboxNode?.querySelectorAll('[role="option"]');
+
+    if (itemList?.length) {
+      focusItem(itemList[itemList.length - 1]);
+    }
+  };
+
+  const checkKeyPress = (evt: KeyboardEvent) => {
+    const lastActiveId = activeDescendant;
+    const allOptions = listboxNode?.querySelectorAll('[role="option"]');
+    let currentItem: Element | null | undefined;
+    if (activeDescendant) {
+      currentItem = document.getElementById(activeDescendant);
+    } else {
+      currentItem = allOptions?.[0];
+    }
+    let nextItem = currentItem;
+
+    if (!currentItem) {
+      return;
+    }
+
+    switch (evt.key) {
+      case "PageUp":
+      case "PageDown":
+        evt.preventDefault();
+
+        break;
+      case "ArrowUp":
+      case "ArrowDown":
+        evt.preventDefault();
+        if (!activeDescendant && currentItem) {
+          // focus first option if no option was previously focused, and perform no other actions
+          focusItem(currentItem);
+          break;
+        }
+
+        if (evt.key === "ArrowUp") {
+          nextItem = findPreviousOption(currentItem);
+        } else {
+          nextItem = findNextOption(currentItem);
+        }
+
+        if (
+          nextItem &&
+          evt.shiftKey &&
+          startRangeIndex &&
+          nextItem instanceof HTMLElement
+        ) {
+          selectRange(startRangeIndex, nextItem);
+        }
+
+        if (nextItem && nextItem instanceof HTMLElement) {
+          focusItem(nextItem);
+        }
+
+        break;
+
+      case "Home":
+        evt.preventDefault();
+        focusFirstItem();
+        break;
+
+      case "End":
+        evt.preventDefault();
+        focusLastItem();
+
+        if (
+          evt.shiftKey &&
+          evt.ctrlKey &&
+          allOptions?.length &&
+          startRangeIndex
+        ) {
+          selectRange(startRangeIndex, allOptions.length - 1);
+        }
+        break;
+
+      case "Shift":
+        if (allOptions?.length) {
+          startRangeIndex = getElementIndex(currentItem, allOptions);
+        }
+        break;
+
+      case " ":
+        if (nextItem) {
+          evt.preventDefault();
+        }
+        break;
+
+      case "Backspace":
+      case "Delete":
+      case "Enter": {
+        evt.preventDefault();
+
+        let nextUnselected = nextItem?.nextElementSibling;
+        while (nextUnselected) {
+          if (nextUnselected.getAttribute("aria-selected") != "true") {
+            break;
+          }
+          nextUnselected = nextUnselected.nextElementSibling;
+        }
+        if (!nextUnselected) {
+          nextUnselected = nextItem?.previousElementSibling;
+          while (nextUnselected) {
+            if (nextUnselected.getAttribute("aria-selected") != "true") {
+              break;
+            }
+            nextUnselected = nextUnselected.previousElementSibling;
+          }
+        }
+
+        if (
+          !activeDescendant &&
+          nextUnselected &&
+          nextUnselected instanceof HTMLElement
+        ) {
+          focusItem(nextUnselected);
+        }
+        break;
+      }
+
+      case "A":
+      case "a":
+        // handle control + A
+        if (evt.ctrlKey || evt.metaKey) {
+          evt.preventDefault();
+          break;
+        }
+      // fall through
+      default:
+        if (evt.key.length === 1) {
+          const itemToFocus = findItemToFocus(evt.key.toLowerCase());
+          if (itemToFocus) {
+            focusItem(itemToFocus);
+          }
+        }
+        break;
+    }
+
+    if (activeDescendant !== lastActiveId) {
+      updateScroll();
+    }
+  };
+
+  const findItemToFocus = (character: string) => {
+    const itemList = listboxNode?.querySelectorAll('[role="option"]');
+    let searchIndex = 0;
+    if (itemList?.length) {
+      if (!keysSoFar) {
+        for (let i = 0; i < itemList.length; i++) {
+          if (itemList[i].getAttribute("id") === activeDescendant) {
+            searchIndex = i;
+          }
+        }
+      }
+
+      keysSoFar += character;
+      clearKeysSoFarAfterDelay();
+
+      let nextMatch = findMatchInRange(
+        itemList,
+        searchIndex + 1,
+        itemList?.length
+      );
+
+      if (!nextMatch) {
+        nextMatch = findMatchInRange(itemList, 0, searchIndex);
+      }
+      return nextMatch;
+    }
+  };
+
+  const getElementIndex = (option: Element, options: NodeList) => {
+    const allOptions = Array.prototype.slice.call(options); // convert to array
+    const optionIndex = allOptions.indexOf(option);
+
+    return typeof optionIndex === "number" ? optionIndex : null;
+  };
+
+  /* Return the next listbox option, if it exists; otherwise, returns null */
+  const findNextOption = (currentOption: Element) => {
+    const allOptions = Array.prototype.slice.call(
+      listboxNode?.querySelectorAll('[role="option"]')
+    ); // get options array
+    const currentOptionIndex = allOptions.indexOf(currentOption);
+    let nextOption = null;
+
+    if (currentOptionIndex > -1 && currentOptionIndex < allOptions.length - 1) {
+      nextOption = allOptions[currentOptionIndex + 1];
+    }
+
+    return nextOption;
+  };
+
+  /* Return the previous listbox option, if it exists; otherwise, returns null */
+  const findPreviousOption = (currentOption: Element) => {
+    const allOptions = Array.prototype.slice.call(
+      listboxNode?.querySelectorAll('[role="option"]')
+    ); // get options array
+    const currentOptionIndex = allOptions.indexOf(currentOption);
+    let previousOption = null;
+
+    if (currentOptionIndex > -1 && currentOptionIndex > 0) {
+      previousOption = allOptions[currentOptionIndex - 1];
+    }
+
+    return previousOption;
+  };
+
+  const clearKeysSoFarAfterDelay = () => {
+    let keyClear;
+    if (keyClear) {
+      clearTimeout(keyClear);
+      keyClear = null;
+    }
+    keyClear = setTimeout(() => {
+      keysSoFar = "";
+      keyClear = null;
+    }, 500);
+  };
+
+  const findMatchInRange = (
+    list: NodeListOf<Element>,
+    startIndex: number,
+    endIndex: number
+  ) => {
+    // Find the first item starting with the keysSoFar substring, searching in
+    // the specified range of items
+    for (let n = startIndex; n < endIndex; n++) {
+      const labelElement = list[n];
+      if (labelElement instanceof HTMLElement) {
+        const label = labelElement.innerText;
+        if (label && label.toLowerCase().indexOf(keysSoFar) === 0) {
+          return labelElement;
+        }
+      }
+    }
+    return null;
+  };
+
+  const checkClickItem = (evt: MouseEvent) => {
+    if (evt.target && evt.target instanceof HTMLElement) {
+      if (evt.target.getAttribute("role") !== "option") {
+        return;
+      }
+
+      focusItem(evt.target);
+      updateScroll();
+    }
+  };
+
+  /**
+   * @description
+   *  Defocus the specified item
+   * @param element
+   *  The element to defocus
+   */
+  const defocusItem = (element?: HTMLElement | null) => {
+    if (!element) {
+      return;
+    }
+
+    element.removeAttribute("aria-selected");
+    element.classList.remove("focused");
+  };
+
+  /**
+   * @description
+   *  Focus on the specified item
+   * @param element
+   *  The element to focus
+   */
+  const focusItem = (element: Element | null) => {
+    if (activeDescendant) {
+      const activeDescendantElement = document.getElementById(activeDescendant);
+      defocusItem(activeDescendantElement);
+    }
+    element?.setAttribute("aria-selected", "true");
+    element?.classList.add("focused");
+    if (element) {
+      listboxNode?.setAttribute("aria-activedescendant", element.id);
+      activeDescendant = element.id;
+
+      // checkUpDownButtons();
+      // handleFocusChange(element);
+    }
+  };
+
+  const checkInRange = (index: number, start: number, end: number) => {
+    const rangeStart = start < end ? start : end;
+    const rangeEnd = start < end ? end : start;
+
+    return index >= rangeStart && index <= rangeEnd;
+  };
+
+  /**
+   * Select a range of options
+   *
+   * @param start
+   * @param end
+   */
+  const selectRange = (start: number, end: number | HTMLElement) => {
+    // get start/end indices
+    const allOptions = listboxNode?.querySelectorAll('[role="option"]');
+    if (allOptions?.length) {
+      const startIndex =
+        typeof start === "number" ? start : getElementIndex(start, allOptions);
+      const endIndex =
+        typeof end === "number" ? end : getElementIndex(end, allOptions);
+      if (allOptions?.length && startIndex && endIndex) {
+        for (let index = 0; index < allOptions.length; index++) {
+          const selected = checkInRange(index, startIndex, endIndex);
+          allOptions[index].setAttribute("aria-selected", selected + "");
+        }
+      }
+    }
+  };
+
+  /**
+   * Check if the selected option is in view, and scroll if not
+   */
+  const updateScroll = () => {
+    if (activeDescendant) {
+      const selectedOption = document.getElementById(activeDescendant);
+      if (selectedOption && listboxNode) {
+        const scrollBottom = listboxNode.clientHeight + listboxNode.scrollTop;
+        const elementBottom =
+          selectedOption.offsetTop + selectedOption.offsetHeight;
+        if (elementBottom > scrollBottom) {
+          listboxNode.scrollTop = elementBottom - listboxNode.clientHeight;
+        } else if (selectedOption.offsetTop < listboxNode.scrollTop) {
+          listboxNode.scrollTop = selectedOption.offsetTop;
+        }
+        selectedOption.scrollIntoView({ block: "nearest", inline: "nearest" });
+      }
+    }
+  };
+</script> -->
