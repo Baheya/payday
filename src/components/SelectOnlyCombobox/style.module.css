@@ -1,0 +1,135 @@
+.container {
+  position: relative;
+  container-type: inline-size;
+  display: flex;
+}
+
+.mobile-trigger {
+  @container (min-width: 245px) {
+    display: none;
+  }
+}
+
+.desktop-trigger {
+  display: none;
+  line-height: 0;
+
+  @container (min-width: 245px) {
+    display: block;
+  }
+}
+
+.list {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+
+  display: none;
+  flex-direction: column;
+  row-gap: var(--spacing-100);
+
+  margin: 0;
+  padding: 0;
+  padding: var(--spacing-150);
+  border: 1px solid var(--grey-100);
+  border-radius: var(--spacing-100);
+
+  list-style-type: none;
+
+  background-color: var(--white);
+  box-shadow: 0 4px 24px rgb(0 0 0 / 25%);
+
+  &:focus {
+    outline: 1px solid var(--green);
+  }
+}
+
+.container[data-open] {
+  .list {
+    display: block;
+  }
+
+  .desktop-trigger {
+    transform: rotate(180deg);
+  }
+}
+
+.label {
+  display: none;
+
+  @container (min-width: 245px) {
+    display: block;
+  }
+}
+
+.button {
+  @container (min-width: 245px) {
+    display: none;
+  }
+}
+
+.button-label {
+  @mixin visually-hidden;
+
+  @container (min-width: 245px) {
+    @mixin visually-unhidden;
+  }
+}
+
+.combobox {
+  cursor: pointer;
+
+  display: flex;
+  column-gap: var(--spacing-100);
+  align-items: center;
+  justify-content: space-between;
+
+  border: none;
+
+  background: none;
+
+  &:focus {
+    outline: 1px solid var(--green);
+  }
+
+  @container (min-width: 245px) {
+    padding: var(--spacing-150) var(--spacing-250);
+    border: 1px solid var(--grey-900);
+    border-radius: var(--spacing-100);
+  }
+}
+
+.option {
+  @mixin text-sm;
+
+  cursor: pointer;
+  position: relative;
+  padding: var(--spacing-100) var(--spacing-50);
+
+  &:not(:last-child)::after {
+    content: "";
+
+    position: absolute;
+    right: 0;
+    bottom: calc((-1 * var(--spacing-100)) / 2);
+    left: 0;
+
+    height: 1px;
+
+    background-color: var(--grey-100);
+  }
+}
+
+[role="listbox"]:focus [role="option"].focused {
+  outline: 2px solid currentcolor;
+}
+
+[role="option"]:hover {
+  border-radius: var(--spacing-100);
+  background-color: var(--grey-100);
+}
+
+[aria-selected="true"] {
+  font-weight: 700;
+}

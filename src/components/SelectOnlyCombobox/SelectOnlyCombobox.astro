@@ -1,0 +1,83 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import Icon, { type iconName } from "../Icon/Icon.astro";
+
+import style from "./style.module.css";
+
+interface Props extends HTMLAttributes<"select"> {
+  options: string[];
+  comboboxLabel: string;
+  previewLabel: string;
+  mobileTriggerIconName: iconName;
+}
+
+const {
+  options,
+  comboboxLabel,
+  previewLabel,
+  mobileTriggerIconName,
+  ...props
+} = Astro.props;
+---
+
+<select-only-combobox class={style.container}>
+  <div class:list={[style.option, style.label]} id="combobox-label">
+    {comboboxLabel}
+  </div>
+  <button
+    aria-controls="ss_elem_list"
+    aria-expanded="false"
+    aria-haspopup="listbox"
+    aria-labelledby="combobox-label"
+    class={style.combobox}
+    role="combobox"
+    tabindex="0"
+  >
+    <span class={style["button-label"]} data-combobox-preview
+      >{previewLabel}</span
+    >
+    <Icon
+      aria-hidden="true"
+      class={style["mobile-trigger"]}
+      icon={mobileTriggerIconName}
+    />
+    <Icon
+      aria-hidden="true"
+      class={style["desktop-trigger"]}
+      icon="chevron-down"
+    />
+  </button>
+  <div
+    aria-labelledby="combobox-label"
+    class:list={[style.list]}
+    id="ss_elem_list"
+    role="listbox"
+    tabindex="-1"
+    {...props}
+  >
+    <div aria-selected="true" class={style.option} id="option_0" role="option">
+      All Transactions
+    </div>
+    {
+      options.map((option, i) => (
+        <div
+          aria-selected="false"
+          class={style.option}
+          id={`option_${i + 1}`}
+          role="option"
+        >
+          {option}
+        </div>
+      ))
+    }
+  </div>
+</select-only-combobox>
+
+<script>
+  import { SelectOnlyCombobox } from "./SelectOnlyCombobox.ts";
+
+  if (!customElements.get("select-only-combobox")) {
+    customElements.define("select-only-combobox", SelectOnlyCombobox);
+  }
+</script>

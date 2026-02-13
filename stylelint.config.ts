@@ -10,6 +10,10 @@ export default {
         ignorePartialSupport: true,
       },
     ],
+    "nesting-selector-no-missing-scoping-root": [
+      true,
+      { ignoreAtRules: ["/^define-mixin/"] },
+    ],
     "custom-property-empty-line-before": null,
     "at-rule-no-unknown": null,
     "selector-not-notation": null,
