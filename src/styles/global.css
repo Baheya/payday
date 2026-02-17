@@ -63,6 +63,10 @@
 
     clip-path: inset(50%);
   }
+
+  .hidden {
+    display: none;
+  }
 }
 
 @font-face {

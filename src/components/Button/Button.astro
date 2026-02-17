@@ -1,0 +1,30 @@
+---
+import type { iconName } from "#components/Icon/Icon.astro";
+import type { HTMLAttributes } from "astro/types";
+
+import Icon from "../Icon/Icon.astro";
+
+import style from "./style.module.css";
+
+interface Props extends HTMLAttributes<"button"> {
+  icon?: iconName;
+  iconPlacement?: "before" | "after";
+}
+
+const { icon, iconPlacement = "before", ...props } = Astro.props;
+const buttonLabel = await Astro.slots.render("default");
+---
+
+<button class={style.button} {...props}>
+  {
+    iconPlacement === "before" && icon && (
+      <Icon aria-labelledby={buttonLabel} icon={icon} />
+    )
+  }
+  <slot />
+  {
+    iconPlacement === "after" && icon && (
+      <Icon aria-labelledby={buttonLabel} icon={icon} />
+    )
+  }
+</button>

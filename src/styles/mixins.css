@@ -32,3 +32,33 @@
   font-size: var(--font-size-xs);
   line-height: 150%;
 }
+
+@define-mixin visually-hidden {
+  &:not(:focus):not(:active):not(:focus-within) {
+    position: absolute;
+
+    overflow: hidden;
+
+    width: 1px;
+    height: 1px;
+
+    white-space: nowrap;
+
+    clip-path: inset(50%);
+  }
+}
+
+@define-mixin visually-unhidden {
+  &:not(:focus):not(:active):not(:focus-within) {
+    position: static;
+
+    overflow: visible;
+
+    width: auto;
+    height: auto;
+
+    white-space: initial;
+
+    clip-path: none;
+  }
+}
