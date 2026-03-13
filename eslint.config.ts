@@ -1,4 +1,5 @@
 import eslint from "@eslint/js";
+import eslintConfigPrettier from "eslint-config-prettier/flat";
 import eslintPluginAstro from "eslint-plugin-astro";
 import compat from "eslint-plugin-compat";
 import perfectionist from "eslint-plugin-perfectionist";
@@ -12,6 +13,7 @@ export default defineConfig([
   compat.configs["flat/recommended"],
   ...eslintPluginAstro.configs["flat/recommended"],
   ...eslintPluginAstro.configs["flat/jsx-a11y-recommended"],
+  eslintConfigPrettier,
   {
     files: ["**/*.{astro,ts,tsx}"],
     processor: "astro/client-side-ts",
