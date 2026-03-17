@@ -1,0 +1,125 @@
+---
+import type { Tables } from "#src/types.ts";
+
+import { Image } from "@unpic/astro";
+import Filter from "#components/Filter/Filter.astro";
+import Pagination from "#components/Pagination/Pagination.astro";
+import Search from "#components/Search/Search.astro";
+import Sort from "#components/Sort/Sort.astro";
+import {
+  getAllTransactionCategories,
+  getTransactions,
+} from "#db/transactions.ts";
+import { setCurrency, transformDate } from "#lib/utils.ts";
+import MiniSearch from "minisearch";
+
+import style from "./style.module.css";
+
+const categoriesResponse = await getAllTransactionCategories();
+const categories = new Set(
+  categoriesResponse?.data?.map((item) => item.category),
+);
+const currentParams = Astro.url.searchParams;
+const pageNumber = parseInt(currentParams.get("page") || "1");
+const decodedFilterValue = decodeURI(currentParams.get("filter") || "");
+const decodedSortValue = decodeURI(currentParams.get("sort") || "Latest");
+const decodedSearchValue = decodeURI(currentParams.get("search") || "");
+const fieldsToSearch = ["name", "category", "amount", "date", "avatar"];
+const searchInstance = new MiniSearch<Tables<"Transactions">>({
+  fields: fieldsToSearch,
+  storeFields: fieldsToSearch,
+});
+
+const response = await getTransactions(
+  pageNumber,
+  decodedFilterValue,
+  decodedSortValue,
+);
+
+if (response?.data) {
+  searchInstance.addAll(response.data);
+}
+
+const transactions =
+  decodedSearchValue !== ""
+    ? searchInstance.search(decodedSearchValue, {
+        prefix: true,
+        fuzzy: 0.3,
+        maxFuzzy: 0.7,
+      })
+    : response?.data;
+---
+
+<div class={style.container}>
+  <div class={style.wrapper}>
+    <Search label="Search Transactions" placeholder="Search transactions" />
+    <div class={style.controls}>
+      <Sort
+        options={["Latest", "Oldest", "A to Z", "Z to A", "Highest", "Lowest"]}
+      />
+      <Filter options={["All Transactions", ...categories]} />
+    </div>
+  </div>
+  {
+    transactions && transactions.length > 0 ? (
+      <ul class={style.list}>
+        <li class:list={[style.item, style.header]}>
+          <p class:list={[style.name, style.text]}>Recipient/Sender</p>
+          <p class:list={[style.category, style.text]}>Category</p>
+          <p class:list={[style.date, style.text]}>Transaction date</p>
+          <p class:list={[style.amount, style.text]}>Amount</p>
+        </li>
+        {transactions.map((transaction, i) => {
+          const strippedDate = transaction.date.split("T")[0];
+          const transformedDate = transformDate(transaction.date);
+          const transformedAmount = setCurrency(transaction.amount);
+          const isIncome = !transformedAmount.includes("-");
+          const styleAttribute = { style: { "--i": i + 1 } };
+          return (
+            <>
+              <hr class={style.divider} {...styleAttribute} />
+              <li class={style.item} {...styleAttribute}>
+                <Image
+                  alt=""
+                  class={style.image}
+                  height={40}
+                  layout="fixed"
+                  src={transaction.avatar}
+                  width={40}
+                />
+                <p class:list={[style.emphasis, style.name]}>
+                  {transaction.name}
+                </p>
+                <p class:list={[style.text, style.category]}>
+                  {transaction.category}
+                </p>
+                <p
+                  class:list={[
+                    style.emphasis,
+                    isIncome && style.green,
+                    style.amount,
+                  ]}
+                >
+                  {transformedAmount}
+                </p>
+                <time
+                  class:list={[style.text, style.date]}
+                  datetime={strippedDate}
+                >
+                  {transformedDate}
+                </time>
+              </li>
+            </>
+          );
+        })}
+      </ul>
+    ) : (
+      <p class={style.text}>No transactions found.</p>
+    )
+  }
+  {
+    transactions && transactions?.length > 0 && response?.count && (
+      <Pagination countPerPage={10} totalCount={transactions.length} />
+    )
+  }
+</div>
