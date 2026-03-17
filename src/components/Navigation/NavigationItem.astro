@@ -16,7 +16,7 @@ const currentPath = Astro.url.pathname;
 
 <li class={style.item}>
   <a class:list={[style.link, currentPath === href && style.active]} href={href}
-    ><Icon icon={icon} id={id} /><span class={style.label} id={id}
+    ><Icon aria-labelledby={id} icon={icon} /><span class={style.label} id={id}
       ><slot /></span
     >
   </a>
