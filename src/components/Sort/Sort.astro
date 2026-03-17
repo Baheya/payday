@@ -1,0 +1,34 @@
+---
+import SelectOnlyCombobox from "../SelectOnlyCombobox/SelectOnlyCombobox.astro";
+
+interface Props {
+  options: string[];
+}
+
+const { options } = Astro.props;
+
+const currentlySelected = Astro.url.searchParams.get("sort");
+---
+
+<SelectOnlyCombobox
+  comboboxLabel="Sort By"
+  data-combobox-sort
+  id="sort-combo"
+  mobileTriggerIconName="sort"
+  options={options}
+  previewLabel={currentlySelected}
+/>
+
+<script>
+  document.querySelectorAll("[data-combobox-sort]").forEach((combobox) => {
+    combobox?.querySelectorAll("[role=option]").forEach((element) => {
+      element.addEventListener("selection-change", (e) => {
+        if (e instanceof CustomEvent) {
+          const currentParams = new URLSearchParams(window.location.search);
+          currentParams.set("sort", e.detail);
+          window.location.assign(`?${currentParams.toString()}`);
+        }
+      });
+    });
+  });
+</script>

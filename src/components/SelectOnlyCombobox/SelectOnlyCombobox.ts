@@ -1,6 +1,5 @@
 export class SelectOnlyCombobox extends HTMLElement {
-  combobox: HTMLElement | null;
-  listboxEl: HTMLUListElement | null | undefined;
+  listboxEl;
   selectActions;
   comboLabel;
   comboEl;
@@ -11,23 +10,18 @@ export class SelectOnlyCombobox extends HTMLElement {
   searchString;
   searchTimeout: number | undefined;
   ignoreBlur;
-  buttonEl;
   comboboxPreviewLabel;
 
   constructor() {
     super();
 
-    this.combobox = document.querySelector("select-only-combobox");
-    this.listboxEl = this.combobox?.querySelector("[role=listbox]");
-    this.comboLabel = this.combobox?.querySelector("#combobox-label");
-    this.comboEl = this.combobox?.querySelector('[role="combobox"]');
-    this.buttonEl = this.combobox?.querySelector("button");
+    this.listboxEl = this.querySelector<HTMLUListElement>("[role=listbox]");
+    this.comboLabel = this.querySelector("#combobox-label");
+    this.comboEl = this.querySelector('[role="combobox"]');
     this.idBase = this.comboEl?.id || "combo";
-    this.options = this.combobox?.querySelectorAll("[role=option]");
-    this.comboboxPreviewLabel = this.combobox?.querySelector(
-      "[data-combobox-preview]",
-    );
-    // state
+    this.options = this.querySelectorAll("[role=option]");
+    this.comboboxPreviewLabel = this.querySelector("[data-combobox-preview]");
+
     this.activeIndex = 0;
     this.open = false;
     this.searchString = "";
@@ -49,13 +43,20 @@ export class SelectOnlyCombobox extends HTMLElement {
   }
 
   connectedCallback() {
-    // add event listeners
     this.options?.forEach((option, index) => {
+      const customEvent = new CustomEvent("selection-change", {
+        detail: option.textContent.trim(),
+      });
+
       option.addEventListener("click", (event) => {
         event.stopPropagation();
         this.onOptionClick(index);
+        option.dispatchEvent(customEvent);
       });
-      option.addEventListener("mousedown", () => this.onOptionMouseDown());
+      option.addEventListener("mousedown", () => {
+        this.onOptionMouseDown();
+        option.dispatchEvent(customEvent);
+      });
     });
     this.comboLabel?.addEventListener("click", () => this.onLabelClick());
     this.listboxEl?.addEventListener("focusout", (e: FocusEvent) =>
@@ -65,8 +66,8 @@ export class SelectOnlyCombobox extends HTMLElement {
     this.comboEl?.addEventListener("click", () => this.onComboClick());
     this.comboEl?.addEventListener("keydown", (e) => this.onComboKeyDown(e));
     document.addEventListener("click", (evt) => {
-      if (evt.target instanceof Node && !this.combobox?.contains(evt.target)) {
-        this.listboxEl?.classList.add("hidden");
+      if (evt.target instanceof Node && !this.contains(evt.target)) {
+        this.removeAttribute("data-open");
       }
     });
   }
@@ -303,8 +304,8 @@ export class SelectOnlyCombobox extends HTMLElement {
     // find the index of the first matching option
     const searchString = this.getSearchString(letter);
     if (this.options) {
-      const optionsContentArray = Array.from(this.options).map(
-        (option) => option.textContent,
+      const optionsContentArray = Array.from(this.options).map((option) =>
+        option.textContent.trim(),
       );
       const searchIndex = this.getIndexByLetter(
         optionsContentArray,
@@ -378,8 +379,8 @@ export class SelectOnlyCombobox extends HTMLElement {
       this.activeIndex = index;
 
       // update displayed value
-      const optionsContentArray = Array.from(this.options).map(
-        (option) => option.textContent,
+      const optionsContentArray = Array.from(this.options).map((option) =>
+        option.textContent.trim(),
       );
       const selected = optionsContentArray[index];
       if (this.comboboxPreviewLabel) {
@@ -406,9 +407,9 @@ export class SelectOnlyCombobox extends HTMLElement {
     // update aria-expanded and styles
     this.comboEl?.setAttribute("aria-expanded", `${open}`);
     if (open) {
-      this.combobox?.setAttribute("data-open", "true");
+      this.setAttribute("data-open", "true");
     } else {
-      this.combobox?.removeAttribute("data-open");
+      this.removeAttribute("data-open");
     }
 
     // update activedescendant

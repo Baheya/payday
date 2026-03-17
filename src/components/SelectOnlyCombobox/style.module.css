@@ -1,11 +1,18 @@
 .container {
-  position: relative;
-  container-type: inline-size;
   display: flex;
+  column-gap: var(--spacing-150);
+  align-items: center;
+}
+
+.wrapper {
+  position: relative;
 }
 
 .mobile-trigger {
-  @container (min-width: 245px) {
+  display: block;
+  line-height: 0;
+
+  @media (--md-viewport) {
     display: none;
   }
 }
@@ -14,21 +21,23 @@
   display: none;
   line-height: 0;
 
-  @container (min-width: 245px) {
+  @media (--md-viewport) {
     display: block;
   }
 }
 
 .list {
   position: absolute;
-  top: 100%;
-  right: 0;
-  left: 0;
+  z-index: 2;
+  top: calc(100% + var(--spacing-200));
+  left: 50%;
+  transform: translateX(-50%);
 
   display: none;
   flex-direction: column;
   row-gap: var(--spacing-100);
 
+  width: 100%;
   margin: 0;
   padding: 0;
   padding: var(--spacing-150);
@@ -42,12 +51,13 @@
 
   &:focus {
     outline: 1px solid var(--green);
+    outline-offset: 2px;
   }
 }
 
 .container[data-open] {
   .list {
-    display: block;
+    display: flex;
   }
 
   .desktop-trigger {
@@ -58,22 +68,20 @@
 .label {
   display: none;
 
-  @container (min-width: 245px) {
-    display: block;
-  }
-}
+  @media (--md-viewport) {
+    @mixin text-sm;
 
-.button {
-  @container (min-width: 245px) {
-    display: none;
+    display: block;
+    color: var(--grey-500);
   }
 }
 
 .button-label {
   @mixin visually-hidden;
 
-  @container (min-width: 245px) {
+  @media (--md-viewport) {
     @mixin visually-unhidden;
+    @mixin text-sm;
   }
 }
 
@@ -90,12 +98,14 @@
   background: none;
 
   &:focus {
-    outline: 1px solid var(--green);
+    outline: 2px solid var(--green);
+    outline-offset: 1px;
   }
 
-  @container (min-width: 245px) {
+  @media (--md-viewport) {
+    height: 45px;
     padding: var(--spacing-150) var(--spacing-250);
-    border: 1px solid var(--grey-900);
+    border: 1px solid var(--beige-500);
     border-radius: var(--spacing-100);
   }
 }
