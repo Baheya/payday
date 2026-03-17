@@ -1,0 +1,72 @@
+---
+import Icon from "#components/Icon/Icon.astro";
+
+import style from "./style.module.css";
+
+interface Props {
+  countPerPage: number;
+  totalCount: number;
+}
+
+const { countPerPage, totalCount } = Astro.props;
+
+const currentURL = Astro.url;
+const currentPage = parseInt(currentURL.searchParams.get("page") || "1");
+const numberOfPages = Math.ceil(totalCount / countPerPage);
+const isFirstPage = currentPage === 1;
+const isLastPage = currentPage === numberOfPages;
+const pageNumbers = Array.from({ length: numberOfPages }, (_value, i) => i + 1);
+
+const setPage = (pageNumber: number) => {
+  return `${currentURL.pathname}?page=${pageNumber}`;
+};
+const nextPageLink = isLastPage ? "#" : setPage(currentPage + 1);
+const previousPageLink = isFirstPage ? "#" : setPage(currentPage - 1);
+---
+
+<nav aria-label="Pagination" class={style.pagination}>
+  <ul class={style.list}>
+    <li class:list={[style.item, style.prev]}>
+      <a
+        aria-disabled={isFirstPage ? "true" : "false"}
+        class:list={[style.link, isFirstPage && style.disabled]}
+        href={previousPageLink}
+        ><Icon
+          aria-labelledby="previous-pagination-label"
+          icon="chevron-left"
+        /><span class={style.label} id="previous-pagination-label"
+          >Previous</span
+        ></a
+      >
+    </li>
+    {
+      pageNumbers.map((pageNumber) => {
+        return (
+          <li class={style.item}>
+            <a
+              aria-current={currentPage === pageNumber ? "page" : "false"}
+              class:list={[
+                style.link,
+                currentPage === pageNumber && style.active,
+              ]}
+              href={setPage(pageNumber)}
+            >
+              {pageNumber}
+            </a>
+          </li>
+        );
+      })
+    }
+    <li class:list={[style.item, style.next]}>
+      <a
+        aria-disabled={isLastPage ? "true" : "false"}
+        class:list={[style.link, isLastPage && style.disabled]}
+        href={nextPageLink}
+        ><span class={style.label} id="next-pagination-label">Next</span><Icon
+          aria-labelledby="next-pagination-label"
+          icon="chevron-right"
+        /></a
+      >
+    </li>
+  </ul>
+</nav>
