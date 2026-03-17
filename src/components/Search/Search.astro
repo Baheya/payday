@@ -1,0 +1,45 @@
+---
+import Icon from "#components/Icon/Icon.astro";
+
+import style from "./style.module.css";
+
+interface Props {
+  label: string;
+  placeholder: string;
+}
+
+const { label, placeholder } = Astro.props;
+---
+
+<div class={style.search}>
+  <label class="visually-hidden" for="search">{label}</label>
+  <input
+    class={style.input}
+    id="search"
+    placeholder={placeholder}
+    type="search"
+  />
+  <Icon class={style.icon} icon="magnifying-glass" />
+</div>
+
+<script>
+  import { debounce } from "#src/lib/utils.ts";
+
+  document
+    .querySelectorAll<HTMLInputElement>('input[type="search"]')
+    .forEach((element) => {
+      const currentParams = new URLSearchParams(window.location.search);
+      if (currentParams.has("search")) {
+        element.value = currentParams.get("search") || "";
+      }
+      element.addEventListener(
+        "input",
+        debounce((e: Event) => {
+          if (e.target instanceof HTMLInputElement) {
+            currentParams.set("search", e.target.value);
+            window.location.assign(`?${currentParams.toString()}`);
+          }
+        }, 600),
+      );
+    });
+</script>
