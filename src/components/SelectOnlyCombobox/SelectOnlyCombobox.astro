@@ -8,8 +8,9 @@ import style from "./style.module.css";
 interface Props extends HTMLAttributes<"select"> {
   options: string[];
   comboboxLabel: string;
-  previewLabel: string;
+  previewLabel: string | null;
   mobileTriggerIconName: iconName;
+  id: string;
 }
 
 const {
@@ -17,60 +18,60 @@ const {
   comboboxLabel,
   previewLabel,
   mobileTriggerIconName,
+  id,
   ...props
 } = Astro.props;
 ---
 
 <select-only-combobox class={style.container}>
-  <div class:list={[style.option, style.label]} id="combobox-label">
+  <div class:list={[style.label]} id="combobox-label">
     {comboboxLabel}
   </div>
-  <button
-    aria-controls="ss_elem_list"
-    aria-expanded="false"
-    aria-haspopup="listbox"
-    aria-labelledby="combobox-label"
-    class={style.combobox}
-    role="combobox"
-    tabindex="0"
-  >
-    <span class={style["button-label"]} data-combobox-preview
-      >{previewLabel}</span
+  <div class={style.wrapper}>
+    <button
+      aria-controls={id}
+      aria-expanded="false"
+      aria-haspopup="listbox"
+      aria-labelledby="combobox-label"
+      class={style.combobox}
+      role="combobox"
+      tabindex="0"
     >
-    <Icon
-      aria-hidden="true"
-      class={style["mobile-trigger"]}
-      icon={mobileTriggerIconName}
-    />
-    <Icon
-      aria-hidden="true"
-      class={style["desktop-trigger"]}
-      icon="chevron-down"
-    />
-  </button>
-  <div
-    aria-labelledby="combobox-label"
-    class:list={[style.list]}
-    id="ss_elem_list"
-    role="listbox"
-    tabindex="-1"
-    {...props}
-  >
-    <div aria-selected="true" class={style.option} id="option_0" role="option">
-      All Transactions
+      <span class={style["button-label"]} data-combobox-preview
+        >{previewLabel || options[0]}</span
+      >
+      <Icon
+        aria-hidden="true"
+        class={style["mobile-trigger"]}
+        icon={mobileTriggerIconName}
+      />
+      <Icon
+        aria-hidden="true"
+        class={style["desktop-trigger"]}
+        icon="chevron-down"
+      />
+    </button>
+    <div
+      aria-labelledby="combobox-label"
+      class:list={[style.list]}
+      id={id}
+      role="listbox"
+      tabindex="-1"
+      {...props}
+    >
+      {
+        options.map((option, i) => (
+          <div
+            aria-selected={i === 0 ? "true" : "false"}
+            class={style.option}
+            id={`${id}-option-${i}`}
+            role="option"
+          >
+            {option}
+          </div>
+        ))
+      }
     </div>
-    {
-      options.map((option, i) => (
-        <div
-          aria-selected="false"
-          class={style.option}
-          id={`option_${i + 1}`}
-          role="option"
-        >
-          {option}
-        </div>
-      ))
-    }
   </div>
 </select-only-combobox>
 
