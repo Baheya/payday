@@ -12,9 +12,9 @@ type Props<Tag extends HTMLTag = HTMLTag> = Polymorphic<{
 }> &
   CustomProps;
 
-const { as: Tag = "h1", size = "xl", ...props } = Astro.props;
+const { as: Tag = "h1", size = "xl", class: className, ...props } = Astro.props;
 ---
 
-<Tag class:list={[style.heading, style[size]]} {...props}>
+<Tag class:list={[style.heading, style[size], className]} {...props}>
   <slot />
 </Tag>
