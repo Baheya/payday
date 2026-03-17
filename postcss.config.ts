@@ -14,7 +14,11 @@ export default {
     }),
     postcssMixins({ mixinsDir: path.join(__dirname, "src/styles") }),
     postcssPresetEnv({
-      features: { "nesting-rules": true, "custom-media-queries": true },
+      features: {
+        "nesting-rules": true,
+        "custom-media-queries": true,
+        "not-pseudo-class": true,
+      },
     }),
   ],
 };
