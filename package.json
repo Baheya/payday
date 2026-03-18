@@ -25,7 +25,7 @@
     "@csstools/css-syntax-patches-for-csstree": "^1.1.1",
     "@csstools/postcss-global-data": "^3.1.0",
     "@eslint/js": "^9.39.1",
-    "@supabase/supabase-js": "^2.88.0",
+    "@supabase/supabase-js": "^2.99.2",
     "@types/node": "^25.0.3",
     "@typescript-eslint/parser": "^8.48.1",
     "@vitest/browser": "^3.2.4",
