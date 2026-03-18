@@ -11,7 +11,7 @@
     "test:browser": "vitest --config=vitest.browser.config.ts"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.6",
+    "@astrojs/check": "^0.9.8",
     "@astrojs/netlify": "^6.6.3",
     "@unpic/astro": "^1.0.2",
     "astro": "^5.16.3",
