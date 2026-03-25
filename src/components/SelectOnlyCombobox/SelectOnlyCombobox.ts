@@ -44,18 +44,12 @@ export class SelectOnlyCombobox extends HTMLElement {
 
   connectedCallback() {
     this.options?.forEach((option, index) => {
-      const customEvent = new CustomEvent("selection-change", {
-        detail: option.textContent.trim(),
-      });
-
       option.addEventListener("click", (event) => {
         event.stopPropagation();
         this.onOptionClick(index);
-        option.dispatchEvent(customEvent);
       });
       option.addEventListener("mousedown", () => {
         this.onOptionMouseDown();
-        option.dispatchEvent(customEvent);
       });
     });
     this.comboLabel?.addEventListener("click", () => this.onLabelClick());
@@ -326,23 +320,20 @@ export class SelectOnlyCombobox extends HTMLElement {
   }
 
   onOptionChange(index: number) {
-    // update state
-    this.activeIndex = index;
-
-    // update aria-activedescendant
-    this.comboEl?.setAttribute(
-      "aria-activedescendant",
-      `${this.idBase}-${index}`,
-    );
-
     // update active option styles
     if (this.options) {
+      // update state
+      this.activeIndex = index;
       const options = Array.from(this.options);
       const option = options[index];
+
+      // update aria-activedescendant
+      this.comboEl?.setAttribute("aria-activedescendant", `${option.id}`);
+
       [...options].forEach((optionEl) => {
-        optionEl.classList.remove("option-current");
+        optionEl.removeAttribute("data-focused");
       });
-      option.classList.add("option-current");
+      option.setAttribute("data-focused", "true");
 
       // ensure the new option is in view
       if (
@@ -393,6 +384,12 @@ export class SelectOnlyCombobox extends HTMLElement {
         optionEl.setAttribute("aria-selected", "false");
       });
       options[index].setAttribute("aria-selected", "true");
+
+      const customEvent = new CustomEvent("selection-change", {
+        detail: options[index].textContent.trim(),
+      });
+
+      options[index].dispatchEvent(customEvent);
     }
   }
 
@@ -413,7 +410,9 @@ export class SelectOnlyCombobox extends HTMLElement {
     }
 
     // update activedescendant
-    const activeID = open ? `${this.idBase}-${this.activeIndex}` : "";
+    const options = Array.from(this.options);
+    const option = options[this.activeIndex];
+    const activeID = open ? `${option.id}` : "";
     this.comboEl?.setAttribute("aria-activedescendant", activeID);
 
     if (

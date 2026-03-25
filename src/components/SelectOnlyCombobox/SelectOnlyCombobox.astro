@@ -8,22 +8,25 @@ import style from "./style.module.css";
 interface Props extends HTMLAttributes<"select"> {
   options: string[];
   comboboxLabel: string;
-  previewLabel: string | null;
   mobileTriggerIconName: iconName;
   id: string;
+  currentlySelected?: string | null;
 }
 
 const {
   options,
   comboboxLabel,
-  previewLabel,
   mobileTriggerIconName,
   id,
+  currentlySelected,
   ...props
 } = Astro.props;
 ---
 
-<select-only-combobox class={style.container}>
+<select-only-combobox
+  class={style.container}
+  data-testid="select-only-combobox"
+>
   <div class:list={[style.label]} id="combobox-label">
     {comboboxLabel}
   </div>
@@ -38,7 +41,7 @@ const {
       tabindex="0"
     >
       <span class={style["button-label"]} data-combobox-preview
-        >{previewLabel || options[0]}</span
+        >{currentlySelected || options[0]}</span
       >
       <Icon
         aria-hidden="true"
@@ -62,8 +65,13 @@ const {
       {
         options.map((option, i) => (
           <div
-            aria-selected={i === 0 ? "true" : "false"}
+            aria-selected={
+              option === currentlySelected || i === 0 ? "true" : "false"
+            }
             class={style.option}
+            data-focused={
+              option === currentlySelected || i === 0 ? "true" : "false"
+            }
             id={`${id}-option-${i}`}
             role="option"
           >

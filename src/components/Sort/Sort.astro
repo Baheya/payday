@@ -12,11 +12,11 @@ const currentlySelected = Astro.url.searchParams.get("sort");
 
 <SelectOnlyCombobox
   comboboxLabel="Sort By"
+  currentlySelected={decodeURIComponent(currentlySelected || "")}
   data-combobox-sort
   id="sort-combo"
   mobileTriggerIconName="sort"
   options={options}
-  previewLabel={currentlySelected}
 />
 
 <script>
