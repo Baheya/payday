@@ -12,11 +12,11 @@ const currentlySelected = Astro.url.searchParams.get("filter");
 
 <SelectOnlyCombobox
   comboboxLabel="Filter By"
+  currentlySelected={decodeURIComponent(currentlySelected || "")}
   data-combobox-filter
   id="filter-combo"
   mobileTriggerIconName="filter"
   options={options}
-  previewLabel={currentlySelected}
 />
 
 <script>
