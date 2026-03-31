@@ -1,12 +1,9 @@
+import type { Database } from "#src/types.ts";
+
 import { supabase } from "#lib/supabase.ts";
 import { getPreviousMonthISOString } from "#lib/utils.ts";
 
-export interface BudgetExpenseOverview {
-  total: number;
-  budgetExpenses: Array<{ total: number; category: string }>;
-}
-
-export const getBudgets = async () => {
+const getAllBudgets = async () => {
   const response = await supabase.from("Budgets").select();
   return response.data;
 };
@@ -42,57 +39,60 @@ export const getBudgetExpensesOverview = async () => {
   }
 };
 
-export const getBudgetExpenses = async () => {
-  const previousMonthDate = getPreviousMonthISOString();
+export interface BudgetExpensesByCategory {
+  totalSpent: number;
+  transactions?:
+    | {
+        amount: number;
+        avatar: string;
+        category: string;
+        date: string;
+        id: number;
+        name: string;
+        recurring: boolean;
+      }[]
+    | undefined;
+  category: string;
+  id: number;
+  maximum: number;
+  theme: Database["public"]["Enums"]["theme"];
+}
 
+export const getBudgetExpensesByCategory = async () => {
   try {
-    const budgets = await getBudgets();
-    const budgetCategories = budgets?.map((budget) => budget.category);
+    const currentBudgets = await getAllBudgets();
+    const previousMonthDate = getPreviousMonthISOString();
+    const budgetCategories = currentBudgets?.map((budget) => budget.category);
 
     if (budgetCategories) {
       const currentMonthTransactions = await supabase
         .from("Transactions")
-        .select()
+        .select("*")
         .in("category", budgetCategories)
         .gte("date", previousMonthDate)
-        .lte("date", new Date().toISOString());
+        .lte("date", new Date().toISOString())
+        .order("date", { ascending: true });
 
-      const budgetOverview: BudgetExpenseOverview = {
-        total: 0,
-        budgetExpenses: [],
-      };
-
-      if (
-        currentMonthTransactions.data &&
-        currentMonthTransactions.data.length > 0
-      ) {
-        const totalSpentFromBudget = currentMonthTransactions.data?.reduce(
-          (acc, transaction) => {
-            const isExpense = transaction.amount.toString().includes("-");
-            const budget = acc.budgetExpenses.find(
-              (budget) => budget.category === transaction.category,
-            );
-            const budgetExists = !!budget;
-
-            if (budgetExists && isExpense) {
-              budget.total = budget.total + transaction.amount;
-              acc.total = acc.total + transaction.amount;
-              return acc;
-            } else if (!budgetExists && isExpense) {
-              acc.budgetExpenses.push({
-                total: transaction.amount,
-                category: transaction.category,
-              });
-              acc.total = acc.total + transaction.amount;
-              return acc;
-            } else {
-              return acc;
-            }
-          },
-          budgetOverview,
+      if (currentMonthTransactions.data && currentBudgets) {
+        const transactionsGroupedByCategory = Object.groupBy(
+          currentMonthTransactions.data,
+          ({ category }) => category,
         );
 
-        return totalSpentFromBudget;
+        const currentBudgetsWithTransactions = currentBudgets.map((budget) => ({
+          ...budget,
+          ...(transactionsGroupedByCategory[budget.category] && {
+            transactions: transactionsGroupedByCategory[budget.category],
+          }),
+          totalSpent:
+            transactionsGroupedByCategory[budget.category]?.reduce(
+              (total, acc) => {
+                return total + acc.amount;
+              },
+              0,
+            ) || 0,
+        }));
+        return currentBudgetsWithTransactions;
       }
     }
   } catch (e) {

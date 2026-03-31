@@ -1,0 +1,91 @@
+---
+import type { BudgetExpensesByCategory } from "#db/budgets.ts";
+
+import { Image } from "@unpic/astro";
+import ExpenseDetail from "#components/ExpenseDetail/ExpenseDetail.astro";
+import Link from "#components/Link/Link.astro";
+import { setCurrency, transformDate } from "#lib/utils.ts";
+
+import style from "./style.module.css";
+
+interface Props {
+  budget: BudgetExpensesByCategory;
+}
+
+const { budget } = Astro.props;
+
+const amountSpentPercentage = Math.abs(
+  (100 * (budget.totalSpent || 0)) / budget.maximum,
+);
+const styleAttribute = {
+  style: {
+    "--theme": `var(--${budget.theme})`,
+    "--spent":
+      amountSpentPercentage < budget.maximum ? amountSpentPercentage : 100,
+  },
+};
+---
+
+<li class={style.card} {...styleAttribute}>
+  <p class={style.category}>{budget.category}</p>
+  <p class:list={[style.grey, style.small]}>
+    Maximum of {setCurrency(budget.maximum)}
+  </p>
+  <div class={style.graph}><div class={style.inner}></div></div>
+  <ul class={style.status}>
+    <ExpenseDetail
+      color={budget.theme}
+      label="Spent"
+      value={setCurrency(budget.totalSpent || 0)}
+    />
+    <ExpenseDetail
+      color="beige"
+      label="Free"
+      value={setCurrency(budget.maximum - Math.abs(budget.totalSpent || 0))}
+    />
+  </ul>
+  {
+    budget.transactions && budget.transactions.length > 0 && (
+      <div class={style.transactions}>
+        <div class={style.header}>
+          <p class={style.bold}>Latest Spending</p>
+          <Link href={`transactions/?filter=${budget.category}&sort=Latest`}>
+            See All
+          </Link>
+        </div>
+        <ul class={style.list}>
+          {budget.transactions?.map((transaction) => {
+            const strippedDate = transaction.date.split("T")[0];
+            const transformedDate = transformDate(transaction.date);
+            return (
+              <li class={style.transaction}>
+                <div class={style.row}>
+                  <Image
+                    alt=""
+                    class={style.image}
+                    height={40}
+                    layout="fixed"
+                    src={transaction.avatar}
+                    width={40}
+                  />
+                  <p class:list={[style.bold, style.xs]}>{transaction.name}</p>
+                </div>
+                <div class={style.column}>
+                  <p class:list={[style.bold, style.xs, style.end]}>
+                    {setCurrency(transaction.amount)}
+                  </p>
+                  <time
+                    class:list={[style.grey, style.xs, style.end]}
+                    datetime={strippedDate}
+                  >
+                    {transformedDate}
+                  </time>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    )
+  }
+</li>

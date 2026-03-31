@@ -5,12 +5,14 @@ import ChevronRight from "#icons/chevron-right.svg";
 
 import style from "./style.module.css";
 
-type Props = Omit<HTMLAttributes<"a">, "class" | "class:list">;
+type Props = Omit<HTMLAttributes<"a">, "class" | "class:list" | "href"> & {
+  href: string;
+};
 
-const { ...props } = Astro.props;
+const { href, ...props } = Astro.props;
 ---
 
-<a class={style.link} {...props}>
+<a class={style.link} href={href} {...props}>
   <slot />
   <ChevronRight aria-hidden="true" class={style.icon} />
 </a>

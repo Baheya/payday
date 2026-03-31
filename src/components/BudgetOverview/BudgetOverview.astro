@@ -1,6 +1,5 @@
 ---
-import type { BudgetExpenseOverview } from "#db/budgets.ts";
-import type { Tables } from "#src/types.ts";
+import type { BudgetExpensesByCategory } from "#db/budgets.ts";
 
 import ExpenseDetail from "#components/ExpenseDetail/ExpenseDetail.astro";
 import Heading from "#components/Heading/Heading.astro";
@@ -10,31 +9,33 @@ import { setCurrency } from "#lib/utils.ts";
 import style from "./style.module.css";
 
 interface Props {
-  budgets: Array<Tables<"Budgets">>;
-  overview: BudgetExpenseOverview;
+  expenses: BudgetExpensesByCategory[];
+  summary?: "budgets" | "expenses";
 }
 
-const { budgets, overview } = Astro.props;
+const { expenses, summary = "budgets" } = Astro.props;
 
-const budgetMaximum = budgets.reduce((acc, budget) => acc + budget.maximum, 0);
-
-const generatedGradientStops = overview.budgetExpenses.reduce(
-  (acc, expense) => {
-    let gradientStart;
-
-    const budgetColor = budgets.find(
-      (budget) => expense.category === budget.category,
-    )?.theme;
-    const gradientEnd =
-      (Math.abs(expense.total) / Math.abs(overview.total)) * 100;
-    const gradient =
-      acc +
-      `${!acc ? "" : ", "}var(--${budgetColor}) ${gradientStart || 0}% ${gradientEnd.toFixed(0)}%`;
-    gradientStart = gradientEnd;
-    return gradient;
-  },
-  "",
+const budgetMaximum = expenses.reduce(
+  (acc, expense) => acc + expense.maximum,
+  0,
 );
+const expensesTotalSpend = expenses.reduce(
+  (acc, expense) => acc + Math.abs(expense.totalSpent || 0),
+  0,
+);
+
+const generatedGradientStops = expenses.reduce((acc, expense) => {
+  let gradientStart;
+
+  const budgetColor = expense.theme;
+  const gradientEnd =
+    (Math.abs(expense.totalSpent || 0) / expensesTotalSpend) * 100;
+  const gradient =
+    acc +
+    `${!acc ? "" : ", "}var(--${budgetColor}) ${gradientStart || 0}% ${gradientEnd.toFixed(0)}%`;
+  gradientStart = gradientEnd;
+  return gradient;
+}, "");
 
 const styleAttribute = {
   style: { background: `conic-gradient(${generatedGradientStops})` },
@@ -52,19 +53,22 @@ const styleAttribute = {
         <div class={style.chart} {...styleAttribute}></div>
         <div class={style.inner}>
           <div class={style.text}>
-            <span class={style.emphasis}
-              >{setCurrency(Math.abs(overview.total))}</span
+            <span class={style.emphasis}>{setCurrency(expensesTotalSpend)}</span
             > of {setCurrency(budgetMaximum)} limit
           </div>
         </div>
       </div>
+      {summary === "expenses" && <p class={style.summary}>Spending Summary</p>}
       <ul class={style.details}>
         {
-          budgets.map((budget) => (
+          expenses.map((expense) => (
             <ExpenseDetail
-              color={budget.theme}
-              label={budget.category}
-              value={setCurrency(budget.maximum)}
+              color={expense.theme}
+              label={expense.category}
+              {...(summary === "expenses" && {
+                totalSpent: setCurrency(expense.totalSpent),
+              })}
+              value={setCurrency(expense.maximum)}
             />
           ))
         }
