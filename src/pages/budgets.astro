@@ -1,0 +1,58 @@
+---
+import BudgetDetailCard from "#components/BudgetDetailCard/BudgetDetailCard.astro";
+import BudgetOverview from "#components/BudgetOverview/BudgetOverview.astro";
+import Button from "#components/Button/Button.astro";
+import Heading from "#components/Heading/Heading.astro";
+import { getBudgetExpensesByCategory } from "#db/budgets.ts";
+import BaseLayout from "#layouts/BaseLayout.astro";
+
+const budgetExpensesByCategory = await getBudgetExpensesByCategory();
+---
+
+<BaseLayout title="Budgets">
+  <section>
+    <div class="header">
+      <Heading as="h1" size="xl">Budgets</Heading>
+      <Button>Add New budget</Button>
+    </div>
+    {
+      budgetExpensesByCategory && budgetExpensesByCategory.length > 0 && (
+        <BudgetOverview
+          expenses={budgetExpensesByCategory}
+          summary="expenses"
+        />
+      )
+    }
+    <ul>
+      {
+        budgetExpensesByCategory?.map((budget) => (
+          <BudgetDetailCard budget={budget} />
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--spacing-150);
+    margin-block-start: var(--spacing-400);
+
+    @media (--lg-viewport) {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-300);
+    }
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    margin-block: var(--spacing-400);
+  }
+</style>

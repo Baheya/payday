@@ -5,7 +5,7 @@ import CardGrid from "#components/CardGrid/CardGrid.astro";
 import PotsOverview from "#components/PotsOverview/PotsOverview.astro";
 import RecurringBillsOverview from "#components/RecurringBillsOverview/RecurringBillsOverview.astro";
 import TransactionOverview from "#components/TransactionOverview/TransactionOverview.astro";
-import { getBudgetExpenses } from "#db/budgets.ts";
+import { getBudgetExpensesByCategory } from "#db/budgets.ts";
 import { getOverview } from "#db/overview.ts";
 import { getRecurringBillsOverview } from "#db/transactions.ts";
 import BaseLayout from "#layouts/BaseLayout.astro";
@@ -14,7 +14,7 @@ import { setCurrency } from "#lib/utils.ts";
 
 const data = await getOverview();
 
-const currentMonthTransactions = await getBudgetExpenses();
+const budgetExpensesByCategory = await getBudgetExpensesByCategory();
 const recurringBills = await getRecurringBillsOverview();
 
 const currentBalance =
@@ -55,11 +55,8 @@ const currentExpenses =
     }
 
     {
-      data?.budgets && data.budgets.length > 0 && currentMonthTransactions && (
-        <BudgetOverview
-          budgets={data.budgets}
-          overview={currentMonthTransactions}
-        />
+      budgetExpensesByCategory && budgetExpensesByCategory.length > 0 && (
+        <BudgetOverview expenses={budgetExpensesByCategory} />
       )
     }
 

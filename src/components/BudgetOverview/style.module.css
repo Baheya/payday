@@ -109,3 +109,9 @@
   font-weight: 700;
   color: var(--grey-900);
 }
+
+.summary {
+  @mixin text-lg;
+
+  font-weight: 700;
+}

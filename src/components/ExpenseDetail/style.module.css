@@ -19,6 +19,10 @@
     border-inline-start-color: var(--purple);
   }
 
+  &.beige {
+    border-inline-start-color: var(--beige-100);
+  }
+
   .label {
     @mixin text-xs;
 

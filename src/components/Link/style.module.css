@@ -1,6 +1,7 @@
 .link {
   @mixin text-sm;
 
+  cursor: pointer;
   color: var(--grey-500);
   text-decoration: none;
 }
