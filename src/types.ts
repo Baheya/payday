@@ -26,7 +26,7 @@ export type Database = {
           created_at?: string;
           current?: number;
           expenses?: number;
-          id?: number;
+          id: number;
           income?: number;
         };
         Update: {
@@ -47,7 +47,7 @@ export type Database = {
         };
         Insert: {
           category: string;
-          id?: number;
+          id: number;
           maximum: number;
           theme?: Database["public"]["Enums"]["theme"];
         };
@@ -56,6 +56,32 @@ export type Database = {
           id?: number;
           maximum?: number;
           theme?: Database["public"]["Enums"]["theme"];
+        };
+        Relationships: [
+          {
+            foreignKeyName: "Budgets_category_fkey";
+            columns: ["category"];
+            isOneToOne: false;
+            referencedRelation: "Categories";
+            referencedColumns: ["name"];
+          },
+        ];
+      };
+      Categories: {
+        Row: {
+          created_at: string;
+          id: number;
+          name: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: number;
+          name: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: number;
+          name?: string;
         };
         Relationships: [];
       };
@@ -68,7 +94,7 @@ export type Database = {
           total: number;
         };
         Insert: {
-          id?: number;
+          id: number;
           name: string;
           target: number;
           theme?: Database["public"]["Enums"]["theme"];
@@ -98,7 +124,7 @@ export type Database = {
           avatar: string;
           category: string;
           date: string;
-          id?: number;
+          id: number;
           name: string;
           recurring: boolean;
         };
@@ -111,7 +137,15 @@ export type Database = {
           name?: string;
           recurring?: boolean;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "Transactions_category_fkey";
+            columns: ["category"];
+            isOneToOne: false;
+            referencedRelation: "Categories";
+            referencedColumns: ["name"];
+          },
+        ];
       };
     };
     Views: {
