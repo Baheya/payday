@@ -1,10 +1,47 @@
 .button {
+  @mixin text-sm;
+
   all: unset;
+
   cursor: pointer;
+
+  padding: var(--spacing-200);
   border: 1px solid transparent;
+  border-radius: var(--spacing-100);
+
+  font-weight: 700;
+
   background: transparent;
 
   &:hover {
     background-color: var(--grey-100);
   }
+}
+
+.disabled {
+  cursor: not-allowed;
+}
+
+.primary {
+  color: var(--white);
+  background-color: var(--grey-900);
+
+  &.disabled {
+    background-color: var(--grey-500);
+  }
+}
+
+.secondary {
+  color: var(--grey-900);
+  background-color: var(--beige-100);
+
+  &.disabled {
+    border: 1px solid var(--beige-500);
+    background-color: var(--white);
+  }
+}
+
+.danger {
+  color: var(--white);
+  background-color: var(--red);
 }
