@@ -1,19 +1,62 @@
 ---
 import BudgetDetailCard from "#components/BudgetDetailCard/BudgetDetailCard.astro";
 import BudgetOverview from "#components/BudgetOverview/BudgetOverview.astro";
-import Button from "#components/Button/Button.astro";
+import DialogButton from "#components/Dialog/DialogButton.astro";
+import DialogModal from "#components/Dialog/DialogModal.astro";
 import Heading from "#components/Heading/Heading.astro";
+import Input from "#components/Input/Input.astro";
+import Select from "#components/Select/Select.astro";
 import { getBudgetExpensesByCategory } from "#db/budgets.ts";
+import { getAllCategories } from "#db/categories.ts";
+import { getAllColors } from "#db/colors.ts";
 import BaseLayout from "#layouts/BaseLayout.astro";
 
-const budgetExpensesByCategory = await getBudgetExpensesByCategory();
+const [budgetExpensesByCategory, colors, categories] = await Promise.all([
+  getBudgetExpensesByCategory(),
+  getAllColors(),
+  getAllCategories(),
+]);
+const colorOptions = colors?.map((color) => ({
+  name: color.label,
+  prefixStyle: color.value,
+}));
+const categoryOptions = categories?.map((category) => ({
+  name: category.name,
+  suffixText: category.budgets && "already used",
+}));
 ---
 
 <BaseLayout title="Budgets">
   <section>
     <div class="header">
       <Heading as="h1" size="xl">Budgets</Heading>
-      <Button>Add New budget</Button>
+      <DialogButton modalId="add-budget">Add New budget</DialogButton>
+      <DialogModal
+        description="Choose a category to set a spending budget. These categories can help you monitor spending."
+        id="add-budget"
+        title="Add New Budget"
+      >
+        {
+          categoryOptions && categoryOptions.length > 0 && (
+            <Select
+              id="budget_categories"
+              label="Budget Category"
+              options={categoryOptions}
+            />
+          )
+        }
+        <Input
+          id="budget_max_spending"
+          label="Maximum Spending"
+          placeholder="e.g. 2000"
+          prefix="$"
+        />
+        {
+          colorOptions && colorOptions.length > 0 && (
+            <Select id="budget-theme" label="Theme" options={colorOptions} />
+          )
+        }
+      </DialogModal>
     </div>
     {
       budgetExpensesByCategory && budgetExpensesByCategory.length > 0 && (

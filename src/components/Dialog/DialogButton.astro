@@ -1,0 +1,16 @@
+---
+import type { ComponentProps } from "astro/types";
+
+import Button from "#components/Button/Button.astro";
+
+interface Props {
+  modalId: string;
+  variant?: ComponentProps<typeof Button>["variant"];
+}
+
+const { modalId, variant } = Astro.props;
+---
+
+<Button command="show-modal" commandfor={modalId} variant={variant}>
+  <slot />
+</Button>
