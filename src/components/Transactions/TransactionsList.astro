@@ -1,5 +1,5 @@
 ---
-import type { Tables } from "#src/types.ts";
+import type { Tables } from "#src/db/types.ts";
 
 import { Image } from "@unpic/astro";
 import Filter from "#components/Filter/Filter.astro";
@@ -17,7 +17,7 @@ import style from "./style.module.css";
 
 const categoriesResponse = await getAllTransactionCategories();
 const categories = new Set(
-  categoriesResponse?.data?.map((item) => item.category),
+  categoriesResponse?.data?.map((item) => ({ name: item.category })),
 );
 const currentParams = Astro.url.searchParams;
 const pageNumber = parseInt(currentParams.get("page") || "1");
@@ -55,9 +55,16 @@ const transactions =
     <Search label="Search Transactions" placeholder="Search transactions" />
     <div class={style.controls}>
       <Sort
-        options={["Latest", "Oldest", "A to Z", "Z to A", "Highest", "Lowest"]}
+        options={[
+          { name: "Latest" },
+          { name: "Oldest" },
+          { name: "A to Z" },
+          { name: "Z to A" },
+          { name: "Highest" },
+          { name: "Lowest" },
+        ]}
       />
-      <Filter options={["All Transactions", ...categories]} />
+      <Filter options={[{ name: "All Transactions" }, ...categories]} />
     </div>
   </div>
   {
