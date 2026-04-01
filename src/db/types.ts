@@ -14,7 +14,7 @@ export type Database = {
   };
   public: {
     Tables: {
-      Balance: {
+      balance: {
         Row: {
           created_at: string;
           current: number;
@@ -38,36 +38,43 @@ export type Database = {
         };
         Relationships: [];
       };
-      Budgets: {
+      budgets: {
         Row: {
           category: string;
           id: number;
           maximum: number;
-          theme: Database["public"]["Enums"]["theme"];
+          theme: string;
         };
         Insert: {
           category: string;
           id: number;
           maximum: number;
-          theme?: Database["public"]["Enums"]["theme"];
+          theme: string;
         };
         Update: {
           category?: string;
           id?: number;
           maximum?: number;
-          theme?: Database["public"]["Enums"]["theme"];
+          theme?: string;
         };
         Relationships: [
           {
             foreignKeyName: "Budgets_category_fkey";
             columns: ["category"];
-            isOneToOne: false;
-            referencedRelation: "Categories";
+            isOneToOne: true;
+            referencedRelation: "categories";
             referencedColumns: ["name"];
+          },
+          {
+            foreignKeyName: "Budgets_theme_fkey";
+            columns: ["theme"];
+            isOneToOne: false;
+            referencedRelation: "colors";
+            referencedColumns: ["value"];
           },
         ];
       };
-      Categories: {
+      categories: {
         Row: {
           created_at: string;
           id: number;
@@ -85,31 +92,63 @@ export type Database = {
         };
         Relationships: [];
       };
-      Pots: {
+      colors: {
+        Row: {
+          created_at: string;
+          hex: string;
+          id: number;
+          label: string;
+          value: string;
+        };
+        Insert: {
+          created_at?: string;
+          hex: string;
+          id?: number;
+          label: string;
+          value: string;
+        };
+        Update: {
+          created_at?: string;
+          hex?: string;
+          id?: number;
+          label?: string;
+          value?: string;
+        };
+        Relationships: [];
+      };
+      pots: {
         Row: {
           id: number;
           name: string;
           target: number;
-          theme: Database["public"]["Enums"]["theme"];
+          theme: string;
           total: number;
         };
         Insert: {
           id: number;
           name: string;
           target: number;
-          theme?: Database["public"]["Enums"]["theme"];
+          theme: string;
           total: number;
         };
         Update: {
           id?: number;
           name?: string;
           target?: number;
-          theme?: Database["public"]["Enums"]["theme"];
+          theme?: string;
           total?: number;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "Pots_theme_fkey";
+            columns: ["theme"];
+            isOneToOne: false;
+            referencedRelation: "colors";
+            referencedColumns: ["value"];
+          },
+        ];
       };
-      Transactions: {
+      transactions: {
         Row: {
           amount: number;
           avatar: string;
@@ -142,7 +181,7 @@ export type Database = {
             foreignKeyName: "Transactions_category_fkey";
             columns: ["category"];
             isOneToOne: false;
-            referencedRelation: "Categories";
+            referencedRelation: "categories";
             referencedColumns: ["name"];
           },
         ];

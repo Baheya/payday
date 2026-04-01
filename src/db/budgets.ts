@@ -1,10 +1,8 @@
-import type { Database } from "#src/types.ts";
-
 import { supabase } from "#lib/supabase.ts";
 import { getPreviousMonthISOString } from "#lib/utils.ts";
 
 const getAllBudgets = async () => {
-  const response = await supabase.from("Budgets").select();
+  const response = await supabase.from("budgets").select();
   return response.data;
 };
 
@@ -13,7 +11,7 @@ export const getBudgetExpensesOverview = async () => {
 
   try {
     const currentMonthTransactions = await supabase
-      .from("Transactions")
+      .from("transactions")
       .select()
       .gte("date", previousMonthDate)
       .lte("date", new Date().toISOString());
@@ -55,7 +53,7 @@ export interface BudgetExpensesByCategory {
   category: string;
   id: number;
   maximum: number;
-  theme: Database["public"]["Enums"]["theme"];
+  theme: string;
 }
 
 export const getBudgetExpensesByCategory = async () => {
@@ -66,7 +64,7 @@ export const getBudgetExpensesByCategory = async () => {
 
     if (budgetCategories) {
       const currentMonthTransactions = await supabase
-        .from("Transactions")
+        .from("transactions")
         .select("*")
         .in("category", budgetCategories)
         .gte("date", previousMonthDate)

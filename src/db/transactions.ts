@@ -19,7 +19,7 @@ export const getTransactions = async (
       sort === "Oldest" || sort === "A to Z" || sort === "Highest"
         ? true
         : false;
-    let query = supabase.from("Transactions").select("*", { count: "exact" });
+    let query = supabase.from("transactions").select("*", { count: "exact" });
 
     if (category) {
       query = query.eq("category", category);
@@ -44,7 +44,7 @@ export const getTransactions = async (
 
 export const getAllTransactionCategories = async () => {
   try {
-    const response = await supabase.from("Transactions").select("category");
+    const response = await supabase.from("transactions").select("category");
     return { data: response.data };
   } catch (e) {
     console.log(e);
@@ -60,7 +60,7 @@ export interface RecurringBills {
 export const getRecurringBillsOverview = async () => {
   try {
     const response = await supabase
-      .from("Transactions")
+      .from("transactions")
       .select()
       .eq("recurring", true);
     const initialValue: RecurringBills = { paid: 0, future: 0, dueSoon: 0 };
