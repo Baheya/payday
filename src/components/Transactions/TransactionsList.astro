@@ -25,7 +25,7 @@ const decodedFilterValue = decodeURI(currentParams.get("filter") || "");
 const decodedSortValue = decodeURI(currentParams.get("sort") || "Latest");
 const decodedSearchValue = decodeURI(currentParams.get("search") || "");
 const fieldsToSearch = ["name", "category", "amount", "date", "avatar"];
-const searchInstance = new MiniSearch<Tables<"Transactions">>({
+const searchInstance = new MiniSearch<Tables<"transactions">>({
   fields: fieldsToSearch,
   storeFields: fieldsToSearch,
 });
