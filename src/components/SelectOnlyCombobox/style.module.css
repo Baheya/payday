@@ -2,10 +2,20 @@
   display: flex;
   column-gap: var(--spacing-150);
   align-items: center;
+
+  &.desktop {
+    flex-direction: column;
+    row-gap: var(--spacing-50);
+    align-items: flex-start;
+  }
 }
 
 .wrapper {
   position: relative;
+}
+
+.desktop .wrapper {
+  width: 100%;
 }
 
 .mobile-trigger {
@@ -24,6 +34,10 @@
   @media (--md-viewport) {
     display: block;
   }
+}
+
+.desktop .desktop-trigger {
+  display: block;
 }
 
 .list {
@@ -76,6 +90,13 @@
   }
 }
 
+.desktop .label {
+  @mixin text-xs;
+
+  display: block;
+  font-weight: 700;
+}
+
 .button-label {
   @mixin visually-hidden;
 
@@ -110,11 +131,21 @@
   }
 }
 
+.desktop .combobox {
+  width: 100%;
+}
+
 .option {
   @mixin text-sm;
 
   cursor: pointer;
+
   position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
   padding: var(--spacing-100) var(--spacing-50);
 
   &:not(:last-child)::after {
@@ -129,6 +160,32 @@
 
     background-color: var(--grey-100);
   }
+}
+
+.prefixed .option {
+  align-self: flex-start;
+}
+
+.prefixed .option::before,
+.prefixed .button-label::before {
+  content: "";
+
+  display: inline-block;
+
+  width: 16px;
+  height: 16px;
+  margin-inline-end: var(--spacing-150);
+  border-radius: 50%;
+
+  vertical-align: middle;
+
+  background-color: var(--theme);
+}
+
+.suffix {
+  @mixin text-xs;
+
+  color: var(--grey-500);
 }
 
 [role="option"][data-focused="true"] {

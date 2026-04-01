@@ -1,0 +1,23 @@
+.label {
+  @mixin text-xs;
+
+  margin-block-end: var(--spacing-50);
+  font-weight: 700;
+  color: var(--grey-500);
+}
+
+.field {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: var(--spacing-150);
+  align-items: center;
+
+  padding: var(--spacing-100) var(--spacing-250);
+  border: 1px solid var(--grey-900);
+  border-radius: var(--spacing-100);
+}
+
+.input {
+  all: unset;
+  border: none;
+}

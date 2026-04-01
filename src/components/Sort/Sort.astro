@@ -1,8 +1,10 @@
 ---
-import SelectOnlyCombobox from "../SelectOnlyCombobox/SelectOnlyCombobox.astro";
+import type { ComponentProps } from "astro/types";
+
+import SelectOnlyCombobox from "#components/SelectOnlyCombobox/SelectOnlyCombobox.astro";
 
 interface Props {
-  options: string[];
+  options: ComponentProps<typeof SelectOnlyCombobox>["options"];
 }
 
 const { options } = Astro.props;

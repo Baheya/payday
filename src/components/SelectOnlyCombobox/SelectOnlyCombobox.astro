@@ -6,9 +6,13 @@ import Icon, { type iconName } from "../Icon/Icon.astro";
 import style from "./style.module.css";
 
 interface Props extends HTMLAttributes<"select"> {
-  options: string[];
+  options: {
+    name: string;
+    prefixStyle?: string;
+    suffixText?: string | null;
+  }[];
   comboboxLabel: string;
-  mobileTriggerIconName: iconName;
+  mobileTriggerIconName?: iconName;
   id: string;
   currentlySelected?: string | null;
 }
@@ -21,10 +25,17 @@ const {
   currentlySelected,
   ...props
 } = Astro.props;
+
+const dropdownShouldBecomeIconOnMobile = !!mobileTriggerIconName;
+const optionHasPrefix = options.every((option) => option.prefixStyle);
 ---
 
 <select-only-combobox
-  class={style.container}
+  class:list={[
+    style.container,
+    !dropdownShouldBecomeIconOnMobile && style.desktop,
+    optionHasPrefix && style.prefixed,
+  ]}
   data-testid="select-only-combobox"
 >
   <div class:list={[style.label]} id="combobox-label">
@@ -40,14 +51,23 @@ const {
       role="combobox"
       tabindex="0"
     >
-      <span class={style["button-label"]} data-combobox-preview
-        >{currentlySelected || options[0]}</span
+      <span
+        class={style["button-label"]}
+        data-combobox-preview
+        {...!currentlySelected &&
+          options[0].prefixStyle && {
+            style: { "--theme": `var(--${options[0].prefixStyle})` },
+          }}>{currentlySelected || options[0].name}</span
       >
-      <Icon
-        aria-hidden="true"
-        class={style["mobile-trigger"]}
-        icon={mobileTriggerIconName}
-      />
+      {
+        dropdownShouldBecomeIconOnMobile && (
+          <Icon
+            aria-hidden="true"
+            class={style["mobile-trigger"]}
+            icon={mobileTriggerIconName}
+          />
+        )
+      }
       <Icon
         aria-hidden="true"
         class={style["desktop-trigger"]}
@@ -63,21 +83,30 @@ const {
       {...props}
     >
       {
-        options.map((option, i) => (
-          <div
-            aria-selected={
-              option === currentlySelected || i === 0 ? "true" : "false"
-            }
-            class={style.option}
-            data-focused={
-              option === currentlySelected || i === 0 ? "true" : "false"
-            }
-            id={`${id}-option-${i}`}
-            role="option"
-          >
-            {option}
-          </div>
-        ))
+        options.map((option, i) => {
+          const prefixStyleAttribute = option.prefixStyle && {
+            style: { "--theme": `var(--${option.prefixStyle})` },
+          };
+          return (
+            <div
+              aria-selected={
+                option.name === currentlySelected || i === 0 ? "true" : "false"
+              }
+              class={style.option}
+              data-focused={
+                option.name === currentlySelected || i === 0 ? "true" : "false"
+              }
+              id={`${id}-option-${i}`}
+              role="option"
+              {...prefixStyleAttribute}
+            >
+              {option.name}
+              {option.suffixText && (
+                <span class={style.suffix}>{option.suffixText}</span>
+              )}
+            </div>
+          );
+        })
       }
     </div>
   </div>

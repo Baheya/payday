@@ -1,5 +1,5 @@
 ---
-import type { Tables } from "#src/types.ts";
+import type { Tables } from "#src/db/types.ts";
 
 import ExpenseDetail from "#components/ExpenseDetail/ExpenseDetail.astro";
 import Heading from "#components/Heading/Heading.astro";
@@ -10,7 +10,7 @@ import { setCurrency } from "#lib/utils.ts";
 import style from "./style.module.css";
 
 interface Props {
-  pots: Array<Tables<"Pots">>;
+  pots: Array<Tables<"pots">>;
 }
 
 const { pots } = Astro.props;

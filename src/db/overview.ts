@@ -8,10 +8,10 @@ export const getOverview = async () => {
       potsResponse,
       transactionsResponse,
     ] = await Promise.all([
-      supabase.from("Balance").select(),
-      supabase.from("Budgets").select(),
-      supabase.from("Pots").select(),
-      supabase.from("Transactions").select().limit(5),
+      supabase.from("balance").select(),
+      supabase.from("budgets").select(),
+      supabase.from("pots").select(),
+      supabase.from("transactions").select().limit(5),
     ]);
 
     return {

@@ -371,10 +371,10 @@ export class SelectOnlyCombobox extends HTMLElement {
 
       // update displayed value
       const optionsContentArray = Array.from(this.options).map((option) =>
-        option.textContent.trim(),
+        option.firstChild?.textContent?.trim(),
       );
       const selected = optionsContentArray[index];
-      if (this.comboboxPreviewLabel) {
+      if (this.comboboxPreviewLabel && selected) {
         this.comboboxPreviewLabel.innerHTML = selected;
       }
 
@@ -386,7 +386,7 @@ export class SelectOnlyCombobox extends HTMLElement {
       options[index].setAttribute("aria-selected", "true");
 
       const customEvent = new CustomEvent("selection-change", {
-        detail: options[index].textContent.trim(),
+        detail: options[index].firstChild?.textContent?.trim(),
       });
 
       options[index].dispatchEvent(customEvent);

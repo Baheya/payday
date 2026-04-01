@@ -1,0 +1,27 @@
+---
+import Button from "#components/Button/Button.astro";
+import Heading from "#components/Heading/Heading.astro";
+import Icon from "#components/Icon/Icon.astro";
+
+import style from "./style.module.css";
+
+interface Props {
+  title: string;
+  description: string;
+  id: string;
+}
+
+const { title, description, id } = Astro.props;
+---
+
+<dialog class={style.dialog} id={id}>
+  <div class={style.header}>
+    <Heading as="h1" id="modal_title" size="xl">{title}</Heading>
+    <Button command="close" commandfor={id} variant="icon"
+      ><Icon icon="close" /><span class="visually-hidden">Close modal</span
+      ></Button
+    >
+  </div>
+  <p class={style.description} id="modal_description">{description}</p>
+  <slot />
+</dialog>

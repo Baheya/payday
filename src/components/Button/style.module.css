@@ -45,3 +45,15 @@
   color: var(--white);
   background-color: var(--red);
 }
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 45px;
+  min-height: 45px;
+  padding: 0;
+
+  background-color: transparent;
+}
