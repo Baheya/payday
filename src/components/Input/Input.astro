@@ -1,0 +1,20 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import style from "./style.module.css";
+
+interface Props extends HTMLAttributes<"input"> {
+  label: string;
+  id: string;
+  prefix?: string;
+}
+
+const { label, id, prefix, ...props } = Astro.props;
+---
+
+<div>
+  <label class={style.label} for={id}>{label}</label>
+  <div class={style.field}>
+    {prefix}<input class={style.input} id={id} type="text" {...props} />
+  </div>
+</div>
