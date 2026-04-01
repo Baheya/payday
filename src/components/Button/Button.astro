@@ -4,7 +4,7 @@ import type { HTMLAttributes } from "astro/types";
 import style from "./style.module.css";
 
 interface Props extends HTMLAttributes<"button"> {
-  variant?: "primary" | "secondary" | "danger";
+  variant?: "primary" | "secondary" | "danger" | "icon";
 }
 
 const { variant = "primary", disabled = false, ...props } = Astro.props;
