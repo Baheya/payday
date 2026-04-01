@@ -12,9 +12,9 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.8",
-    "@astrojs/netlify": "^7.0.4",
+    "@astrojs/netlify": "<7.0.0",
     "@unpic/astro": "^1.0.2",
-    "astro": "^6.0.0",
+    "astro": "<6.0.0",
     "minisearch": "^7.2.0"
   },
   "name": "payday-app",
