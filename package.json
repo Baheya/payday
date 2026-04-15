@@ -35,7 +35,7 @@
     "eslint-plugin-compat": "^6.2.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-perfectionist": "^5.7.0",
-    "globals": "^17.4.0",
+    "globals": "^17.5.0",
     "husky": "^9.1.7",
     "jiti": "^2.6.1",
     "lint-staged": "^16.2.7",
