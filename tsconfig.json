@@ -18,6 +18,7 @@
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
     "types": ["vite/client"],
-    "strict": true
+    "strict": true,
+    "baseUrl": "."
   }
 }
