@@ -16,6 +16,7 @@ const [budgetExpensesByCategory, colors, categories] = await Promise.all([
   getAllColors(),
   getAllCategories(),
 ]);
+
 const colorOptions = colors?.map((color) => ({
   name: color.label,
   prefixStyle: color.value,

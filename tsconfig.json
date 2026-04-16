@@ -1,6 +1,15 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*.ts", "**/*.tsx", "**/*.astro", "**/*"],
+  "ignoreDeprecations": "6.0",
+  "include": [
+    ".astro/types.d.ts",
+    ".astro/actions.d.ts",
+    "env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.astro",
+    "**/*"
+  ],
   "exclude": ["dist"],
   "compilerOptions": {
     "module": "nodenext",
@@ -8,7 +17,8 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
-    "baseUrl": ".",
-    "types": ["vite/client"]
+    "types": ["vite/client"],
+    "strict": true,
+    "baseUrl": "."
   }
 }
