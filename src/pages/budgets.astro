@@ -22,7 +22,7 @@ const colorOptions = colors?.map((color) => ({
   prefixStyle: color.value,
 }));
 const categoryOptions = categories?.map((category) => ({
-  name: category.name,
+  name: category.label,
   suffixText: category.budgets && "already used",
 }));
 ---

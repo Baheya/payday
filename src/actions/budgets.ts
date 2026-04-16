@@ -48,7 +48,7 @@ export const budgets = {
     },
   }),
   addNewBudget: defineAction({
-    input: publicBudgetsInsertSchema,
+    // input: publicBudgetsInsertSchema,
     handler: async (input: { [k: string]: unknown }, { locals }) => {
       try {
         const validatedData = publicBudgetsInsertSchema.safeParse(input);

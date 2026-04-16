@@ -27,7 +27,7 @@ const expensesTotalSpend = expenses.reduce(
 const generatedGradientStops = expenses.reduce((acc, expense) => {
   let gradientStart;
 
-  const budgetColor = expense.theme;
+  const budgetColor = expense.theme_id;
   const gradientEnd =
     (Math.abs(expense.totalSpent || 0) / expensesTotalSpend) * 100;
   const gradient =
@@ -63,8 +63,8 @@ const styleAttribute = {
         {
           expenses.map((expense) => (
             <ExpenseDetail
-              color={expense.theme}
-              label={expense.category}
+              color={expense.theme_id.toString()}
+              label={expense.category_id.toString()}
               {...(summary === "expenses" && {
                 totalSpent: setCurrency(expense.totalSpent),
               })}
