@@ -1,6 +1,7 @@
 ---
 import type { GetBudgetExpensesByCategory } from "#actions/budgets.ts";
 
+// import { GetAllColors } from "#actions/colors.ts";
 import AddNewBudget from "#components/AddNewBudget/AddNewBudget.astro";
 import BudgetDetailCard from "#components/BudgetDetailCard/BudgetDetailCard.astro";
 import BudgetOverview from "#components/BudgetOverview/BudgetOverview.astro";
@@ -8,20 +9,24 @@ import Heading from "#components/Heading/Heading.astro";
 import { fetchData } from "#db/fetch.ts";
 import BaseLayout from "#layouts/BaseLayout.astro";
 
-const [budgetExpensesByCategory, colors, categories] = await Promise.all([
-  getBudgetExpensesByCategory(),
-  getAllColors(),
-  getAllCategories(),
+const [
+  budgetExpensesByCategory,
+  // colors,
+  // categories
+] = await Promise.all([
+  fetchData<GetBudgetExpensesByCategory>("/budgets"),
+  // fetchData<GetAllColors>("/colors"),
+  // getAllCategories(),
 ]);
 
-const colorOptions = colors?.map((color) => ({
-  name: color.label,
-  prefixStyle: color.value,
-}));
-const categoryOptions = categories?.map((category) => ({
-  name: category.label,
-  suffixText: category.budgets && "already used",
-}));
+// const colorOptions = colors?.map((color) => ({
+//   name: color.label,
+//   prefixStyle: color.value,
+// }));
+// const categoryOptions = categories?.map((category) => ({
+//   name: category.label,
+//   suffixText: category.budgets && "already used",
+// }));
 ---
 
 <BaseLayout title="Budgets">

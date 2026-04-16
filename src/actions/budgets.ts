@@ -115,7 +115,7 @@ const getAllBudgets = async (locals: App.Locals) => {
   }
 };
 
-export type GetBudgetExpensesByCategory = ActionReturnType<
-  typeof budgets.getBudgetExpensesByCategory
+export type GetBudgetExpensesByCategory = NonNullable<
+  ActionReturnType<typeof budgets.getBudgetExpensesByCategory>["data"]
 >;
 export type GetBudgets = ActionReturnType<typeof budgets.get>;

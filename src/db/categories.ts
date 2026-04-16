@@ -1,5 +1,3 @@
-import type { AsyncReturnType } from "./fetch.ts";
-
 export const getAllCategories = async (supabase: App.Locals["supabase"]) => {
   try {
     const categories = await supabase
@@ -13,4 +11,6 @@ export const getAllCategories = async (supabase: App.Locals["supabase"]) => {
   }
 };
 
-export type GetAllCategories = AsyncReturnType<typeof getAllCategories>;
+export type GetAllCategories = NonNullable<
+  Awaited<ReturnType<typeof getAllCategories>>
+>;

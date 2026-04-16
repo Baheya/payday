@@ -1,5 +1,5 @@
 ---
-import type { BudgetExpensesByCategory } from "#db/budgets.ts";
+import type { GetBudgetExpensesByCategory } from "#actions/budgets.ts";
 
 import { Image } from "@unpic/astro";
 import ExpenseDetail from "#components/ExpenseDetail/ExpenseDetail.astro";
@@ -9,7 +9,7 @@ import { setCurrency, transformDate } from "#lib/utils.ts";
 import style from "./style.module.css";
 
 interface Props {
-  budget: BudgetExpensesByCategory;
+  budget: GetBudgetExpensesByCategory[number];
 }
 
 const { budget } = Astro.props;
