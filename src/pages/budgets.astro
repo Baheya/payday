@@ -3,7 +3,7 @@ import type { GetBudgetExpensesByCategory } from "#actions/budgets.ts";
 
 // import { GetAllColors } from "#actions/colors.ts";
 // import AddNewBudget from "#components/AddNewBudget/AddNewBudget.astro";
-// import BudgetDetailCard from "#components/BudgetDetailCard/BudgetDetailCard.astro";
+import BudgetDetailCard from "#components/BudgetDetailCard/BudgetDetailCard.astro";
 import BudgetOverview from "#components/BudgetOverview/BudgetOverview.astro";
 import Heading from "#components/Heading/Heading.astro";
 import { fetchData } from "#db/fetch.ts";
@@ -33,7 +33,7 @@ const [
   <section>
     <div class="header">
       <Heading as="h1" size="xl">Budgets</Heading>
-      <AddNewBudget />
+      <!-- <AddNewBudget /> -->
     </div>
     {
       budgetExpensesByCategory && budgetExpensesByCategory.length > 0 && (
