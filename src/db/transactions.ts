@@ -19,11 +19,13 @@ export const getTransactions = async (
       sort === "Oldest" || sort === "A to Z" || sort === "Highest"
         ? true
         : false;
-    let query = supabase.from("transactions").select("*", { count: "exact" });
+    let query = supabase
+      .from("transactions")
+      .select("*, categories ( label )", { count: "exact" });
 
-    // if (category) {
-    //   query = query.eq("category", category);
-    // }
+    if (category) {
+      query = query.eq("category_id", parseInt(category));
+    }
 
     if (sort) {
       query = query.order(sortingColumnName, { ascending });

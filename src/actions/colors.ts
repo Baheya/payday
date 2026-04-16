@@ -17,4 +17,4 @@ export const colors = {
   }),
 };
 
-export type GetAllColors = ActionReturnType<typeof colors.getAllColors>;
+export type GetAllColors = ActionReturnType<typeof colors.getAllColors>["data"];

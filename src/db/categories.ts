@@ -1,6 +1,4 @@
-import { supabase } from "#lib/supabase.ts";
-
-export const getAllCategories = async () => {
+export const getAllCategories = async (supabase: App.Locals["supabase"]) => {
   try {
     const categories = await supabase
       .from("categories")
@@ -12,3 +10,7 @@ export const getAllCategories = async () => {
     console.log(e);
   }
 };
+
+export type GetAllCategories = NonNullable<
+  Awaited<ReturnType<typeof getAllCategories>>
+>;

@@ -60,7 +60,6 @@
     "vitest-browser-astro": "^0.2.0"
   },
   "imports": {
-    "#src/*": "./src/*",
     "#icons/*": "./src/assets/icons/*",
     "#components/*": "./src/components/*",
     "#db/*": "./src/db/*",
