@@ -1,11 +1,7 @@
-import { supabase } from "#lib/supabase.ts";
-
-export const getAllColors = async () => {
+export const getAllColors = async (supabase: App.Locals["supabase"]) => {
   try {
-    const colors = await supabase.from("colors").select("*");
-    if (colors.data && colors.data.length > 0) {
-      return colors.data;
-    }
+    const colors = await supabase.from("colors").select("*, budgets ( * )");
+    return colors.data;
   } catch (e) {
     console.log(e);
   }

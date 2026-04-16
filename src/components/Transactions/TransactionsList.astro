@@ -1,28 +1,28 @@
 ---
-import type { Tables } from "#src/db/types.ts";
+import type { GetTransactions } from "#actions/transactions.ts";
+import type { Tables } from "#db/types.ts";
 
 import { Image } from "@unpic/astro";
 import Filter from "#components/Filter/Filter.astro";
 import Pagination from "#components/Pagination/Pagination.astro";
 import Search from "#components/Search/Search.astro";
 import Sort from "#components/Sort/Sort.astro";
-import {
-  getAllTransactionCategories,
-  getTransactions,
-} from "#db/transactions.ts";
+import { fetchData } from "#db/fetch.ts";
 import { setCurrency, transformDate } from "#lib/utils.ts";
+import { actions } from "astro:actions";
 import MiniSearch from "minisearch";
 
 import style from "./style.module.css";
 
-const categoriesResponse = await getAllTransactionCategories();
-const categories = new Set(
-  categoriesResponse?.data?.map((item) => ({ name: item.categories.label })),
+const { data: categoriesResponse } = await Astro.callAction(
+  actions.categories.getAllCategories,
+  {},
 );
+const categories = categoriesResponse?.map((item) => ({ label: item.label }));
 const currentParams = Astro.url.searchParams;
-const pageNumber = parseInt(currentParams.get("page") || "1");
-const decodedFilterValue = decodeURI(currentParams.get("filter") || "");
-const decodedSortValue = decodeURI(currentParams.get("sort") || "Latest");
+// const pageNumber = parseInt(currentParams.get("page") || "1");
+// const decodedFilterValue = decodeURI(currentParams.get("filter") || "");
+// const decodedSortValue = decodeURI(currentParams.get("sort") || "Latest");
 const decodedSearchValue = decodeURI(currentParams.get("search") || "");
 const fieldsToSearch = ["name", "category", "amount", "date", "avatar"];
 const searchInstance = new MiniSearch<Tables<"transactions">>({
@@ -30,13 +30,17 @@ const searchInstance = new MiniSearch<Tables<"transactions">>({
   storeFields: fieldsToSearch,
 });
 
-const response = await getTransactions(
-  pageNumber,
-  decodedFilterValue,
-  decodedSortValue,
+// const { data: response } = await Astro.callAction(
+//   actions.transactions.getTransactions,
+//   { pageNumber, category: decodedFilterValue, sort: decodedSortValue },
+// );
+
+const { data: response } = await fetchData<GetTransactions>(
+  `/transactions?${currentParams.toString()}`,
+  "get",
 );
 
-if (response?.data) {
+if (response) {
   searchInstance.addAll(response.data);
 }
 
@@ -56,15 +60,19 @@ const transactions =
     <div class={style.controls}>
       <Sort
         options={[
-          { name: "Latest" },
-          { name: "Oldest" },
-          { name: "A to Z" },
-          { name: "Z to A" },
-          { name: "Highest" },
-          { name: "Lowest" },
+          { label: "Latest" },
+          { label: "Oldest" },
+          { label: "A to Z" },
+          { label: "Z to A" },
+          { label: "Highest" },
+          { label: "Lowest" },
         ]}
       />
-      <Filter options={[{ name: "All Transactions" }, ...categories]} />
+      {
+        categories && categories.length > 0 && (
+          <Filter options={[{ label: "All Transactions" }, ...categories]} />
+        )
+      }
     </div>
   </div>
   {
@@ -98,7 +106,7 @@ const transactions =
                   {transaction.name}
                 </p>
                 <p class:list={[style.text, style.category]}>
-                  {transaction.category_id}
+                  {transaction.categories.label}
                 </p>
                 <p
                   class:list={[

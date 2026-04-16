@@ -1,5 +1,5 @@
 ---
-import type { Tables } from "#src/db/types.ts";
+import type { GetOverview } from "#actions/overview.ts";
 
 import ExpenseDetail from "#components/ExpenseDetail/ExpenseDetail.astro";
 import Heading from "#components/Heading/Heading.astro";
@@ -10,7 +10,7 @@ import { setCurrency } from "#lib/utils.ts";
 import style from "./style.module.css";
 
 interface Props {
-  pots: Array<Tables<"pots">>;
+  pots: NonNullable<NonNullable<GetOverview["data"]>["pots"]>;
 }
 
 const { pots } = Astro.props;
@@ -32,7 +32,7 @@ const { pots } = Astro.props;
       {
         pots.map((pot) => (
           <ExpenseDetail
-            color={pot.theme_id.toString()}
+            color={pot.colors.value}
             label={pot.name}
             value={setCurrency(pot.target)}
           />

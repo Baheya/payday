@@ -5,17 +5,17 @@ import CardGrid from "#components/CardGrid/CardGrid.astro";
 import PotsOverview from "#components/PotsOverview/PotsOverview.astro";
 import RecurringBillsOverview from "#components/RecurringBillsOverview/RecurringBillsOverview.astro";
 import TransactionOverview from "#components/TransactionOverview/TransactionOverview.astro";
-import { getBudgetExpensesByCategory } from "#db/budgets.ts";
-import { getOverview } from "#db/overview.ts";
-import { getRecurringBillsOverview } from "#db/transactions.ts";
 import BaseLayout from "#layouts/BaseLayout.astro";
 import HomeLayout from "#layouts/HomeLayout.astro";
 import { setCurrency } from "#lib/utils.ts";
+import { actions } from "astro:actions";
 
-const data = await getOverview();
+const { data } = await Astro.callAction(actions.overview.getOverview, {});
 
-const budgetExpensesByCategory = await getBudgetExpensesByCategory();
-const recurringBills = await getRecurringBillsOverview();
+const { data: budgetExpensesByCategory } = await Astro.callAction(
+  actions.budgets.getBudgetExpensesByCategory,
+  {},
+);
 
 const currentBalance =
   data?.balance?.[0].current && setCurrency(data.balance[0].current);
@@ -60,6 +60,10 @@ const currentExpenses =
       )
     }
 
-    {recurringBills && <RecurringBillsOverview bills={recurringBills} />}
+    {
+      data?.recurringBills && (
+        <RecurringBillsOverview bills={data?.recurringBills} />
+      )
+    }
   </HomeLayout>
 </BaseLayout>
