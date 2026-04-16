@@ -17,7 +17,7 @@ import style from "./style.module.css";
 
 const categoriesResponse = await getAllTransactionCategories();
 const categories = new Set(
-  categoriesResponse?.data?.map((item) => ({ name: item.category })),
+  categoriesResponse?.data?.map((item) => ({ name: item.categories.label })),
 );
 const currentParams = Astro.url.searchParams;
 const pageNumber = parseInt(currentParams.get("page") || "1");
@@ -98,7 +98,7 @@ const transactions =
                   {transaction.name}
                 </p>
                 <p class:list={[style.text, style.category]}>
-                  {transaction.category}
+                  {transaction.category_id}
                 </p>
                 <p
                   class:list={[

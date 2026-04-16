@@ -4,7 +4,7 @@ export const getAllCategories = async () => {
   try {
     const categories = await supabase
       .from("categories")
-      .select("*, budgets ( category )");
+      .select("*, budgets ( * )");
     if (categories.data && categories.data.length > 0) {
       return categories.data;
     }

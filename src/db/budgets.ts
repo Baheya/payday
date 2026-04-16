@@ -43,30 +43,35 @@ export interface BudgetExpensesByCategory {
     | {
         amount: number;
         avatar: string;
-        category: string;
+        category_id: number;
         date: string;
         id: number;
         name: string;
         recurring: boolean;
+        user_id: string;
+        categories: {
+          label: string;
+        };
       }[]
     | undefined;
-  category: string;
+  category_id: number;
   id: number;
   maximum: number;
-  theme: string;
+  theme_id: number;
+  user_id: string;
 }
 
 export const getBudgetExpensesByCategory = async () => {
   try {
     const currentBudgets = await getAllBudgets();
     const previousMonthDate = getPreviousMonthISOString();
-    const budgetCategories = currentBudgets?.map((budget) => budget.category);
+    const budgetIds = currentBudgets?.map((budget) => budget.category_id);
 
-    if (budgetCategories) {
+    if (budgetIds) {
       const currentMonthTransactions = await supabase
         .from("transactions")
-        .select("*")
-        .in("category", budgetCategories)
+        .select("*, categories ( label )")
+        .in("category_id", budgetIds)
         .gte("date", previousMonthDate)
         .lte("date", new Date().toISOString())
         .order("date", { ascending: true });
@@ -74,16 +79,16 @@ export const getBudgetExpensesByCategory = async () => {
       if (currentMonthTransactions.data && currentBudgets) {
         const transactionsGroupedByCategory = Object.groupBy(
           currentMonthTransactions.data,
-          ({ category }) => category,
+          ({ category_id }) => category_id,
         );
 
         const currentBudgetsWithTransactions = currentBudgets.map((budget) => ({
           ...budget,
-          ...(transactionsGroupedByCategory[budget.category] && {
-            transactions: transactionsGroupedByCategory[budget.category],
+          ...(transactionsGroupedByCategory[budget.category_id] && {
+            transactions: transactionsGroupedByCategory[budget.category_id],
           }),
           totalSpent:
-            transactionsGroupedByCategory[budget.category]?.reduce(
+            transactionsGroupedByCategory[budget.category_id]?.reduce(
               (total, acc) => {
                 return total + acc.amount;
               },

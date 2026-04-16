@@ -32,7 +32,7 @@ const { pots } = Astro.props;
       {
         pots.map((pot) => (
           <ExpenseDetail
-            color={pot.theme}
+            color={pot.theme_id.toString()}
             label={pot.name}
             value={setCurrency(pot.target)}
           />

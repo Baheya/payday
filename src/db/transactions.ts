@@ -21,9 +21,9 @@ export const getTransactions = async (
         : false;
     let query = supabase.from("transactions").select("*", { count: "exact" });
 
-    if (category) {
-      query = query.eq("category", category);
-    }
+    // if (category) {
+    //   query = query.eq("category", category);
+    // }
 
     if (sort) {
       query = query.order(sortingColumnName, { ascending });
@@ -44,7 +44,9 @@ export const getTransactions = async (
 
 export const getAllTransactionCategories = async () => {
   try {
-    const response = await supabase.from("transactions").select("category");
+    const response = await supabase
+      .from("transactions")
+      .select("*, categories ( * )");
     return { data: response.data };
   } catch (e) {
     console.log(e);
