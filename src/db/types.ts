@@ -21,15 +21,13 @@ export type Database = {
           expenses: number;
           id: number;
           income: number;
-          user_id: string;
         };
         Insert: {
           created_at?: string;
           current?: number;
           expenses?: number;
-          id?: number;
+          id: number;
           income?: number;
-          user_id?: string;
         };
         Update: {
           created_at?: string;
@@ -37,61 +35,42 @@ export type Database = {
           expenses?: number;
           id?: number;
           income?: number;
-          user_id?: string;
         };
-        Relationships: [
-          {
-            foreignKeyName: "balance_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
-          },
-        ];
+        Relationships: [];
       };
       budgets: {
         Row: {
-          category_id: number;
+          category: string;
           id: number;
           maximum: number;
-          theme_id: number;
-          user_id: string;
+          theme: string;
         };
         Insert: {
-          category_id: number;
-          id?: number;
+          category: string;
+          id: number;
           maximum: number;
-          theme_id: number;
-          user_id?: string;
+          theme: string;
         };
         Update: {
-          category_id?: number;
+          category?: string;
           id?: number;
           maximum?: number;
-          theme_id?: number;
-          user_id?: string;
+          theme?: string;
         };
         Relationships: [
           {
-            foreignKeyName: "budgets_category_id_fkey";
-            columns: ["category_id"];
-            isOneToOne: false;
+            foreignKeyName: "Budgets_category_fkey";
+            columns: ["category"];
+            isOneToOne: true;
             referencedRelation: "categories";
-            referencedColumns: ["id"];
+            referencedColumns: ["name"];
           },
           {
-            foreignKeyName: "budgets_theme_id_fkey";
-            columns: ["theme_id"];
+            foreignKeyName: "Budgets_theme_fkey";
+            columns: ["theme"];
             isOneToOne: false;
             referencedRelation: "colors";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "budgets_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
+            referencedColumns: ["value"];
           },
         ];
       };
@@ -99,20 +78,17 @@ export type Database = {
         Row: {
           created_at: string;
           id: number;
-          label: string;
-          value: string;
+          name: string;
         };
         Insert: {
           created_at?: string;
           id?: number;
-          label?: string;
-          value?: string;
+          name: string;
         };
         Update: {
           created_at?: string;
           id?: number;
-          label?: string;
-          value?: string;
+          name?: string;
         };
         Relationships: [];
       };
@@ -145,40 +121,30 @@ export type Database = {
           id: number;
           name: string;
           target: number;
-          theme_id: number;
+          theme: string;
           total: number;
-          user_id: string;
         };
         Insert: {
-          id?: number;
+          id: number;
           name: string;
           target: number;
-          theme_id: number;
+          theme: string;
           total: number;
-          user_id?: string;
         };
         Update: {
           id?: number;
           name?: string;
           target?: number;
-          theme_id?: number;
+          theme?: string;
           total?: number;
-          user_id?: string;
         };
         Relationships: [
           {
-            foreignKeyName: "pots_theme_id_fkey";
-            columns: ["theme_id"];
+            foreignKeyName: "Pots_theme_fkey";
+            columns: ["theme"];
             isOneToOne: false;
             referencedRelation: "colors";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "pots_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
+            referencedColumns: ["value"];
           },
         ];
       };
@@ -186,70 +152,39 @@ export type Database = {
         Row: {
           amount: number;
           avatar: string;
-          category_id: number;
+          category: string;
           date: string;
           id: number;
           name: string;
           recurring: boolean;
-          user_id: string;
         };
         Insert: {
           amount: number;
           avatar: string;
-          category_id: number;
+          category: string;
           date: string;
-          id?: number;
+          id: number;
           name: string;
           recurring: boolean;
-          user_id?: string;
         };
         Update: {
           amount?: number;
           avatar?: string;
-          category_id?: number;
+          category?: string;
           date?: string;
           id?: number;
           name?: string;
           recurring?: boolean;
-          user_id?: string;
         };
         Relationships: [
           {
-            foreignKeyName: "transactions_category_id_fkey";
-            columns: ["category_id"];
+            foreignKeyName: "Transactions_category_fkey";
+            columns: ["category"];
             isOneToOne: false;
             referencedRelation: "categories";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "transactions_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
+            referencedColumns: ["name"];
           },
         ];
-      };
-      users: {
-        Row: {
-          created_at: string;
-          email: string;
-          id: string;
-          name: string;
-        };
-        Insert: {
-          created_at?: string;
-          email: string;
-          id?: string;
-          name: string;
-        };
-        Update: {
-          created_at?: string;
-          email?: string;
-          id?: string;
-          name?: string;
-        };
-        Relationships: [];
       };
     };
     Views: {
