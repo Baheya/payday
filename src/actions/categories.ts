@@ -19,4 +19,4 @@ export const categories = {
 
 export type GetAllCategories = ActionReturnType<
   typeof categories.getAllCategories
->;
+>["data"];
