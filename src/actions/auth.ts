@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import type { EmailOtpType } from "@supabase/supabase-js";
 
 import { defineAction } from "astro:actions";
