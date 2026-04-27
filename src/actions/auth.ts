@@ -1,3 +1,5 @@
+import type { EmailOtpType } from "@supabase/supabase-js";
+
 import { defineAction } from "astro:actions";
 
 export const auth = {
@@ -61,6 +63,26 @@ export const auth = {
       context.cookies.set("sb-refresh-token", refresh_token, {
         path: "/",
       });
+    },
+  }),
+  confirm: defineAction({
+    handler: async (_, context) => {
+      const requestUrl = new URL(context.request.url);
+      const token_hash = requestUrl.searchParams.get("token_hash");
+      const type = requestUrl.searchParams.get("type") as EmailOtpType | null;
+
+      if (token_hash && type) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const { error } = await context.locals.supabase.auth.verifyOtp({
+          type,
+          token_hash,
+        });
+
+        if (!error) {
+          return new Response("Email confirmation success!", { status: 200 });
+        }
+      }
     },
   }),
 };
