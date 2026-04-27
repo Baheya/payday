@@ -6,7 +6,7 @@ import Input from "#components/Input/Input.astro";
 import BaseLayout from "#layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title="Sign Up">
+<BaseLayout title="Sign In">
   <section>
     <Image
       height={920}
@@ -14,22 +14,21 @@ import BaseLayout from "#layouts/BaseLayout.astro";
       width={560}
     />
     <div class="container">
-      <Heading size="xl">Sign Up</Heading>
-      <form action="/api/auth/signup" method="POST">
-        <Input id="name" label="Name" name="name" required />
+      <Heading size="xl">Sign In</Heading>
+      <form action="/api/auth/signin" method="POST">
         <Input id="email" label="Email" name="email" required type="email" />
         <Input
-          autocomplete="new-password"
+          autocomplete="current-password"
           id="password"
-          label="Create password"
+          label="Password"
           minlength="8"
           name="password"
           required
           type="password"
         />
-        <Button type="submit">Create Account</Button>
+        <Button type="submit">Log In</Button>
       </form>
-      <p>Already have an account? <a href="/login">Login</a></p>
+      <p>Need to create an account? <a href="/signup">Sign Up</a></p>
     </div>
   </section>
 </BaseLayout>
