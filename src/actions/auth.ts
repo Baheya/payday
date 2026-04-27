@@ -42,9 +42,9 @@ export const auth = {
       if (!email || !password) {
         return new Response("Email and password are required", { status: 400 });
       }
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       const { data, error } =
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         await context.locals.supabase.auth.signInWithPassword({
           email,
           password,
