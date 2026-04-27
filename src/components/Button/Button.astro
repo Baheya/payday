@@ -5,13 +5,24 @@ import style from "./style.module.css";
 
 interface Props extends HTMLAttributes<"button"> {
   variant?: "primary" | "secondary" | "danger" | "icon";
+  size?: "default" | "small";
 }
 
-const { variant = "primary", disabled = false, ...props } = Astro.props;
+const {
+  variant = "primary",
+  disabled = false,
+  size = "default",
+  ...props
+} = Astro.props;
 ---
 
 <button
-  class:list={[style.button, style[variant], disabled && style.disabled]}
+  class:list={[
+    style.button,
+    style[variant],
+    disabled && style.disabled,
+    style[size],
+  ]}
   {...props}
 >
   <slot />

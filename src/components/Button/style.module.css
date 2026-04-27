@@ -5,11 +5,14 @@
 
   cursor: pointer;
 
+  position: relative;
+
   padding: var(--spacing-200);
   border: 1px solid transparent;
   border-radius: var(--spacing-100);
 
   font-weight: 700;
+  text-align: center;
 
   background: transparent;
 
@@ -51,9 +54,19 @@
   align-items: center;
   justify-content: center;
 
-  min-width: 45px;
-  min-height: 45px;
   padding: 0;
 
   background-color: transparent;
+
+  /* A trick to increase the hitbox area of an icon-only button without increasing the element's size  */
+  &::after {
+    content: "";
+
+    position: absolute;
+
+    display: block;
+
+    min-width: 45px;
+    min-height: 45px;
+  }
 }

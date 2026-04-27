@@ -1,20 +1,33 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 
+import PasswordVisibilityToggle from "#components/PasswordVisibilityToggle/PasswordVisibilityToggle.astro";
+
 import style from "./style.module.css";
 
 interface Props extends HTMLAttributes<"input"> {
   label: string;
   id: string;
   prefix?: string;
+  errorMessage?: string;
 }
 
-const { label, id, prefix, ...props } = Astro.props;
+const {
+  label,
+  id,
+  prefix,
+  type = "text",
+  errorMessage,
+  ...props
+} = Astro.props;
 ---
 
 <div>
   <label class={style.label} for={id}>{label}</label>
-  <div class={style.field}>
-    {prefix}<input class={style.input} id={id} type="text" {...props} />
+  <div class:list={[style.field, prefix && style.prefixed]}>
+    {prefix}<input class={style.input} id={id} type={type} {...props} />{
+      type === "password" && <PasswordVisibilityToggle />
+    }
   </div>
+  {errorMessage && <p class={style.error}>{errorMessage}</p>}
 </div>
