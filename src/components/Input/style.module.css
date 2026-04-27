@@ -8,7 +8,7 @@
 
 .field {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 1fr;
   column-gap: var(--spacing-150);
   align-items: center;
 
@@ -17,7 +17,16 @@
   border-radius: var(--spacing-100);
 }
 
+.prefixed {
+  grid-template-columns: auto 1fr;
+}
+
+.field:has(button) {
+  grid-template-columns: 1fr auto;
+}
+
 .input {
   all: unset;
+  width: 100%;
   border: none;
 }

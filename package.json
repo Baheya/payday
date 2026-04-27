@@ -66,7 +66,8 @@
     "#lib/*": "./src/lib/*",
     "#styles/*": "./src/styles/*",
     "#layouts/*": "./src/layouts/*",
-    "#actions/*": "./src/actions/*"
+    "#actions/*": "./src/actions/*",
+    "#images/*": "./src/images/*"
   },
   "keywords": [],
   "author": "",

@@ -1,0 +1,76 @@
+---
+import { Image } from "@unpic/astro";
+import Button from "#components/Button/Button.astro";
+import Heading from "#components/Heading/Heading.astro";
+import Input from "#components/Input/Input.astro";
+import BaseLayout from "#layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Signup">
+  <section>
+    <Image
+      height={920}
+      src="src/assets/images/illustration-authentication.svg"
+      width={560}
+    />
+    <div class="container">
+      <Heading size="xl">Sign Up</Heading>
+      <form action="/api/auth/signup" method="POST">
+        <Input id="name" label="Name" name="name" required />
+        <Input id="email" label="Email" name="email" required type="email" />
+        <Input
+          autocomplete="new-password"
+          id="password"
+          label="Create password"
+          minlength="8"
+          name="password"
+          required
+          type="password"
+        />
+        <Button type="submit">Create Account</Button>
+      </form>
+      <p>Already have an account? <a href="/login">Login</a></p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  form {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--spacing-200);
+  }
+  img {
+    display: none;
+
+    @media (--md-viewport) {
+      border-radius: var(--spacing-150);
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+  }
+  section {
+    height: 100%;
+    padding: var(--spacing-250);
+
+    @media (--md-viewport) {
+      display: grid;
+      grid-template-columns: auto 1fr;
+    }
+  }
+  .container {
+    border-radius: var(--spacing-150);
+    background-color: var(--white);
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--spacing-400);
+    margin: auto;
+    padding: var(--spacing-400);
+    min-width: 560px;
+  }
+
+  p {
+    text-align: center;
+  }
+</style>
