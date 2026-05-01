@@ -10,10 +10,9 @@ import {
   parseCookieHeader,
   serializeCookieHeader,
 } from "@supabase/ssr/dist/main/utils/helpers.js";
-import { defineMiddleware } from "astro:middleware";
+import { defineMiddleware, sequence } from "astro:middleware";
 
-// // `context` and `next` are automatically typed
-export const onRequest = defineMiddleware(async (context, next) => {
+const createSupabaseClient = defineMiddleware(async (context, next) => {
   try {
     const supabaseUrl = import.meta.env.SUPABASE_URL;
     const supabaseKey = import.meta.env.SUPABASE_KEY;
@@ -63,5 +62,25 @@ export const onRequest = defineMiddleware(async (context, next) => {
   } catch (e) {
     console.log(e);
   }
-  return next();
+  return await next();
 });
+
+const checkTokens = defineMiddleware(async (context, next) => {
+  const authPagePaths = [
+    "/signin",
+    "/signup",
+    "/api/auth/signin",
+    "/api/auth/signup",
+    "/api/auth/confirm",
+  ];
+  const isSignedIn =
+    context.cookies.has("sb-access-token") &&
+    context.cookies.has("sb-refresh-token");
+  if (!isSignedIn && !authPagePaths.includes(context.url.pathname)) {
+    return context.redirect("/signin");
+  }
+  return await next();
+});
+
+// // `context` and `next` are automatically typed
+export const onRequest = sequence(createSupabaseClient, checkTokens);

@@ -8,9 +8,11 @@ export const auth = {
   signup: defineAction({
     handler: async (_, context) => {
       const formData = await context.request.formData();
+      console.log(formData);
       const email = formData.get("email")?.toString();
       const password = formData.get("password")?.toString();
       const name = formData.get("name")?.toString();
+      const captchaToken = formData.get("h-captcha-response")?.toString();
 
       if (!email || !password || !name) {
         return new Response("Email, password, and name are required", {
@@ -27,11 +29,12 @@ export const auth = {
           data: {
             name,
           },
+          captchaToken,
         },
       });
 
       if (error) {
-        return new Response(error.message, { status: 500 });
+        throw new Error(error.message);
       }
 
       return new Response("Successfully signed in", { status: 200 });
@@ -54,11 +57,16 @@ export const auth = {
           password,
         });
 
+      console.log(data);
+      console.log(error);
+
       if (error) {
         return new Response(error.message, { status: 500 });
       }
 
       const { access_token, refresh_token } = data.session;
+      console.log(access_token);
+      console.log(refresh_token);
       context.cookies.set("sb-access-token", access_token, {
         path: "/",
       });
@@ -85,6 +93,13 @@ export const auth = {
           return new Response("Email confirmation success!", { status: 200 });
         }
       }
+    },
+  }),
+  signout: defineAction({
+    handler: (_, context) => {
+      context.cookies.delete("sb-access-token", { path: "/" });
+      context.cookies.delete("sb-refresh-token", { path: "/" });
+      return new Response("Successfully logged out", { status: 200 });
     },
   }),
 };
