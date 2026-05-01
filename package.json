@@ -1,6 +1,7 @@
 {
   "scripts": {
     "dev": "astro dev",
+    "dev:local": "astro dev --host test.payday.com --port 443",
     "build": "astro check && astro build",
     "preview": "astro preview",
     "prepare": "husky && husky install",
@@ -14,6 +15,7 @@
   "dependencies": {
     "@astrojs/check": "^0.9.8",
     "@astrojs/netlify": "<7.0.0",
+    "@hcaptcha/vanilla-hcaptcha": "^1.1.4",
     "@unpic/astro": "^1.0.2",
     "astro": "<6.0.0",
     "minisearch": "^7.2.0"
@@ -26,6 +28,7 @@
     "@csstools/css-syntax-patches-for-csstree": "^1.1.1",
     "@csstools/postcss-global-data": "^3.1.0",
     "@eslint/js": "^9.39.4",
+    "@hcaptcha/types": "^1.2.0",
     "@supabase/ssr": "^0.10.2",
     "@supabase/supabase-js": "^2.104.0",
     "@types/node": "^25.0.3",

@@ -1,15 +1,15 @@
 ---
 import Heading from "#components/Heading/Heading.astro";
 import TransactionsList from "#components/Transactions/TransactionsList.astro";
-import BaseLayout from "#layouts/BaseLayout.astro";
+import DefaultLayout from "#layouts/DefaultLayout.astro";
 ---
 
-<BaseLayout title="Transactions">
+<DefaultLayout title="Transactions">
   <section>
     <Heading as="h1" class="title" size="xl">Transactions</Heading>
     <TransactionsList />
   </section>
-</BaseLayout>
+</DefaultLayout>
 
 <style>
   section {

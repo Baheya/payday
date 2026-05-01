@@ -7,7 +7,7 @@ import BudgetDetailCard from "#components/BudgetDetailCard/BudgetDetailCard.astr
 import BudgetOverview from "#components/BudgetOverview/BudgetOverview.astro";
 import Heading from "#components/Heading/Heading.astro";
 import { fetchData } from "#db/fetch.ts";
-import BaseLayout from "#layouts/BaseLayout.astro";
+import DefaultLayout from "#layouts/DefaultLayout.astro";
 
 const [
   budgetExpensesByCategory,
@@ -29,7 +29,7 @@ const [
 // }));
 ---
 
-<BaseLayout title="Budgets">
+<DefaultLayout title="Budgets">
   <section>
     <div class="header">
       <Heading as="h1" size="xl">Budgets</Heading>
@@ -51,7 +51,7 @@ const [
       }
     </ul>
   </section>
-</BaseLayout>
+</DefaultLayout>
 
 <style>
   ul {

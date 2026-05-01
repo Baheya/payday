@@ -1,6 +1,11 @@
+/// <reference types="@hcaptcha/types"/>
+
 interface ImportMetaEnv {
   readonly SUPABASE_URL: string;
   readonly SUPABASE_ANON_KEY: string;
+  readonly H_CAPTCHA_SITEKEY: string;
+  readonly H_CAPTCHA_SECRET_KEY: string;
+  readonly HTTPS_ENABLED: boolean;
 }
 
 interface ImportMeta {
