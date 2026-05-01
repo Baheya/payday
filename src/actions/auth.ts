@@ -8,7 +8,6 @@ export const auth = {
   signup: defineAction({
     handler: async (_, context) => {
       const formData = await context.request.formData();
-      console.log(formData);
       const email = formData.get("email")?.toString();
       const password = formData.get("password")?.toString();
       const name = formData.get("name")?.toString();
