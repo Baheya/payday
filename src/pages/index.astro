@@ -5,7 +5,7 @@ import CardGrid from "#components/CardGrid/CardGrid.astro";
 import PotsOverview from "#components/PotsOverview/PotsOverview.astro";
 import RecurringBillsOverview from "#components/RecurringBillsOverview/RecurringBillsOverview.astro";
 import TransactionOverview from "#components/TransactionOverview/TransactionOverview.astro";
-import BaseLayout from "#layouts/BaseLayout.astro";
+import DefaultLayout from "#layouts/DefaultLayout.astro";
 import HomeLayout from "#layouts/HomeLayout.astro";
 import { setCurrency } from "#lib/utils.ts";
 import { actions } from "astro:actions";
@@ -25,7 +25,7 @@ const currentExpenses =
   data?.balance?.[0].expenses && setCurrency(data.balance[0].expenses);
 ---
 
-<BaseLayout title="Overview">
+<DefaultLayout title="Overview">
   <h1>Overview</h1>
   <HomeLayout>
     <CardGrid>
@@ -66,4 +66,4 @@ const currentExpenses =
       )
     }
   </HomeLayout>
-</BaseLayout>
+</DefaultLayout>

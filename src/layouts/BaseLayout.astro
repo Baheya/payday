@@ -9,6 +9,9 @@ interface Props {
 }
 
 const { title = "Overview" } = Astro.props;
+
+const isSignedIn =
+  Astro.cookies.has("sb-access-token") && Astro.cookies.has("sb-refresh-token");
 ---
 
 <!doctype html>
@@ -90,7 +93,7 @@ const { title = "Overview" } = Astro.props;
     <title>{`Payday | ${title}`}</title>
   </head>
   <body>
-    <Navigation />
+    {isSignedIn && <Navigation />}
     <main>
       <slot />
     </main>
@@ -101,21 +104,11 @@ const { title = "Overview" } = Astro.props;
   html {
     height: 100%;
   }
-  main {
-    padding-inline: var(--spacing-200);
-    width: 100%;
-    container: main / inline-size;
-
-    @media (--md-viewport) {
-      padding-inline: var(--spacing-500);
-    }
-  }
-
   body {
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 100%;
+    min-height: 100%;
 
     @media (--md-viewport) {
       flex-direction: column-reverse;
@@ -124,5 +117,10 @@ const { title = "Overview" } = Astro.props;
     @media (--lg-viewport) {
       flex-direction: row;
     }
+  }
+
+  main {
+    width: 100%;
+    min-height: 100%;
   }
 </style>
