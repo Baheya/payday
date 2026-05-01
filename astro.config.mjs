@@ -10,12 +10,14 @@ export default defineConfig({
   devToolbar: {
     enabled: false,
   },
-  vite: {
-    server: {
-      https: {
-        cert: readFileSync("./cert.pem"),
-        key: readFileSync("./key.pem"),
+  ...(import.meta.env.DEV && {
+    vite: {
+      server: {
+        https: {
+          cert: readFileSync("./cert.pem"),
+          key: readFileSync("./key.pem"),
+        },
       },
     },
-  },
+  }),
 });
