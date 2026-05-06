@@ -28,11 +28,12 @@ export const auth = {
           data: {
             name,
           },
-          captchaToken,
+          ...(captchaToken && { captchaToken }),
         },
       });
 
       if (error) {
+        console.error(error);
         throw new Error(error.message);
       }
 
@@ -44,6 +45,7 @@ export const auth = {
       const formData = await context.request.formData();
       const email = formData.get("email")?.toString();
       const password = formData.get("password")?.toString();
+      const captchaToken = formData.get("h-captcha-response")?.toString();
 
       if (!email || !password) {
         return new Response("Email and password are required", { status: 400 });
@@ -54,18 +56,18 @@ export const auth = {
         await context.locals.supabase.auth.signInWithPassword({
           email,
           password,
+          ...(captchaToken && {
+            options: {
+              captchaToken,
+            },
+          }),
         });
-
-      console.log(data);
-      console.log(error);
 
       if (error) {
         return new Response(error.message, { status: 500 });
       }
 
       const { access_token, refresh_token } = data.session;
-      console.log(access_token);
-      console.log(refresh_token);
       context.cookies.set("sb-access-token", access_token, {
         path: "/",
       });

@@ -1,6 +1,7 @@
 ---
 import { Image } from "@unpic/astro";
 import Button from "#components/Button/Button.astro";
+import Captcha from "#components/Captcha/Captcha.astro";
 import Heading from "#components/Heading/Heading.astro";
 import Input from "#components/Input/Input.astro";
 import BaseLayout from "#layouts/BaseLayout.astro";
@@ -26,6 +27,7 @@ import BaseLayout from "#layouts/BaseLayout.astro";
           required
           type="password"
         />
+        {import.meta.env.HTTPS_ENABLED && <Captcha />}
         <Button type="submit">Log In</Button>
       </form>
       <p>Need to create an account? <a href="/signup">Sign Up</a></p>
