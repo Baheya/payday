@@ -1,18 +1,22 @@
+import type { AstroCookies } from "astro";
+
 import { publicBudgetsInsertSchema } from "../db/schemas.ts";
 import { PostgrestError } from "@supabase/supabase-js";
+import { createSbClient } from "#lib/supabase.ts";
 import { getPreviousMonthISOString } from "#lib/utils.ts";
 import { defineAction, type ActionReturnType } from "astro:actions";
 import { z, ZodError } from "astro/zod";
 
 export const budgets = {
   getBudgetExpensesByCategory: defineAction({
-    handler: async (_, { locals }) => {
-      const currentBudgets = await getAllBudgets(locals);
+    handler: async (_, { request, cookies }) => {
+      const currentBudgets = await getAllBudgets({ request, cookies });
       const previousMonthDate = getPreviousMonthISOString();
       const budgetIds = currentBudgets?.map((budget) => budget.category_id);
+      const supabase = createSbClient({ request, cookies });
 
       if (budgetIds) {
-        const currentMonthTransactions = await locals.supabase
+        const currentMonthTransactions = await supabase
           .from("transactions")
           .select("*, categories ( label )")
           .in("category_id", budgetIds)
@@ -49,12 +53,13 @@ export const budgets = {
   }),
   addNewBudget: defineAction({
     // input: publicBudgetsInsertSchema,
-    handler: async (input: { [k: string]: unknown }, { locals }) => {
+    handler: async (input: { [k: string]: unknown }, { request, cookies }) => {
       try {
         const validatedData = publicBudgetsInsertSchema.safeParse(input);
+        const supabase = createSbClient({ request, cookies });
 
         if (validatedData.success) {
-          const { data, error } = await locals.supabase
+          const { data, error } = await supabase
             .from("budgets")
             .insert([validatedData.data])
             .select();
@@ -65,9 +70,9 @@ export const budgets = {
         }
       } catch (e) {
         if (e instanceof ZodError) {
-          console.log(e);
+          console.error(e);
         } else if (e instanceof PostgrestError) {
-          console.log(e);
+          console.error(e);
         }
       }
     },
@@ -78,8 +83,9 @@ export const budgets = {
       budget_id: z.number().optional(),
       count: z.number().optional(),
     }),
-    handler: async (input, ctx) => {
-      let query = ctx.locals.supabase.from("budgets").select("*");
+    handler: async (input, { request, cookies }) => {
+      const supabase = createSbClient({ request, cookies });
+      let query = supabase.from("budgets").select("*");
 
       if (input.category_id) {
         query = query.in("category_id", [input.category_id]);
@@ -102,9 +108,16 @@ export const budgets = {
   }),
 };
 
-const getAllBudgets = async (locals: App.Locals) => {
+const getAllBudgets = async ({
+  request,
+  cookies,
+}: {
+  request: Request;
+  cookies: AstroCookies;
+}) => {
   try {
-    const response = await locals.supabase
+    const supabase = createSbClient({ request, cookies });
+    const response = await supabase
       .from("budgets")
       .select("*, categories ( label ), colors ( label, value )");
     if (response.data && response.data.length > 0) {

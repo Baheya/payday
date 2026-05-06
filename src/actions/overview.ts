@@ -1,3 +1,4 @@
+import { createSbClient } from "#lib/supabase.ts";
 import { defineAction, type ActionReturnType } from "astro:actions";
 
 interface RecurringBills {
@@ -8,8 +9,9 @@ interface RecurringBills {
 
 export const overview = {
   getOverview: defineAction({
-    handler: async (_, ctx) => {
+    handler: async (_, { request, cookies }) => {
       try {
+        const supabase = createSbClient({ request, cookies });
         const [
           balanceResponse,
           budgetsResponse,
@@ -17,11 +19,11 @@ export const overview = {
           transactionsResponse,
           recurringBillsResponse,
         ] = await Promise.all([
-          ctx.locals.supabase.from("balance").select("*"),
-          ctx.locals.supabase.from("budgets").select("*"),
-          ctx.locals.supabase.from("pots").select("*, colors ( * )"),
-          ctx.locals.supabase.from("transactions").select("*").limit(5),
-          ctx.locals.supabase
+          supabase.from("balance").select("*"),
+          supabase.from("budgets").select("*"),
+          supabase.from("pots").select("*, colors ( * )"),
+          supabase.from("transactions").select("*").limit(5),
+          supabase
             .from("transactions")
             .select("*, categories ( label )")
             .eq("recurring", true),
@@ -56,7 +58,7 @@ export const overview = {
           recurringBills,
         };
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     },
   }),

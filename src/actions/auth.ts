@@ -1,13 +1,14 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import type { EmailOtpType } from "@supabase/supabase-js";
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { createSbClient } from "#lib/supabase.ts";
 import { defineAction } from "astro:actions";
 
 export const auth = {
   signup: defineAction({
-    handler: async (_, context) => {
-      const formData = await context.request.formData();
+    handler: async (_, { request, cookies }) => {
+      const formData = await request.formData();
       const email = formData.get("email")?.toString();
       const password = formData.get("password")?.toString();
       const name = formData.get("name")?.toString();
@@ -19,9 +20,11 @@ export const auth = {
         });
       }
 
+      const supabase = createSbClient({ request: request, cookies: cookies });
+
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      const { error } = await context.locals.supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -41,8 +44,8 @@ export const auth = {
     },
   }),
   signin: defineAction({
-    handler: async (_, context) => {
-      const formData = await context.request.formData();
+    handler: async (_, { request, cookies }) => {
+      const formData = await request.formData();
       const email = formData.get("email")?.toString();
       const password = formData.get("password")?.toString();
       const captchaToken = formData.get("h-captcha-response")?.toString();
@@ -50,10 +53,13 @@ export const auth = {
       if (!email || !password) {
         return new Response("Email and password are required", { status: 400 });
       }
-      const { data, error } =
+
+      const supabase = createSbClient({ request: request, cookies: cookies });
+
+      const { error } =
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        await context.locals.supabase.auth.signInWithPassword({
+        await supabase.auth.signInWithPassword({
           email,
           password,
           ...(captchaToken && {
@@ -66,26 +72,20 @@ export const auth = {
       if (error) {
         return new Response(error.message, { status: 500 });
       }
-
-      const { access_token, refresh_token } = data.session;
-      context.cookies.set("sb-access-token", access_token, {
-        path: "/",
-      });
-      context.cookies.set("sb-refresh-token", refresh_token, {
-        path: "/",
-      });
     },
   }),
   confirm: defineAction({
-    handler: async (_, context) => {
-      const requestUrl = new URL(context.request.url);
+    handler: async (_, { request, cookies }) => {
+      const requestUrl = new URL(request.url);
       const token_hash = requestUrl.searchParams.get("token_hash");
       const type = requestUrl.searchParams.get("type") as EmailOtpType | null;
 
       if (token_hash && type) {
+        const supabase = createSbClient({ request: request, cookies: cookies });
+
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        const { error } = await context.locals.supabase.auth.verifyOtp({
+        const { error } = await supabase.auth.verifyOtp({
           type,
           token_hash,
         });
@@ -97,9 +97,10 @@ export const auth = {
     },
   }),
   signout: defineAction({
-    handler: (_, context) => {
-      context.cookies.delete("sb-access-token", { path: "/" });
-      context.cookies.delete("sb-refresh-token", { path: "/" });
+    handler: async (_, { request, cookies }) => {
+      const supabase = createSbClient({ request: request, cookies: cookies });
+
+      await supabase.auth.signOut();
       return new Response("Successfully logged out", { status: 200 });
     },
   }),

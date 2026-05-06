@@ -1,17 +1,17 @@
+import { createSbClient } from "#lib/supabase.ts";
 import { defineAction, type ActionReturnType } from "astro:actions";
 
 export const colors = {
   getAllColors: defineAction({
-    handler: async (_, ctx) => {
+    handler: async (_, { request, cookies }) => {
       try {
-        const colors = await ctx.locals.supabase
-          .from("colors")
-          .select("*, budgets ( * )");
+        const supabase = createSbClient({ request, cookies });
+        const colors = await supabase.from("colors").select("*, budgets ( * )");
         if (colors.data && colors.data.length > 0) {
           return colors.data;
         }
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     },
   }),
