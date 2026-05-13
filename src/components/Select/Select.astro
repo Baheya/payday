@@ -7,9 +7,18 @@ interface Props {
   id: string;
   label: string;
   options: ComponentProps<typeof SelectOnlyCombobox>["options"];
+  formControlId?: string;
+  name: string;
 }
 
-const { id, label, options } = Astro.props;
+const { id, label, options, formControlId, ...props } = Astro.props;
 ---
 
-<SelectOnlyCombobox comboboxLabel={label} id={id} options={options} />
+<SelectOnlyCombobox
+  comboboxLabel={label}
+  data-combobox-select
+  formControlId={formControlId}
+  id={id}
+  options={options}
+  {...props}
+/>
