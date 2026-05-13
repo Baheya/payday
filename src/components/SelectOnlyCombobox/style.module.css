@@ -144,8 +144,8 @@
 
   display: flex;
   align-items: center;
-  justify-content: space-between;
 
+  width: 100%;
   padding: var(--spacing-100) var(--spacing-50);
 
   &:not(:last-child)::after {
@@ -185,7 +185,12 @@
 .suffix {
   @mixin text-xs;
 
+  margin-inline-start: auto;
   color: var(--grey-500);
+}
+
+[aria-disabled="true"] {
+  cursor: not-allowed;
 }
 
 [role="option"][data-focused="true"] {

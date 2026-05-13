@@ -22,7 +22,10 @@ export class SelectOnlyCombobox extends HTMLElement {
     this.options = this.querySelectorAll("[role=option]");
     this.comboboxPreviewLabel = this.querySelector("[data-combobox-preview]");
 
-    this.activeIndex = 0;
+    this.activeIndex =
+      Array.from(this.options).findIndex(
+        (option) => option.getAttribute("aria-selected") === "true",
+      ) || 0;
     this.open = false;
     this.searchString = "";
     this.searchTimeout = undefined;
@@ -44,14 +47,20 @@ export class SelectOnlyCombobox extends HTMLElement {
 
   connectedCallback() {
     this.options?.forEach((option, index) => {
-      option.addEventListener("click", (event) => {
-        event.stopPropagation();
-        this.onOptionClick(index);
-      });
-      option.addEventListener("mousedown", () => {
-        this.onOptionMouseDown();
-      });
+      if (
+        option.getAttribute("aria-disabled") === "false" ||
+        !option.hasAttribute("aria-disabled")
+      ) {
+        option.addEventListener("click", (event) => {
+          event.stopPropagation();
+          this.onOptionClick(index);
+        });
+        option.addEventListener("mousedown", () => {
+          this.onOptionMouseDown();
+        });
+      }
     });
+
     this.comboLabel?.addEventListener("click", () => this.onLabelClick());
     this.listboxEl?.addEventListener("focusout", (e: FocusEvent) =>
       this.onComboBlur(e),
@@ -368,10 +377,11 @@ export class SelectOnlyCombobox extends HTMLElement {
     // update state
     if (this.options) {
       this.activeIndex = index;
+      this.setAttribute("data-active-option-index", index.toString());
 
       // update displayed value
       const optionsContentArray = Array.from(this.options).map((option) =>
-        option.firstChild?.textContent?.trim(),
+        option.getAttribute("data-option-label"),
       );
       const selected = optionsContentArray[index];
       if (this.comboboxPreviewLabel && selected) {
@@ -383,13 +393,25 @@ export class SelectOnlyCombobox extends HTMLElement {
       [...options].forEach((optionEl) => {
         optionEl.setAttribute("aria-selected", "false");
       });
+
       options[index].setAttribute("aria-selected", "true");
 
-      const customEvent = new CustomEvent("selection-change", {
-        detail: options[index].firstChild?.textContent?.trim(),
-      });
+      const currentValue = options[index]
+        .getAttribute("data-option-value")
+        ?.trim();
 
-      options[index].dispatchEvent(customEvent);
+      if (currentValue) {
+        const customEvent = new CustomEvent("selection-change", {
+          detail: {
+            label: options[index].getAttribute("data-option-label")?.trim(),
+            value: options[index].getAttribute("data-option-value")?.trim(),
+            id: options[index].getAttribute("data-option-id")?.trim(),
+            optionIndex: index,
+          },
+        });
+
+        this.dispatchEvent(customEvent);
+      }
     }
   }
 
