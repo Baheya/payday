@@ -7,14 +7,17 @@ import style from "./style.module.css";
 
 interface Props extends HTMLAttributes<"select"> {
   options: {
-    name: string;
+    label: string;
     prefixStyle?: string;
-    suffixText?: string | null;
+    disabled?: boolean | null;
+    value?: string;
+    id?: number;
   }[];
   comboboxLabel: string;
   mobileTriggerIconName?: iconName;
   id: string;
   currentlySelected?: string | null;
+  formControlId?: string;
 }
 
 const {
@@ -23,22 +26,32 @@ const {
   mobileTriggerIconName,
   id,
   currentlySelected,
+  formControlId,
   ...props
 } = Astro.props;
 
 const dropdownShouldBecomeIconOnMobile = !!mobileTriggerIconName;
 const optionHasPrefix = options.every((option) => option.prefixStyle);
+const firstAvailableOption = options.find((option) => !option.disabled);
+const activeOptionIndex = options.findIndex(
+  (option) =>
+    option.label === currentlySelected ||
+    option.label === firstAvailableOption?.label,
+);
 ---
 
 <select-only-combobox
+  {...props}
   class:list={[
     style.container,
     !dropdownShouldBecomeIconOnMobile && style.desktop,
     optionHasPrefix && style.prefixed,
   ]}
+  data-active-option-index={activeOptionIndex}
   data-testid="select-only-combobox"
+  {...formControlId && { id: formControlId }}
 >
-  <div class:list={[style.label]} id="combobox-label">
+  <div class={style.label} id="combobox-label">
     {comboboxLabel}
   </div>
   <div class={style.wrapper}>
@@ -50,14 +63,15 @@ const optionHasPrefix = options.every((option) => option.prefixStyle);
       class={style.combobox}
       role="combobox"
       tabindex="0"
+      type="button"
     >
       <span
         class={style["button-label"]}
         data-combobox-preview
         {...!currentlySelected &&
-          options[0].prefixStyle && {
-            style: { "--theme": `var(--${options[0].prefixStyle})` },
-          }}>{currentlySelected || options[0].name}</span
+          firstAvailableOption?.prefixStyle && {
+            style: { "--theme": `var(--${firstAvailableOption?.prefixStyle})` },
+          }}>{currentlySelected || firstAvailableOption?.label}</span
       >
       {
         dropdownShouldBecomeIconOnMobile && (
@@ -80,29 +94,31 @@ const optionHasPrefix = options.every((option) => option.prefixStyle);
       id={id}
       role="listbox"
       tabindex="-1"
-      {...props}
     >
       {
         options.map((option, i) => {
           const prefixStyleAttribute = option.prefixStyle && {
             style: { "--theme": `var(--${option.prefixStyle})` },
           };
+          const isActiveOption =
+            option.label === currentlySelected ||
+            option.label === firstAvailableOption?.label;
           return (
             <div
-              aria-selected={
-                option.name === currentlySelected || i === 0 ? "true" : "false"
-              }
+              aria-disabled={option.disabled}
+              aria-selected={isActiveOption ? "true" : "false"}
               class={style.option}
-              data-focused={
-                option.name === currentlySelected || i === 0 ? "true" : "false"
-              }
+              data-focused={isActiveOption ? "true" : "false"}
+              data-option-id={option.id}
+              data-option-label={option.label}
+              data-option-value={option.value}
               id={`${id}-option-${i}`}
               role="option"
               {...prefixStyleAttribute}
             >
-              {option.name}
-              {option.suffixText && (
-                <span class={style.suffix}>{option.suffixText}</span>
+              {option.label}
+              {option.disabled && (
+                <span class={style.suffix}>already used</span>
               )}
             </div>
           );
