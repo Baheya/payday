@@ -1,0 +1,65 @@
+---
+import type SelectOnlyCombobox from "#components/SelectOnlyCombobox/SelectOnlyCombobox.astro";
+import type { ComponentProps } from "astro/types";
+
+import Button from "#components/Button/Button.astro";
+import DialogButton from "#components/Dialog/DialogButton.astro";
+import DialogModal from "#components/Dialog/DialogModal.astro";
+import Input from "#components/Input/Input.astro";
+import Select from "#components/Select/Select.astro";
+import { actions } from "astro:actions";
+
+interface Props {
+  colorOptions: ComponentProps<typeof SelectOnlyCombobox>["options"];
+  categoryOptions: ComponentProps<typeof SelectOnlyCombobox>["options"];
+}
+
+const { colorOptions, categoryOptions } = Astro.props;
+---
+
+<DialogButton modalId="add-budget">Add New budget</DialogButton>
+<DialogModal
+  description="Choose a category to set a spending budget. These categories can help you monitor spending."
+  id="add-budget"
+  title="Add New Budget"
+>
+  <form
+    action={actions.budgets.addNewBudget}
+    data-add-budget-form
+    enctype="multipart/form-data"
+    method="POST"
+  >
+    {
+      categoryOptions && categoryOptions.length > 0 && (
+        <Select
+          formControlId="category_id"
+          id="budget_categories"
+          label="Budget Category"
+          name="category_id"
+          options={categoryOptions}
+        />
+      )
+    }
+    <Input
+      autocomplete="off"
+      id="budget_max_spending"
+      label="Maximum Spending"
+      name="maximum"
+      placeholder="e.g. 2000"
+      prefix="$"
+      required
+    />
+    {
+      colorOptions && colorOptions.length > 0 && (
+        <Select
+          formControlId="theme_id"
+          id="budget_theme"
+          label="Theme"
+          name="theme_id"
+          options={colorOptions}
+        />
+      )
+    }
+    <Button>Add New Budget</Button>
+  </form>
+</DialogModal>
