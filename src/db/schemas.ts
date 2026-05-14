@@ -4,7 +4,7 @@
  * ==========================================
  */
 
-import { z } from "zod";
+import { z } from "astro/zod";
 
 export const publicThemeSchema = z.union([
   z.literal("cyan"),
@@ -240,21 +240,18 @@ export const publicTransactionsRelationshipsSchema = z.tuple([
 
 export const publicUsersRowSchema = z.object({
   created_at: z.string(),
-  email: z.string(),
   id: z.string(),
   name: z.string(),
 });
 
 export const publicUsersInsertSchema = z.object({
   created_at: z.string().optional(),
-  email: z.string(),
   id: z.string().optional(),
   name: z.string(),
 });
 
 export const publicUsersUpdateSchema = z.object({
   created_at: z.string().optional(),
-  email: z.string().optional(),
   id: z.string().optional(),
   name: z.string().optional(),
 });
