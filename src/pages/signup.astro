@@ -1,11 +1,11 @@
 ---
 import { Image } from "@unpic/astro";
 import Button from "#components/Button/Button.astro";
+import Captcha from "#components/Captcha/Captcha.astro";
 import Heading from "#components/Heading/Heading.astro";
 import Input from "#components/Input/Input.astro";
 import BaseLayout from "#layouts/BaseLayout.astro";
-
-const siteKey = import.meta.env.H_CAPTCHA_SITEKEY;
+import { actions } from "astro:actions";
 ---
 
 <BaseLayout title="Sign Up">
@@ -17,7 +17,7 @@ const siteKey = import.meta.env.H_CAPTCHA_SITEKEY;
     />
     <div class="container">
       <Heading size="xl">Sign Up</Heading>
-      <form action="/api/auth/signup" id="signup-form" method="POST">
+      <form action={actions.auth.signup} id="signup-form" method="POST">
         <Input id="name" label="Name" name="name" required />
         <Input id="email" label="Email" name="email" required type="email" />
         <Input
@@ -29,41 +29,13 @@ const siteKey = import.meta.env.H_CAPTCHA_SITEKEY;
           required
           type="password"
         />
-        <h-captcha
-          id="signup-captcha"
-          site-key={siteKey}
-          size="invisible"
-          theme="light"></h-captcha>
+        {import.meta.env.HTTPS_ENABLED && <Captcha />}
         <Button type="submit">Create Account</Button>
       </form>
       <p>Already have an account? <a href="/signin">Sign In</a></p>
     </div>
   </section>
 </BaseLayout>
-
-<script>
-  import "@hcaptcha/vanilla-hcaptcha";
-
-  const form = document.querySelector<HTMLFormElement>("[id='signup-form']");
-  if (form) {
-    const hcaptchaEl = document.getElementById("signup-captcha");
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      hcaptcha.execute();
-    });
-
-    hcaptchaEl?.addEventListener("verified", async (e) => {
-      if ("token" in e) {
-        form.submit();
-      }
-    });
-
-    hcaptchaEl?.addEventListener("error", (e) => {
-      console.error("hCaptcha error:", e.error);
-    });
-  }
-</script>
 
 <style>
   form {

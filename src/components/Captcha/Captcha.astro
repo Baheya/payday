@@ -1,0 +1,33 @@
+---
+const siteKey = import.meta.env.H_CAPTCHA_SITEKEY;
+---
+
+<h-captcha id="signup-captcha" site-key={siteKey} size="invisible" theme="light"
+></h-captcha>
+
+<script>
+  import "@hcaptcha/vanilla-hcaptcha";
+
+  const hcaptchaElements = document.querySelectorAll<HTMLElement>("h-captcha");
+
+  hcaptchaElements.forEach((hcaptchaEl) => {
+    const form = hcaptchaEl.closest("form");
+
+    if (form) {
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        hcaptcha.execute();
+      });
+
+      hcaptchaEl?.addEventListener("verified", async (e) => {
+        if ("token" in e) {
+          form.submit();
+        }
+      });
+
+      hcaptchaEl?.addEventListener("error", (e) => {
+        console.error("hCaptcha error:", e.error);
+      });
+    }
+  });
+</script>

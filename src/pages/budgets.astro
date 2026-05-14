@@ -1,57 +1,86 @@
 ---
-import type { GetBudgetExpensesByCategory } from "#actions/budgets.ts";
-
-// import { GetAllColors } from "#actions/colors.ts";
-// import AddNewBudget from "#components/AddNewBudget/AddNewBudget.astro";
+import AddNewBudget from "#components/AddNewBudget/AddNewBudget.astro";
 import BudgetDetailCard from "#components/BudgetDetailCard/BudgetDetailCard.astro";
 import BudgetOverview from "#components/BudgetOverview/BudgetOverview.astro";
 import Heading from "#components/Heading/Heading.astro";
-import { fetchData } from "#db/fetch.ts";
 import DefaultLayout from "#layouts/DefaultLayout.astro";
+import { createSbClient } from "#lib/supabase.ts";
+import { actions } from "astro:actions";
+
+const supabase = createSbClient({
+  request: Astro.request,
+  cookies: Astro.cookies,
+});
+// @ts-expect-error due to casting the SSR client to the Browser client
+const user = await supabase.auth.getUser();
+
+if (!user?.data) {
+  Astro.redirect("/signin");
+}
 
 const [
-  budgetExpensesByCategory,
-  // colors,
-  // categories
+  { data: colorsData, error: colorsError },
+  { data: categoriesData, error: categoriesError },
+  { data: budgetExpensesData, error: budgetExpensesError },
 ] = await Promise.all([
-  fetchData<GetBudgetExpensesByCategory>("/budgets"),
-  // fetchData<GetAllColors>("/colors"),
-  // getAllCategories(),
+  Astro.callAction(actions.colors.getAllColors, {}),
+  Astro.callAction(actions.categories.getAllCategories, {}),
+  Astro.callAction(actions.budgets.getBudgetExpensesByCategory, {}),
 ]);
 
-// const colorOptions = colors?.map((color) => ({
-//   name: color.label,
-//   prefixStyle: color.value,
-// }));
-// const categoryOptions = categories?.map((category) => ({
-//   name: category.label,
-//   suffixText: category.budgets && "already used",
-// }));
+if (colorsError || categoriesError || budgetExpensesError) {
+  // handle
+  console.error(colorsError || categoriesError || budgetExpensesError);
+}
+
+const colorOptions = colorsData?.map((color) => ({
+  label: color.label,
+  value: color.id,
+  id: color.id,
+  prefixStyle: color.value,
+  disabled: color.budgets.length > 0,
+}));
+const categoryOptions = categoriesData?.map((category) => ({
+  label: category.label,
+  value: category.id,
+  id: category.id,
+  disabled: category.budgets.length > 0,
+}));
+
+const result = Astro.getActionResult(actions.budgets.addNewBudget);
 ---
 
-<DefaultLayout title="Budgets">
-  <section>
-    <div class="header">
-      <Heading as="h1" size="xl">Budgets</Heading>
-      <!-- <AddNewBudget /> -->
-    </div>
-    {
-      budgetExpensesByCategory && budgetExpensesByCategory.length > 0 && (
-        <BudgetOverview
-          expenses={budgetExpensesByCategory}
-          summary="expenses"
-        />
-      )
-    }
-    <ul>
-      {
-        budgetExpensesByCategory?.map((budget) => (
-          <BudgetDetailCard budget={budget} />
-        ))
-      }
-    </ul>
-  </section>
-</DefaultLayout>
+{
+  categoryOptions && colorOptions && budgetExpensesData && (
+    <DefaultLayout title="Budgets">
+      <section>
+        <div class="header">
+          <Heading as="h1" size="xl">
+            Budgets
+          </Heading>
+          <AddNewBudget
+            categoryOptions={categoryOptions}
+            colorOptions={colorOptions}
+          />
+        </div>
+        {result?.data && (
+          <div class="alert" role="alert">
+            <span>Success!</span> A budget for {result.data[0].categories.label}{" "}
+            has been created.{" "}
+          </div>
+        )}
+        {budgetExpensesData.length > 0 && (
+          <BudgetOverview expenses={budgetExpensesData} summary="expenses" />
+        )}
+        <ul>
+          {budgetExpensesData.map((budget) => (
+            <BudgetDetailCard budget={budget} />
+          ))}
+        </ul>
+      </section>
+    </DefaultLayout>
+  )
+}
 
 <style>
   ul {
@@ -74,5 +103,17 @@ const [
     display: flex;
     justify-content: space-between;
     margin-block: var(--spacing-400);
+  }
+
+  .alert {
+    padding: var(--spacing-150);
+    background-color: var(--white);
+    margin-block-end: var(--spacing-150);
+    border-radius: var(--spacing-150);
+
+    span {
+      color: var(--green);
+      font-weight: 700;
+    }
   }
 </style>

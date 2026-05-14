@@ -1,4 +1,6 @@
-export class SelectOnlyCombobox extends HTMLElement {
+import { FaceMixin } from "#lib/FaceMixin.ts";
+
+export class SelectOnlyCombobox extends FaceMixin(HTMLElement) {
   listboxEl;
   selectActions;
   comboLabel;
@@ -73,6 +75,9 @@ export class SelectOnlyCombobox extends HTMLElement {
         this.removeAttribute("data-open");
       }
     });
+    this._internals.setFormValue(
+      this.options[this.activeIndex].getAttribute("data-option-value"),
+    );
   }
 
   // filter an array of options against an input string
@@ -401,6 +406,10 @@ export class SelectOnlyCombobox extends HTMLElement {
         ?.trim();
 
       if (currentValue) {
+        this._internals.setFormValue(
+          this.options[this.activeIndex].getAttribute("data-option-value"),
+        );
+
         const customEvent = new CustomEvent("selection-change", {
           detail: {
             label: options[index].getAttribute("data-option-label")?.trim(),

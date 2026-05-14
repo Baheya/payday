@@ -2,6 +2,18 @@
 import Heading from "#components/Heading/Heading.astro";
 import TransactionsList from "#components/Transactions/TransactionsList.astro";
 import DefaultLayout from "#layouts/DefaultLayout.astro";
+import { createSbClient } from "#lib/supabase.ts";
+
+const supabase = createSbClient({
+  request: Astro.request,
+  cookies: Astro.cookies,
+});
+// @ts-expect-error due to casting the SSR client to the Browser client
+const user = await supabase.auth.getUser();
+
+if (!user?.data) {
+  Astro.redirect("/signin");
+}
 ---
 
 <DefaultLayout title="Transactions">

@@ -17,13 +17,3 @@ declare module "*.astro" {
   const component: AstroComponentFactory;
   export default component;
 }
-
-declare namespace App {
-  interface Locals {
-    supabase: import("@supabase/supabase-js").SupabaseClient<
-      import("./db/types.ts").Database
-    >;
-    headers: Headers;
-    // session: import("./lib/server/session").Session | null;
-  }
-}

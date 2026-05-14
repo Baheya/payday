@@ -1,6 +1,4 @@
 ---
-import type { RecurringBills } from "#db/transactions.ts";
-
 import Heading from "#components/Heading/Heading.astro";
 import Link from "#components/Link/Link.astro";
 import { setCurrency } from "#lib/utils.ts";
@@ -8,7 +6,11 @@ import { setCurrency } from "#lib/utils.ts";
 import style from "./style.module.css";
 
 interface Props {
-  bills: RecurringBills;
+  bills: {
+    paid: number;
+    future: number;
+    dueSoon: number;
+  };
 }
 
 const { bills } = Astro.props;

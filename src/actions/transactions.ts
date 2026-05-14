@@ -1,3 +1,4 @@
+import { createSbClient } from "#lib/supabase.ts";
 import { defineAction, type ActionReturnType } from "astro:actions";
 import { z } from "astro/zod";
 
@@ -8,7 +9,10 @@ export const transactions = {
       category: z.string().optional(),
       sort: z.string().default("Latest"),
     }),
-    handler: async ({ pageNumber = 1, category, sort = "Latest" }, ctx) => {
+    handler: async (
+      { pageNumber = 1, category, sort = "Latest" },
+      { request, cookies },
+    ) => {
       try {
         const transactionsPerPage = 10;
         const rangeStart =
@@ -24,7 +28,8 @@ export const transactions = {
           sort === "Oldest" || sort === "A to Z" || sort === "Highest"
             ? true
             : false;
-        let query = ctx.locals.supabase
+        const supabase = createSbClient({ request, cookies });
+        let query = supabase
           .from("transactions")
           .select("*, categories ( label )", { count: "exact" });
 
@@ -43,9 +48,9 @@ export const transactions = {
         const { data, error, count } = await query;
         if (error) throw error;
 
-        return { data, count };
+        return { data, count, error };
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     },
   }),
