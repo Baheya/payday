@@ -10,8 +10,8 @@ interface Props {
 
 const { title = "Overview" } = Astro.props;
 
-const isSignedIn =
-  Astro.cookies.has("sb-access-token") && Astro.cookies.has("sb-refresh-token");
+const shouldShowNavigation =
+  Astro.url.pathname !== "/signin" && Astro.url.pathname !== "/signup";
 ---
 
 <!doctype html>
@@ -93,7 +93,7 @@ const isSignedIn =
     <title>{`Payday | ${title}`}</title>
   </head>
   <body>
-    {isSignedIn && <Navigation />}
+    {shouldShowNavigation && <Navigation />}
     <main>
       <slot />
     </main>
