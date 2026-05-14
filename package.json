@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.8",
-    "@astrojs/netlify": "<7.0.0",
+    "@astrojs/netlify": "<8.0.0",
     "@hcaptcha/vanilla-hcaptcha": "^1.1.4",
     "@unpic/astro": "^1.0.2",
     "astro": "<6.0.0",
