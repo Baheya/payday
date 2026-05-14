@@ -23,14 +23,12 @@ const currentlySelected = Astro.url.searchParams.get("sort");
 
 <script>
   document.querySelectorAll("[data-combobox-sort]").forEach((combobox) => {
-    combobox?.querySelectorAll("[role=option]").forEach((element) => {
-      element.addEventListener("selection-change", (e) => {
-        if (e instanceof CustomEvent) {
-          const currentParams = new URLSearchParams(window.location.search);
-          currentParams.set("sort", e.detail);
-          window.location.assign(`?${currentParams.toString()}`);
-        }
-      });
+    combobox.addEventListener("selection-change", (e) => {
+      if (e instanceof CustomEvent) {
+        const currentParams = new URLSearchParams(window.location.search);
+        currentParams.set("sort", e.detail.label);
+        window.location.assign(`?${currentParams.toString()}`);
+      }
     });
   });
 </script>

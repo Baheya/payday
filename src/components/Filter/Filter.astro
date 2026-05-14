@@ -23,18 +23,16 @@ const currentlySelected = Astro.url.searchParams.get("filter");
 
 <script>
   document.querySelectorAll("[data-combobox-filter]").forEach((combobox) => {
-    combobox?.querySelectorAll("[role=option]").forEach((element, i) => {
-      element.addEventListener("selection-change", (e) => {
-        if (e instanceof CustomEvent) {
-          const currentParams = new URLSearchParams(window.location.search);
-          if (i !== 0) {
-            currentParams.set("filter", e.detail);
-          } else {
-            currentParams.delete("filter");
-          }
-          window.location.assign(`?${currentParams.toString()}`);
+    combobox.addEventListener("selection-change", (e) => {
+      if (e instanceof CustomEvent) {
+        const currentParams = new URLSearchParams(window.location.search);
+        if (e.detail.optionIndex !== 0) {
+          currentParams.set("filter", e.detail.id);
+        } else {
+          currentParams.delete("filter");
         }
-      });
+        window.location.assign(`?${currentParams.toString()}`);
+      }
     });
   });
 </script>
