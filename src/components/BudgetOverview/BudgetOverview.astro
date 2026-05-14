@@ -9,25 +9,25 @@ import { setCurrency } from "#lib/utils.ts";
 import style from "./style.module.css";
 
 interface Props {
-  expenses: GetBudgetExpensesByCategory;
+  expenses: NonNullable<GetBudgetExpensesByCategory>;
   summary?: "budgets" | "expenses";
 }
 
 const { expenses, summary = "budgets" } = Astro.props;
 
-const budgetMaximum = expenses.reduce(
+const budgetMaximum = expenses?.reduce(
   (acc, expense) => acc + expense.maximum,
   0,
 );
-const expensesTotalSpend = expenses.reduce(
+const expensesTotalSpend = expenses?.reduce(
   (acc, expense) => acc + Math.abs(expense.totalSpent || 0),
   0,
 );
 
-const generatedGradientStops = expenses.reduce((acc, expense) => {
+const generatedGradientStops = expenses?.reduce((acc, expense) => {
   let gradientStart;
 
-  const budgetColor = expense.theme_id;
+  const budgetColor = expense.colors.value;
   const gradientEnd =
     (Math.abs(expense.totalSpent || 0) / expensesTotalSpend) * 100;
   const gradient =
@@ -61,10 +61,10 @@ const styleAttribute = {
       {summary === "expenses" && <p class={style.summary}>Spending Summary</p>}
       <ul class={style.details}>
         {
-          expenses.map((expense) => (
+          expenses?.map((expense) => (
             <ExpenseDetail
-              color={expense.theme_id.toString()}
-              label={expense.category_id.toString()}
+              color={expense.colors.value}
+              label={expense.categories.label}
               {...(summary === "expenses" && {
                 totalSpent: setCurrency(expense.totalSpent),
               })}

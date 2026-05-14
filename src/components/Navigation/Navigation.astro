@@ -1,5 +1,6 @@
 ---
 import NavigationItem from "./NavigationItem.astro";
+import { actions } from "astro:actions";
 
 import style from "./style.module.css";
 ---
@@ -27,8 +28,10 @@ import style from "./style.module.css";
       id="recurring-bills-label"
       >Recurring Bills
     </NavigationItem>
-    <NavigationItem href="/api/auth/signout" icon="signout" id="signout-label"
-      >Sign Out</NavigationItem
+    <NavigationItem
+      href={actions.auth.signout}
+      icon="signout"
+      id="signout-label">Sign Out</NavigationItem
     >
   </ul>
 </nav>

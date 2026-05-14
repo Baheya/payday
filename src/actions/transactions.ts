@@ -48,7 +48,7 @@ export const transactions = {
         const { data, error, count } = await query;
         if (error) throw error;
 
-        return { data, count };
+        return { data, count, error };
       } catch (e) {
         console.error(e);
       }

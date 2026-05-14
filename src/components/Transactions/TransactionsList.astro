@@ -1,5 +1,4 @@
 ---
-import type { GetTransactions } from "#actions/transactions.ts";
 import type { Tables } from "#db/types.ts";
 
 import { Image } from "@unpic/astro";
@@ -7,22 +6,24 @@ import Filter from "#components/Filter/Filter.astro";
 import Pagination from "#components/Pagination/Pagination.astro";
 import Search from "#components/Search/Search.astro";
 import Sort from "#components/Sort/Sort.astro";
-import { fetchData } from "#db/fetch.ts";
 import { setCurrency, transformDate } from "#lib/utils.ts";
 import { actions } from "astro:actions";
 import MiniSearch from "minisearch";
 
 import style from "./style.module.css";
 
-const { data: categoriesResponse } = await Astro.callAction(
+const { data, error } = await Astro.callAction(
   actions.categories.getAllCategories,
   {},
 );
-const categories = categoriesResponse?.map((item) => ({ label: item.label }));
+if (error) {
+  // handle error
+}
+const categories = data?.map((item) => ({ label: item.label }));
 const currentParams = Astro.url.searchParams;
-// const pageNumber = parseInt(currentParams.get("page") || "1");
-// const decodedFilterValue = decodeURI(currentParams.get("filter") || "");
-// const decodedSortValue = decodeURI(currentParams.get("sort") || "Latest");
+const pageNumber = parseInt(currentParams.get("page") || "1");
+const decodedFilterValue = decodeURI(currentParams.get("filter") || "");
+const decodedSortValue = decodeURI(currentParams.get("sort") || "Latest");
 const decodedSearchValue = decodeURI(currentParams.get("search") || "");
 const fieldsToSearch = ["name", "category", "amount", "date", "avatar"];
 const searchInstance = new MiniSearch<Tables<"transactions">>({
@@ -30,18 +31,19 @@ const searchInstance = new MiniSearch<Tables<"transactions">>({
   storeFields: fieldsToSearch,
 });
 
-// const { data: response } = await Astro.callAction(
-//   actions.transactions.getTransactions,
-//   { pageNumber, category: decodedFilterValue, sort: decodedSortValue },
-// );
+const { data: transactionData, error: transactionError } =
+  await Astro.callAction(actions.transactions.getTransactions, {
+    pageNumber,
+    category: decodedFilterValue,
+    sort: decodedSortValue,
+  });
 
-const { data: response } = await fetchData<GetTransactions>(
-  `/transactions?${currentParams.toString()}`,
-  "get",
-);
+if (transactionError) {
+  // handle error
+}
 
-if (response) {
-  searchInstance.addAll(response.data);
+if (transactionData?.data) {
+  searchInstance.addAll(transactionData.data);
 }
 
 const transactions =
@@ -51,7 +53,7 @@ const transactions =
         fuzzy: 0.3,
         maxFuzzy: 0.7,
       })
-    : response?.data;
+    : transactionData?.data;
 ---
 
 <div class={style.container}>
@@ -133,7 +135,7 @@ const transactions =
     )
   }
   {
-    transactions && transactions?.length > 0 && response?.count && (
+    transactions && transactions?.length > 0 && transactionData?.count && (
       <Pagination countPerPage={10} totalCount={transactions.length} />
     )
   }

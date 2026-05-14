@@ -1,11 +1,13 @@
 import type { AstroCookies } from "astro";
 
-import { publicBudgetsInsertSchema } from "../db/schemas.ts";
-import { PostgrestError } from "@supabase/supabase-js";
 import { createSbClient } from "#lib/supabase.ts";
 import { getPreviousMonthISOString } from "#lib/utils.ts";
-import { defineAction, type ActionReturnType } from "astro:actions";
-import { z, ZodError } from "astro/zod";
+import {
+  ActionError,
+  defineAction,
+  type ActionReturnType,
+} from "astro:actions";
+import { z } from "astro/zod";
 
 export const budgets = {
   getBudgetExpensesByCategory: defineAction({
@@ -52,28 +54,40 @@ export const budgets = {
     },
   }),
   addNewBudget: defineAction({
-    // input: publicBudgetsInsertSchema,
-    handler: async (input: { [k: string]: unknown }, { request, cookies }) => {
+    input: z.object({
+      category_id: z.coerce.number(),
+      theme_id: z.coerce.number(),
+      maximum: z.coerce.number(),
+    }),
+    accept: "form",
+    handler: async (input, { request, cookies }) => {
       try {
-        const validatedData = publicBudgetsInsertSchema.safeParse(input);
         const supabase = createSbClient({ request, cookies });
+        const { data: userData, error: userError } =
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          await supabase.auth.getUser();
+        if (userError) {
+          throw new ActionError({
+            code: "UNAUTHORIZED",
+            message: "User must be logged in.",
+            stack: userError.stack,
+          });
+        }
+        const inputWithUserId = { ...input, user_id: userData.user?.id };
 
-        if (validatedData.success) {
-          const { data, error } = await supabase
-            .from("budgets")
-            .insert([validatedData.data])
-            .select();
-          if (error) throw error;
-          if (data) {
-            return data;
-          }
+        const { data, error } = await supabase
+          .from("budgets")
+          .insert([inputWithUserId])
+          .select("*, categories ( label )");
+        if (error) {
+          console.error(error);
+          throw error;
         }
-      } catch (e) {
-        if (e instanceof ZodError) {
-          console.error(e);
-        } else if (e instanceof PostgrestError) {
-          console.error(e);
-        }
+        console.log("successsss wooohooooo");
+        return data;
+      } catch (error) {
+        console.error(error);
       }
     },
   }),

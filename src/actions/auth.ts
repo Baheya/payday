@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import type { EmailOtpType } from "@supabase/supabase-js";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -99,7 +101,8 @@ export const auth = {
   signout: defineAction({
     handler: async (_, { request, cookies }) => {
       const supabase = createSbClient({ request: request, cookies: cookies });
-
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       await supabase.auth.signOut();
       return new Response("Successfully logged out", { status: 200 });
     },

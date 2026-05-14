@@ -6,11 +6,11 @@ export const categories = {
     handler: async (_, { request, cookies }) => {
       try {
         const supabase = createSbClient({ request, cookies });
-        const categories = await supabase
+        const { data, error } = await supabase
           .from("categories")
           .select("*, budgets ( category_id )");
-        if (categories.data && categories.data.length > 0) {
-          return categories.data;
+        if (!error) {
+          return data;
         }
       } catch (e) {
         console.error(e);
@@ -19,6 +19,6 @@ export const categories = {
   }),
 };
 
-export type GetAllCategories = ActionReturnType<
-  typeof categories.getAllCategories
->["data"];
+export type GetAllCategories = NonNullable<
+  ActionReturnType<typeof categories.getAllCategories>["data"]
+>;
