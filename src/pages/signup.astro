@@ -5,6 +5,7 @@ import Captcha from "#components/Captcha/Captcha.astro";
 import Heading from "#components/Heading/Heading.astro";
 import Input from "#components/Input/Input.astro";
 import BaseLayout from "#layouts/BaseLayout.astro";
+import { actions } from "astro:actions";
 ---
 
 <BaseLayout title="Sign Up">
@@ -16,7 +17,7 @@ import BaseLayout from "#layouts/BaseLayout.astro";
     />
     <div class="container">
       <Heading size="xl">Sign Up</Heading>
-      <form action="/api/auth/signup" id="signup-form" method="POST">
+      <form action={actions.auth.signup} id="signup-form" method="POST">
         <Input id="name" label="Name" name="name" required />
         <Input id="email" label="Email" name="email" required type="email" />
         <Input
