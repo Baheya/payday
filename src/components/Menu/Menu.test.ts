@@ -13,7 +13,7 @@ describe("Menu component", () => {
       const menu = screen.getByRole("menu");
       const menuitems = screen.getByRole("menuitem");
 
-      await userEvent.tab();
+      await userEvent.keyboard("{Tab}{/Tab}");
       await userEvent.keyboard("{ArrowDown}{/ArrowDown}");
       await expect.element(menu).toHaveAttribute("data-menu-open", "true");
       await expect.element(menuButton).toHaveAttribute("aria-expanded", "true");
@@ -43,7 +43,7 @@ describe("Menu component", () => {
       const menu = screen.getByRole("menu");
       const menuitems = screen.getByRole("menuitem");
 
-      await userEvent.tab();
+      await userEvent.keyboard("{Tab}{/Tab}");
       await userEvent.keyboard("{ArrowUp}{/ArrowUp}");
       await expect.element(menu).toHaveAttribute("data-menu-open", "true");
       await expect.element(menuitems.last()).toHaveFocus();
@@ -57,7 +57,7 @@ describe("Menu component", () => {
       const menuButton = screen.getByRole("button");
       const menu = screen.getByRole("menu");
 
-      await userEvent.tab();
+      await userEvent.keyboard("{Tab}{/Tab}");
 
       await userEvent.keyboard("{ArrowUp}{/ArrowUp}");
       await userEvent.keyboard("{Escape}{/Escape}");
@@ -74,7 +74,7 @@ describe("Menu component", () => {
       const menuButton = screen.getByRole("button");
       const menu = screen.getByRole("menu");
 
-      await userEvent.tab();
+      await userEvent.keyboard("{Tab}{/Tab}");
 
       await userEvent.keyboard("{ArrowUp}{/ArrowUp}");
       await userEvent.keyboard("{Enter}{/Enter}");
@@ -87,7 +87,7 @@ describe("Menu component", () => {
     }) => {
       const menuitems = screen.getByRole("menuitem");
 
-      await userEvent.tab();
+      await userEvent.keyboard("{Tab}{/Tab}");
 
       await userEvent.keyboard("{ArrowDown}{/ArrowDown}");
       await userEvent.keyboard("{ArrowUp}{/ArrowUp}");
@@ -102,7 +102,7 @@ describe("Menu component", () => {
     }) => {
       const menuitems = screen.getByRole("menuitem");
 
-      await userEvent.tab();
+      await userEvent.keyboard("{Tab}{/Tab}");
 
       await userEvent.keyboard("{ArrowUp}{/ArrowUp}");
       await userEvent.keyboard("{ArrowDown}{/ArrowDown}");
@@ -115,7 +115,7 @@ describe("Menu component", () => {
     test("Home key moves focus to the first menuitem", async ({ screen }) => {
       const menuitems = screen.getByRole("menuitem");
 
-      await userEvent.tab();
+      await userEvent.keyboard("{Tab}{/Tab}");
 
       await userEvent.keyboard("{ArrowUp}{/ArrowUp}");
       await userEvent.keyboard("{Home}{/Home}");
@@ -124,7 +124,7 @@ describe("Menu component", () => {
     test("End key moves focus to the last menuitem", async ({ screen }) => {
       const menuitems = screen.getByRole("menuitem");
 
-      await userEvent.tab();
+      await userEvent.keyboard("{Tab}{/Tab}");
 
       await userEvent.keyboard("{ArrowDown}{/ArrowDown}");
       await userEvent.keyboard("{End}{/End}");
@@ -135,7 +135,7 @@ describe("Menu component", () => {
     }) => {
       const menuitems = screen.getByRole("menuitem");
 
-      await userEvent.tab();
+      await userEvent.keyboard("{Tab}{/Tab}");
 
       await userEvent.keyboard("{ArrowDown}{/ArrowDown}");
       await userEvent.keyboard("o");
