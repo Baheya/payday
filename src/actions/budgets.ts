@@ -84,7 +84,6 @@ export const budgets = {
           console.error(error);
           throw error;
         }
-        console.log("successsss wooohooooo");
         return data;
       } catch (error) {
         console.error(error);
@@ -117,6 +116,44 @@ export const budgets = {
 
       if (!error) {
         return data;
+      }
+    },
+  }),
+  editBudget: defineAction({
+    input: z.object({
+      category_id: z.coerce.number(),
+      theme_id: z.coerce.number().optional(),
+      maximum: z.coerce.number().optional(),
+    }),
+    accept: "form",
+    handler: async (input, { request, cookies }) => {
+      try {
+        const supabase = createSbClient({ request, cookies });
+        const { data: userData, error: userError } =
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          await supabase.auth.getUser();
+        if (userError) {
+          throw new ActionError({
+            code: "UNAUTHORIZED",
+            message: "User must be logged in.",
+            stack: userError.stack,
+          });
+        }
+        const inputWithUserId = { ...input, user_id: userData.user?.id };
+
+        const { data, error } = await supabase
+          .from("budgets")
+          .update([inputWithUserId])
+          .eq("category_id", inputWithUserId.category_id)
+          .select("*, categories ( label )");
+        if (error) {
+          console.error(error);
+          throw error;
+        }
+        return data;
+      } catch (error) {
+        console.error(error);
       }
     },
   }),

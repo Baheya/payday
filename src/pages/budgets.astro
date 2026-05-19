@@ -2,6 +2,7 @@
 import AddNewBudget from "#components/AddNewBudget/AddNewBudget.astro";
 import BudgetDetailCard from "#components/BudgetDetailCard/BudgetDetailCard.astro";
 import BudgetOverview from "#components/BudgetOverview/BudgetOverview.astro";
+import EditBudget from "#components/EditBudget/EditBudget.astro";
 import Heading from "#components/Heading/Heading.astro";
 import DefaultLayout from "#layouts/DefaultLayout.astro";
 import { createSbClient } from "#lib/supabase.ts";
@@ -38,7 +39,7 @@ const colorOptions = colorsData?.map((color) => ({
   value: color.id,
   id: color.id,
   prefixStyle: color.value,
-  disabled: color.budgets.length > 0,
+  disabled: !!color.budgets,
 }));
 const categoryOptions = categoriesData?.map((category) => ({
   label: category.label,
@@ -47,7 +48,8 @@ const categoryOptions = categoriesData?.map((category) => ({
   disabled: category.budgets.length > 0,
 }));
 
-const result = Astro.getActionResult(actions.budgets.addNewBudget);
+const newBudgetResult = Astro.getActionResult(actions.budgets.addNewBudget);
+const editBudgetResult = Astro.getActionResult(actions.budgets.editBudget);
 ---
 
 {
@@ -63,10 +65,18 @@ const result = Astro.getActionResult(actions.budgets.addNewBudget);
             colorOptions={colorOptions}
           />
         </div>
-        {result?.data && (
+        {newBudgetResult?.data && (
           <div class="alert" role="alert">
-            <span>Success!</span> A budget for {result.data[0].categories.label}{" "}
-            has been created.{" "}
+            <span>Success!</span> A budget for{" "}
+            {newBudgetResult.data[0].categories.label}
+            has been created.
+          </div>
+        )}
+        {editBudgetResult?.data && (
+          <div class="alert" role="alert">
+            <span>Success!</span> The budget for{" "}
+            {editBudgetResult.data[0].categories.label}
+            has been edited and updated.
           </div>
         )}
         {budgetExpensesData.length > 0 && (
@@ -74,7 +84,14 @@ const result = Astro.getActionResult(actions.budgets.addNewBudget);
         )}
         <ul>
           {budgetExpensesData.map((budget) => (
-            <BudgetDetailCard budget={budget} />
+            <>
+              <BudgetDetailCard budget={budget} />
+              <EditBudget
+                categoryOptions={categoryOptions}
+                colorOptions={colorOptions}
+                currentBudget={budget}
+              />
+            </>
           ))}
         </ul>
       </section>

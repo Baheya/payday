@@ -4,6 +4,7 @@ import type { GetBudgetExpensesByCategory } from "#actions/budgets.ts";
 import { Image } from "@unpic/astro";
 import ExpenseDetail from "#components/ExpenseDetail/ExpenseDetail.astro";
 import Link from "#components/Link/Link.astro";
+import Menu from "#components/Menu/Menu.astro";
 import { setCurrency, transformDate } from "#lib/utils.ts";
 
 import style from "./style.module.css";
@@ -27,7 +28,15 @@ const styleAttribute = {
 ---
 
 <li class={style.card} {...styleAttribute}>
-  <p class={style.category}>{budget.categories.label}</p>
+  <div class={style.header}>
+    <p class={style.category}>{budget.categories.label}</p>
+    <Menu
+      options={[
+        { label: "Edit Budget", action: `edit-budget-${budget.category_id}` },
+        { label: "Delete Budget", action: "delete-budget" },
+      ]}
+    />
+  </div>
   <p class:list={[style.grey, style.small]}>
     Maximum of {setCurrency(budget.maximum)}
   </p>

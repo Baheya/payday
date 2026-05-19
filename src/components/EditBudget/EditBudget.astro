@@ -1,0 +1,61 @@
+---
+import type BudgetDetailCard from "#components/BudgetDetailCard/BudgetDetailCard.astro";
+import type SelectOnlyCombobox from "#components/SelectOnlyCombobox/SelectOnlyCombobox.astro";
+import type { ComponentProps } from "astro/types";
+
+import Button from "#components/Button/Button.astro";
+import DialogModal from "#components/Dialog/DialogModal.astro";
+import Form from "#components/Form/Form.astro";
+import Input from "#components/Input/Input.astro";
+import Select from "#components/Select/Select.astro";
+import { actions } from "astro:actions";
+
+interface Props {
+  colorOptions: ComponentProps<typeof SelectOnlyCombobox>["options"];
+  categoryOptions: ComponentProps<typeof SelectOnlyCombobox>["options"];
+  currentBudget: ComponentProps<typeof BudgetDetailCard>["budget"];
+}
+
+const { colorOptions, currentBudget } = Astro.props;
+---
+
+<DialogModal
+  description="As your budgets change, feel free to update your spending limits."
+  id={`edit-budget-${currentBudget.category_id}`}
+  title="Edit Budget"
+>
+  <Form
+    action={actions.budgets.editBudget}
+    data-edit-budget-form
+    enctype="multipart/form-data"
+    method="POST"
+  >
+    <input
+      id="category_id_edit"
+      name="category_id"
+      type="hidden"
+      value={currentBudget.category_id}
+    />
+    <Input
+      autocomplete="off"
+      id="budget_max_spending_edit"
+      label="Maximum Spending"
+      name="maximum"
+      placeholder="e.g. 2000"
+      prefix="$"
+    />
+    {
+      colorOptions && colorOptions.length > 0 && (
+        <Select
+          currentlySelected={currentBudget.colors.label}
+          formControlId="theme_id_edit"
+          id="budget_theme_edit"
+          label="Theme"
+          name="theme_id"
+          options={colorOptions}
+        />
+      )
+    }
+    <Button>Save Changes</Button>
+  </Form>
+</DialogModal>
