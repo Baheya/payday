@@ -44,6 +44,11 @@
   }
 }
 
+.tertiary {
+  width: 100%;
+  font-weight: 400;
+}
+
 .danger {
   color: var(--white);
   background-color: var(--red);
@@ -51,11 +56,8 @@
 
 .icon {
   display: flex;
-  align-items: center;
   justify-content: center;
-
   padding: 0;
-
   background-color: transparent;
 
   /* A trick to increase the hitbox area of an icon-only button without increasing the element's size  */
@@ -63,10 +65,28 @@
     content: "";
 
     position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 
     display: block;
 
     min-width: 45px;
     min-height: 45px;
+    border-radius: 50%;
+  }
+
+  span {
+    z-index: 2;
+    align-self: center;
+    line-height: 0;
+  }
+
+  &:hover::after {
+    background-color: var(--grey-100);
+  }
+
+  &:focus::after {
+    outline: 2px solid var(--green);
   }
 }
