@@ -1,0 +1,9 @@
+---
+import style from "./style.module.css";
+
+const { ...props } = Astro.props;
+---
+
+<form {...props} class={style.form}>
+  <slot />
+</form>

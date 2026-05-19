@@ -5,6 +5,7 @@ import type { ComponentProps } from "astro/types";
 import Button from "#components/Button/Button.astro";
 import DialogButton from "#components/Dialog/DialogButton.astro";
 import DialogModal from "#components/Dialog/DialogModal.astro";
+import Form from "#components/Form/Form.astro";
 import Input from "#components/Input/Input.astro";
 import Select from "#components/Select/Select.astro";
 import { actions } from "astro:actions";
@@ -23,7 +24,7 @@ const { colorOptions, categoryOptions } = Astro.props;
   id="add-budget"
   title="Add New Budget"
 >
-  <form
+  <Form
     action={actions.budgets.addNewBudget}
     data-add-budget-form
     enctype="multipart/form-data"
@@ -61,5 +62,5 @@ const { colorOptions, categoryOptions } = Astro.props;
       )
     }
     <Button>Add New Budget</Button>
-  </form>
+  </Form>
 </DialogModal>
