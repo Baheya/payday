@@ -21,7 +21,7 @@ export class SelectOnlyCombobox extends FaceMixin(HTMLElement) {
     this.comboLabel = this.querySelector("#combobox-label");
     this.comboEl = this.querySelector('[role="combobox"]');
     this.idBase = this.comboEl?.id || "combo";
-    this.options = this.querySelectorAll("[role=option]");
+    this.options = this.querySelectorAll<HTMLElement>("[role=option]");
     this.comboboxPreviewLabel = this.querySelector("[data-combobox-preview]");
 
     this.activeIndex =
@@ -389,8 +389,16 @@ export class SelectOnlyCombobox extends FaceMixin(HTMLElement) {
         option.getAttribute("data-option-label"),
       );
       const selected = optionsContentArray[index];
-      if (this.comboboxPreviewLabel && selected) {
+      if (
+        this.comboboxPreviewLabel &&
+        this.comboboxPreviewLabel instanceof HTMLElement &&
+        selected
+      ) {
         this.comboboxPreviewLabel.innerHTML = selected;
+        this.comboboxPreviewLabel.style.setProperty(
+          "--theme",
+          this.options[this.activeIndex].style.getPropertyValue("--theme"),
+        );
       }
 
       // update aria-selected
