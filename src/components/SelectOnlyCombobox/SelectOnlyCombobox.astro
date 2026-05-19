@@ -68,10 +68,11 @@ const activeOptionIndex = options.findIndex(
       <span
         class={style["button-label"]}
         data-combobox-preview
-        {...!currentlySelected &&
-          firstAvailableOption?.prefixStyle && {
-            style: { "--theme": `var(--${firstAvailableOption?.prefixStyle})` },
-          }}>{currentlySelected || firstAvailableOption?.label}</span
+        {...options[activeOptionIndex].prefixStyle && {
+          style: {
+            "--theme": `var(--${options[activeOptionIndex].prefixStyle})`,
+          },
+        }}>{options[activeOptionIndex].label}</span
       >
       {
         dropdownShouldBecomeIconOnMobile && (
@@ -101,8 +102,7 @@ const activeOptionIndex = options.findIndex(
             style: { "--theme": `var(--${option.prefixStyle})` },
           };
           const isActiveOption =
-            option.label === currentlySelected ||
-            option.label === firstAvailableOption?.label;
+            option.label === options[activeOptionIndex].label;
           return (
             <div
               aria-disabled={option.disabled}

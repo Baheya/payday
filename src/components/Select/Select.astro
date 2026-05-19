@@ -9,6 +9,7 @@ interface Props {
   options: ComponentProps<typeof SelectOnlyCombobox>["options"];
   formControlId?: string;
   name: string;
+  currentlySelected?: string | null;
 }
 
 const { id, label, options, formControlId, ...props } = Astro.props;

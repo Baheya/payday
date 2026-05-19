@@ -1,11 +1,13 @@
 ---
+import type { HTMLAttributes } from "astro/types";
+
 import Button from "#components/Button/Button.astro";
 import Heading from "#components/Heading/Heading.astro";
 import Icon from "#components/Icon/Icon.astro";
 
 import style from "./style.module.css";
 
-interface Props {
+interface Props extends HTMLAttributes<"dialog"> {
   title: string;
   description: string;
   id: string;

@@ -1,0 +1,62 @@
+---
+import Button from "#components/Button/Button.astro";
+import DialogButton from "#components/Dialog/DialogButton.astro";
+import Icon from "#components/Icon/Icon.astro";
+
+import style from "./style.module.css";
+
+interface Props {
+  options: {
+    label: string;
+    action: string;
+  }[];
+}
+
+const { options } = Astro.props;
+---
+
+<custom-menu class={style.container} data-testid="menu">
+  <Button
+    aria-controls="menu1"
+    aria-expanded="false"
+    aria-haspopup="true"
+    id="menu-button"
+    type="button"
+    variant="icon"
+  >
+    <Icon icon="ellipsis" />
+    <span class="visually-hidden">Open menu actions</span>
+  </Button>
+  <ul
+    aria-labelledby="menubutton1"
+    class={style.menu}
+    data-menu-open="false"
+    id="menu1"
+    role="menu"
+    tabindex="-1"
+  >
+    {
+      options.map((option, i) => (
+        <li class={style.option}>
+          <DialogButton
+            id={`mi${i + 1}`}
+            modalId={option.action}
+            role="menuitem"
+            size="small"
+            variant="tertiary"
+          >
+            {option.label}
+          </DialogButton>
+        </li>
+      ))
+    }
+  </ul>
+</custom-menu>
+
+<script>
+  import { Menu } from "./Menu.ts";
+
+  if (!customElements.get("custom-menu")) {
+    customElements.define("custom-menu", Menu);
+  }
+</script>

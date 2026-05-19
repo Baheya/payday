@@ -1,16 +1,17 @@
 ---
-import type { ComponentProps } from "astro/types";
+import type { ComponentProps, HTMLAttributes } from "astro/types";
 
 import Button from "#components/Button/Button.astro";
 
-interface Props {
+interface Props extends HTMLAttributes<"button"> {
   modalId: string;
   variant?: ComponentProps<typeof Button>["variant"];
+  size?: ComponentProps<typeof Button>["size"];
 }
 
-const { modalId, variant } = Astro.props;
+const { modalId, variant, ...props } = Astro.props;
 ---
 
-<Button command="show-modal" commandfor={modalId} variant={variant}>
+<Button command="show-modal" commandfor={modalId} variant={variant} {...props}>
   <slot />
 </Button>
