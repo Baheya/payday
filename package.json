@@ -59,7 +59,7 @@
     "supazod": "^4.5.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.59.1",
-    "vitest": "^4.1.5",
+    "vitest": "^4.1.7",
     "vitest-browser-astro": "^0.2.0"
   },
   "imports": {
