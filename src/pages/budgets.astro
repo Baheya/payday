@@ -1,5 +1,6 @@
 ---
 import AddNewBudget from "#components/AddNewBudget/AddNewBudget.astro";
+import Alert from "#components/Alert/Alert.astro";
 import BudgetDetailCard from "#components/BudgetDetailCard/BudgetDetailCard.astro";
 import BudgetOverview from "#components/BudgetOverview/BudgetOverview.astro";
 import DeleteBudget from "#components/DeleteBudget/DeleteBudget.astro";
@@ -49,9 +50,11 @@ const categoryOptions = categoriesData?.map((category) => ({
   disabled: category.budgets.length > 0,
 }));
 
-const newBudgetResult = Astro.getActionResult(actions.budgets.addNewBudget);
-const editBudgetResult = Astro.getActionResult(actions.budgets.editBudget);
-const deleteBudgetResult = Astro.getActionResult(actions.budgets.deleteBudget);
+const actionResults = [
+  Astro.getActionResult(actions.budgets.addNewBudget),
+  Astro.getActionResult(actions.budgets.editBudget),
+  Astro.getActionResult(actions.budgets.deleteBudget),
+];
 ---
 
 {
@@ -67,27 +70,16 @@ const deleteBudgetResult = Astro.getActionResult(actions.budgets.deleteBudget);
             colorOptions={colorOptions}
           />
         </div>
-        {newBudgetResult?.data && (
-          <div class="alert" role="alert">
-            <span>Success!</span> A budget for{" "}
-            {newBudgetResult.data[0].categories.label}
-            has been created.
-          </div>
+        {actionResults.map(
+          (result) =>
+            result?.data && (
+              <Alert
+                message={result.data.message}
+                success={result.data.success}
+              />
+            ),
         )}
-        {editBudgetResult?.data && (
-          <div class="alert" role="alert">
-            <span>Success!</span> The budget for{" "}
-            {editBudgetResult.data[0].categories.label}
-            has been edited and updated.
-          </div>
-        )}
-        {deleteBudgetResult?.data && (
-          <div class="alert" role="alert">
-            <span>Success!</span> The budget for{" "}
-            {deleteBudgetResult.data[0].categories.label}
-            has been deleted.
-          </div>
-        )}
+
         {budgetExpensesData.length > 0 && (
           <BudgetOverview expenses={budgetExpensesData} summary="expenses" />
         )}
@@ -130,17 +122,5 @@ const deleteBudgetResult = Astro.getActionResult(actions.budgets.deleteBudget);
     display: flex;
     justify-content: space-between;
     margin-block: var(--spacing-400);
-  }
-
-  .alert {
-    padding: var(--spacing-150);
-    background-color: var(--white);
-    margin-block-end: var(--spacing-150);
-    border-radius: var(--spacing-150);
-
-    span {
-      color: var(--green);
-      font-weight: 700;
-    }
   }
 </style>

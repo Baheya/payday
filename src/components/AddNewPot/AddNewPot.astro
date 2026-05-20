@@ -1,0 +1,63 @@
+---
+import type SelectOnlyCombobox from "#components/SelectOnlyCombobox/SelectOnlyCombobox.astro";
+import type { ComponentProps } from "astro/types";
+
+import Button from "#components/Button/Button.astro";
+import DialogButton from "#components/Dialog/DialogButton.astro";
+import DialogModal from "#components/Dialog/DialogModal.astro";
+import Form from "#components/Form/Form.astro";
+import Input from "#components/Input/Input.astro";
+import Select from "#components/Select/Select.astro";
+import { actions } from "astro:actions";
+
+interface Props {
+  colorOptions: ComponentProps<typeof SelectOnlyCombobox>["options"];
+}
+
+const { colorOptions } = Astro.props;
+---
+
+<DialogButton modalId="add-pot">Add New Pot</DialogButton>
+<DialogModal
+  description="Create a pot to set savings targets. These can help keep you on track as you save for special purchases."
+  id="add-pot"
+  title="Add New Pot"
+>
+  <Form
+    action={actions.pots.addNewPot}
+    data-add-pot-form
+    enctype="multipart/form-data"
+    method="POST"
+  >
+    <Input
+      autocomplete="off"
+      id="add_pot_name"
+      label="Pot Name"
+      max="30"
+      name="name"
+      placeholder="e.g. Rainy Days"
+      required
+    />
+    <Input
+      autocomplete="off"
+      id="add_pot_target"
+      label="Target"
+      name="target"
+      placeholder="e.g. 2000"
+      prefix="$"
+      required
+    />
+    {
+      colorOptions && colorOptions.length > 0 && (
+        <Select
+          formControlId="theme_id"
+          id="pot_theme"
+          label="Theme"
+          name="theme_id"
+          options={colorOptions}
+        />
+      )
+    }
+    <Button>Add New Pot</Button>
+  </Form>
+</DialogModal>

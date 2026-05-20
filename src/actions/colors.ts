@@ -11,7 +11,7 @@ export const colors = {
       const supabase = createSbClient({ request, cookies });
       const { data, error } = await supabase
         .from("colors")
-        .select("*, budgets ( * )");
+        .select("*, budgets ( * ), pots ( * )");
       if (error) {
         throw new ActionError<typeof error>({
           message: error.message,

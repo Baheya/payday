@@ -82,7 +82,7 @@ export type Database = {
           {
             foreignKeyName: "budgets_theme_id_fkey";
             columns: ["theme_id"];
-            isOneToOne: false;
+            isOneToOne: true;
             referencedRelation: "colors";
             referencedColumns: ["id"];
           },
@@ -154,7 +154,7 @@ export type Database = {
           name: string;
           target: number;
           theme_id: number;
-          total: number;
+          total?: number;
           user_id?: string;
         };
         Update: {
@@ -169,7 +169,7 @@ export type Database = {
           {
             foreignKeyName: "pots_theme_id_fkey";
             columns: ["theme_id"];
-            isOneToOne: false;
+            isOneToOne: true;
             referencedRelation: "colors";
             referencedColumns: ["id"];
           },

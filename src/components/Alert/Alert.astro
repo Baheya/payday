@@ -1,0 +1,15 @@
+---
+import style from "./style.module.css";
+
+interface Props {
+  success: boolean;
+  message?: string;
+}
+
+const { success, message } = Astro.props;
+---
+
+<div class={style.alert} role="alert">
+  <span>{success ? "Success!" : "Oops!"}</span>
+  {message}
+</div>

@@ -1,4 +1,6 @@
 ---
+import AddNewPot from "#components/AddNewPot/AddNewPot.astro";
+import Alert from "#components/Alert/Alert.astro";
 import Heading from "#components/Heading/Heading.astro";
 import PotsDetailCard from "#components/PotsDetailCard/PotsDetailCard.astro";
 import DefaultLayout from "#layouts/DefaultLayout.astro";
@@ -16,16 +18,49 @@ if (!user?.data) {
   Astro.redirect("/signin");
 }
 
-const { data } = await Astro.callAction(actions.pots.getAllPots, {});
+const [{ data: potsData }, { data: colorsData, error: colorsError }] =
+  await Promise.all([
+    Astro.callAction(actions.pots.getAllPots, {}),
+    Astro.callAction(actions.colors.getAllColors, {}),
+  ]);
+
+if (colorsError) {
+  console.error(colorsError);
+}
+
+const colorOptions = colorsData?.map((color) => ({
+  label: color.label,
+  value: color.id,
+  id: color.id,
+  prefixStyle: color.value,
+  disabled: !!color.pots,
+}));
+
+const addNewPotResult = Astro.getActionResult(actions.pots.addNewPot);
 ---
 
 <DefaultLayout title="Pots">
   <section>
-    <Heading as="h1" size="xl">Pots</Heading>
+    <div class="header">
+      <Heading as="h1" size="xl">Pots</Heading>
+      {
+        colorOptions && colorOptions.length > 0 && (
+          <AddNewPot colorOptions={colorOptions} />
+        )
+      }
+    </div>
     {
-      data && data.length > 0 && (
+      addNewPotResult?.data && (
+        <Alert
+          message={addNewPotResult.data.message}
+          success={addNewPotResult.data.success}
+        />
+      )
+    }
+    {
+      potsData && potsData.length > 0 && (
         <ul>
-          {data.map((pot) => (
+          {potsData.map((pot) => (
             <PotsDetailCard pot={pot} />
           ))}
         </ul>
@@ -47,5 +82,12 @@ const { data } = await Astro.callAction(actions.pots.getAllPots, {});
     @media (--md-viewport) {
       grid-template-columns: 1fr 1fr;
     }
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-block-start: var(--spacing-400);
   }
 </style>
