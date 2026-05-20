@@ -34,12 +34,13 @@
   border: 2px solid transparent;
   border-radius: inherit;
 
-  &:focus-within {
+  &:has(:focus-visible) {
     border: 2px solid var(--green);
   }
 
   [role="menuitem"] {
-    width: max-content;
+    min-width: 8em;
+    text-align: start;
   }
 }
 

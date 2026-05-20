@@ -29,7 +29,7 @@
   color: var(--white);
   background-color: var(--grey-900);
 
-  &.disabled {
+  &:hover {
     background-color: var(--grey-500);
   }
 }
@@ -38,20 +38,23 @@
   color: var(--grey-900);
   background-color: var(--beige-100);
 
-  &.disabled {
+  &:hover {
     border: 1px solid var(--beige-500);
     background-color: var(--white);
   }
 }
 
 .tertiary {
-  width: 100%;
   font-weight: 400;
 }
 
 .danger {
   color: var(--white);
   background-color: var(--red);
+
+  &:hover {
+    background-color: rgb(201 71 54 / 80%);
+  }
 }
 
 .icon {
@@ -86,7 +89,7 @@
     background-color: var(--grey-100);
   }
 
-  &:focus::after {
+  &:focus-visible::after {
     outline: 2px solid var(--green);
   }
 }

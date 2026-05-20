@@ -2,6 +2,7 @@
 import AddNewBudget from "#components/AddNewBudget/AddNewBudget.astro";
 import BudgetDetailCard from "#components/BudgetDetailCard/BudgetDetailCard.astro";
 import BudgetOverview from "#components/BudgetOverview/BudgetOverview.astro";
+import DeleteBudget from "#components/DeleteBudget/DeleteBudget.astro";
 import EditBudget from "#components/EditBudget/EditBudget.astro";
 import Heading from "#components/Heading/Heading.astro";
 import DefaultLayout from "#layouts/DefaultLayout.astro";
@@ -50,6 +51,7 @@ const categoryOptions = categoriesData?.map((category) => ({
 
 const newBudgetResult = Astro.getActionResult(actions.budgets.addNewBudget);
 const editBudgetResult = Astro.getActionResult(actions.budgets.editBudget);
+const deleteBudgetResult = Astro.getActionResult(actions.budgets.deleteBudget);
 ---
 
 {
@@ -79,6 +81,13 @@ const editBudgetResult = Astro.getActionResult(actions.budgets.editBudget);
             has been edited and updated.
           </div>
         )}
+        {deleteBudgetResult?.data && (
+          <div class="alert" role="alert">
+            <span>Success!</span> The budget for{" "}
+            {deleteBudgetResult.data[0].categories.label}
+            has been deleted.
+          </div>
+        )}
         {budgetExpensesData.length > 0 && (
           <BudgetOverview expenses={budgetExpensesData} summary="expenses" />
         )}
@@ -91,6 +100,7 @@ const editBudgetResult = Astro.getActionResult(actions.budgets.editBudget);
                 colorOptions={colorOptions}
                 currentBudget={budget}
               />
+              <DeleteBudget currentBudget={budget} />
             </>
           ))}
         </ul>
