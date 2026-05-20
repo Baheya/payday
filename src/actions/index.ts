@@ -3,6 +3,7 @@ import { budgets } from "./budgets.ts";
 import { categories } from "./categories.ts";
 import { colors } from "./colors.ts";
 import { overview } from "./overview.ts";
+import { pots } from "./pots.ts";
 import { transactions } from "./transactions.ts";
 
 export const server = {
@@ -12,4 +13,5 @@ export const server = {
   colors,
   transactions,
   overview,
+  pots,
 };
