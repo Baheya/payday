@@ -81,10 +81,16 @@ export const budgets = {
           .insert([inputWithUserId])
           .select("*, categories ( label )");
         if (error) {
-          console.error(error);
-          throw error;
+          return {
+            success: false,
+            message: `Something went wrong! Error: ${error.message}`,
+          };
         }
-        return data;
+
+        return {
+          success: true,
+          messsage: `A new budget for ${data[0].categories.label} has been added.`,
+        };
       } catch (error) {
         console.error(error);
       }
@@ -148,10 +154,16 @@ export const budgets = {
           .eq("category_id", inputWithUserId.category_id)
           .select("*, categories ( label )");
         if (error) {
-          console.error(error);
-          throw error;
+          return {
+            success: false,
+            message: `Something went wrong! Error: ${error.message}`,
+          };
         }
-        return data;
+
+        return {
+          success: true,
+          message: `The budget for ${data[0].categories.label} has been updated.`,
+        };
       } catch (error) {
         console.error(error);
       }
@@ -184,10 +196,16 @@ export const budgets = {
           .eq("category_id", inputWithUserId.category_id)
           .select("*, categories ( label )");
         if (error) {
-          console.error(error);
-          throw error;
+          return {
+            success: false,
+            message: `Something went wrong! Error: ${error.message}`,
+          };
         }
-        return data;
+
+        return {
+          success: true,
+          message: `The budget for ${data[0].categories.label} has been deleted.`,
+        };
       } catch (error) {
         console.error(error);
       }

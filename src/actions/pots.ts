@@ -1,5 +1,6 @@
 import { createSbClient } from "#lib/supabase.ts";
-import { defineAction } from "astro:actions";
+import { ActionError, defineAction } from "astro:actions";
+import { z } from "astro:content";
 
 export const pots = {
   getAllPots: defineAction({
@@ -16,6 +17,50 @@ export const pots = {
         }
       } catch (e) {
         console.error(e);
+      }
+    },
+  }),
+  addNewPot: defineAction({
+    input: z.object({
+      name: z.string(),
+      theme_id: z.coerce.number(),
+      target: z.coerce.number(),
+      total: z.coerce.number(),
+    }),
+    accept: "form",
+    handler: async (input, { request, cookies }) => {
+      try {
+        const supabase = createSbClient({ request, cookies });
+
+        const { data: userData, error: userError } =
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          await supabase.auth.getUser();
+        if (userError) {
+          throw new ActionError({
+            code: "UNAUTHORIZED",
+            message: "User must be logged in.",
+            stack: userError.stack,
+          });
+        }
+        const inputWithUserId = { ...input, user_id: userData.user?.id };
+
+        const { data, error } = await supabase
+          .from("pots")
+          .insert([inputWithUserId])
+          .select("name");
+        if (error) {
+          return {
+            success: false,
+            message: `Something went wrong! Error: ${error.message}`,
+          };
+        }
+        return {
+          success: true,
+          message: `A new Pot named ${data[0].name} has been created`,
+        };
+      } catch (error) {
+        console.error(error);
       }
     },
   }),
