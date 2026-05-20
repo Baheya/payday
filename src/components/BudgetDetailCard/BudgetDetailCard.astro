@@ -33,7 +33,10 @@ const styleAttribute = {
     <Menu
       options={[
         { label: "Edit Budget", action: `edit-budget-${budget.category_id}` },
-        { label: "Delete Budget", action: "delete-budget" },
+        {
+          label: "Delete Budget",
+          action: `delete-budget-${budget.category_id}`,
+        },
       ]}
     />
   </div>

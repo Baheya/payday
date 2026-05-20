@@ -1,0 +1,41 @@
+---
+import type BudgetDetailCard from "#components/BudgetDetailCard/BudgetDetailCard.astro";
+import type { ComponentProps } from "astro/types";
+
+import Button from "#components/Button/Button.astro";
+import DialogModal from "#components/Dialog/DialogModal.astro";
+import Form from "#components/Form/Form.astro";
+import { actions } from "astro:actions";
+
+interface Props {
+  currentBudget: ComponentProps<typeof BudgetDetailCard>["budget"];
+}
+
+const { currentBudget } = Astro.props;
+---
+
+<DialogModal
+  description="Are you sure you want to delete this budget? This action cannot be reversed, and all the data inside it will be removed forever."
+  id={`delete-budget-${currentBudget.category_id}`}
+  title={`Delete '${currentBudget.categories.label}'?`}
+>
+  <Form
+    action={actions.budgets.deleteBudget}
+    data-delete-budget-form
+    enctype="multipart/form-data"
+    method="POST"
+  >
+    <input
+      id="category_id_edit"
+      name="category_id"
+      type="hidden"
+      value={currentBudget.category_id}
+    />
+    <Button variant="danger">Delete</Button>
+    <Button
+      command="close"
+      commandfor={`delete-budget-${currentBudget.category_id}`}
+      variant="secondary">No, Go Back</Button
+    >
+  </Form>
+</DialogModal>

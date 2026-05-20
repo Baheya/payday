@@ -157,6 +157,42 @@ export const budgets = {
       }
     },
   }),
+  deleteBudget: defineAction({
+    input: z.object({
+      category_id: z.coerce.number(),
+    }),
+    accept: "form",
+    handler: async (input, { request, cookies }) => {
+      try {
+        const supabase = createSbClient({ request, cookies });
+        const { data: userData, error: userError } =
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          await supabase.auth.getUser();
+        if (userError) {
+          throw new ActionError({
+            code: "UNAUTHORIZED",
+            message: "User must be logged in.",
+            stack: userError.stack,
+          });
+        }
+        const inputWithUserId = { ...input, user_id: userData.user?.id };
+
+        const { data, error } = await supabase
+          .from("budgets")
+          .delete()
+          .eq("category_id", inputWithUserId.category_id)
+          .select("*, categories ( label )");
+        if (error) {
+          console.error(error);
+          throw error;
+        }
+        return data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  }),
 };
 
 const getAllBudgets = async ({
