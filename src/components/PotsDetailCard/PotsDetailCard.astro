@@ -1,0 +1,53 @@
+---
+import type { actions } from "astro:actions";
+import type { ActionReturnType } from "astro:actions";
+
+import Button from "#components/Button/Button.astro";
+import Heading from "#components/Heading/Heading.astro";
+import { setCurrency } from "#lib/utils.ts";
+
+import style from "./style.module.css";
+
+interface Props {
+  pot: NonNullable<
+    ActionReturnType<typeof actions.pots.getAllPots>["data"]
+  >[number];
+}
+
+const { pot } = Astro.props;
+
+const amountSaved = ((pot.total / pot.target) * 100).toFixed(2);
+
+const styleAttribute = pot.colors.value && {
+  style: {
+    "--theme": `var(--${pot.colors.value})`,
+    "--saved": `${amountSaved}%`,
+  },
+};
+---
+
+<li class={style.container} {...styleAttribute}>
+  <div class={style.heading}>
+    <span class={style.prefix}></span>
+    <Heading as="h2" size="lg">
+      {pot.name}
+    </Heading>
+  </div>
+  <div class={style.details}>
+    <div class={style.labels}>
+      <p class:list={[style.label, style.small]}>Total Saved</p>
+      <p class={style.amount}>{setCurrency(pot.total)}</p>
+    </div>
+    <div class={style.graph}><div class={style.inner}></div></div>
+    <div class={style.labels}>
+      <p class:list={[style.percentage, style.xsmall]}>{amountSaved}%</p>
+      <p class:list={[style.label, style.xsmall]}>
+        Target of {setCurrency(pot.target)}
+      </p>
+    </div>
+  </div>
+  <div class={style.buttons}>
+    <Button variant="secondary">+ Add Money</Button>
+    <Button variant="secondary">Withdraw</Button>
+  </div>
+</li>

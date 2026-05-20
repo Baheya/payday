@@ -1,0 +1,85 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--spacing-400);
+
+  padding: var(--spacing-300);
+  border-radius: var(--spacing-150);
+
+  background-color: var(--white);
+}
+
+.heading {
+  display: flex;
+  align-items: baseline;
+}
+
+.label {
+  color: var(--grey-500);
+}
+
+.small {
+  @mixin text-sm;
+}
+
+.xsmall {
+  @mixin text-xs;
+}
+
+.prefix::before {
+  content: "";
+
+  display: inline-block;
+
+  width: var(--spacing-200);
+  height: var(--spacing-200);
+  margin-inline-end: var(--spacing-150);
+  border-radius: 50%;
+
+  background-color: var(--theme);
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--spacing-200);
+}
+
+.labels {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.graph {
+  width: 100%;
+  height: var(--spacing-100);
+  border-radius: var(--spacing-50);
+  background-color: var(--beige-100);
+}
+
+.inner {
+  width: var(--saved);
+  height: 100%;
+  border-radius: inherit;
+  background-color: var(--theme);
+}
+
+.percentage {
+  font-weight: 700;
+}
+
+.amount {
+  @mixin text-xl;
+
+  font-weight: 700;
+}
+
+.buttons {
+  display: flex;
+  column-gap: var(--spacing-200);
+
+  button {
+    width: 100%;
+  }
+}
