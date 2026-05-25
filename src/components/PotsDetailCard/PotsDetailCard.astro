@@ -4,6 +4,7 @@ import type { ActionReturnType } from "astro:actions";
 
 import Button from "#components/Button/Button.astro";
 import Heading from "#components/Heading/Heading.astro";
+import Menu from "#components/Menu/Menu.astro";
 import { setCurrency } from "#lib/utils.ts";
 
 import style from "./style.module.css";
@@ -27,11 +28,19 @@ const styleAttribute = pot.colors.value && {
 ---
 
 <li class={style.container} {...styleAttribute}>
-  <div class={style.heading}>
-    <span class={style.prefix}></span>
-    <Heading as="h2" size="lg">
-      {pot.name}
-    </Heading>
+  <div class={style.header}>
+    <div class={style.heading}>
+      <span class={style.prefix}></span>
+      <Heading as="h2" size="lg">
+        {pot.name}
+      </Heading>
+    </div>
+    <Menu
+      options={[
+        { label: "Edit Pot", action: `edit-pot-${pot.id}` },
+        { label: "Delete Pot", action: `delete-pot-${pot.id}` },
+      ]}
+    />
   </div>
   <div class={style.details}>
     <div class={style.labels}>
