@@ -1,0 +1,36 @@
+---
+import type PotsDetailCard from "#components/PotsDetailCard/PotsDetailCard.astro";
+import type { ComponentProps } from "astro/types";
+
+import Button from "#components/Button/Button.astro";
+import DialogModal from "#components/Dialog/DialogModal.astro";
+import Form from "#components/Form/Form.astro";
+import { actions } from "astro:actions";
+
+interface Props {
+  currentPot: ComponentProps<typeof PotsDetailCard>["pot"];
+}
+
+const { currentPot } = Astro.props;
+---
+
+<DialogModal
+  description="Are you sure you want to delete this pot? This action cannot be reversed, and all the data inside it will be removed forever."
+  id={`delete-pot-${currentPot.id}`}
+  title={`Delete '${currentPot.name}'?`}
+>
+  <Form
+    action={actions.pots.deletePot}
+    data-delete-pot-form
+    enctype="multipart/form-data"
+    method="POST"
+  >
+    <input id="pot_id_delete" name="id" type="hidden" value={currentPot.id} />
+    <Button variant="danger">Delete</Button>
+    <Button
+      command="close"
+      commandfor={`delete-pot-${currentPot.id}`}
+      variant="secondary">No, Go Back</Button
+    >
+  </Form>
+</DialogModal>
