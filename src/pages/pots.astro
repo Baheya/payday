@@ -1,6 +1,7 @@
 ---
 import AddNewPot from "#components/AddNewPot/AddNewPot.astro";
 import Alert from "#components/Alert/Alert.astro";
+import EditPot from "#components/EditPot/EditPot.astro";
 import Heading from "#components/Heading/Heading.astro";
 import PotsDetailCard from "#components/PotsDetailCard/PotsDetailCard.astro";
 import DefaultLayout from "#layouts/DefaultLayout.astro";
@@ -36,7 +37,10 @@ const colorOptions = colorsData?.map((color) => ({
   disabled: !!color.pots,
 }));
 
-const addNewPotResult = Astro.getActionResult(actions.pots.addNewPot);
+const actionsResults = [
+  Astro.getActionResult(actions.pots.addNewPot),
+  Astro.getActionResult(actions.pots.editPot),
+];
 ---
 
 <DefaultLayout title="Pots">
@@ -50,21 +54,30 @@ const addNewPotResult = Astro.getActionResult(actions.pots.addNewPot);
       }
     </div>
     {
-      addNewPotResult?.data && (
-        <Alert
-          message={addNewPotResult.data.message}
-          success={addNewPotResult.data.success}
-        />
+      actionsResults.map(
+        (result) =>
+          result?.data && (
+            <Alert
+              message={result.data.message}
+              success={result.data.success}
+            />
+          ),
       )
     }
     {
-      potsData && potsData.length > 0 && (
-        <ul>
-          {potsData.map((pot) => (
-            <PotsDetailCard pot={pot} />
-          ))}
-        </ul>
-      )
+      potsData &&
+        potsData.length > 0 &&
+        colorOptions &&
+        colorOptions.length > 0 && (
+          <ul>
+            {potsData.map((pot) => (
+              <>
+                <PotsDetailCard pot={pot} />
+                <EditPot colorOptions={colorOptions} currentPot={pot} />
+              </>
+            ))}
+          </ul>
+        )
     }
   </section>
 </DefaultLayout>

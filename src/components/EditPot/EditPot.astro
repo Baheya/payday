@@ -1,0 +1,62 @@
+---
+import type PotsDetailCard from "#components/PotsDetailCard/PotsDetailCard.astro";
+import type SelectOnlyCombobox from "#components/SelectOnlyCombobox/SelectOnlyCombobox.astro";
+import type { ComponentProps } from "astro/types";
+
+import Button from "#components/Button/Button.astro";
+import DialogModal from "#components/Dialog/DialogModal.astro";
+import Form from "#components/Form/Form.astro";
+import Input from "#components/Input/Input.astro";
+import Select from "#components/Select/Select.astro";
+import { actions } from "astro:actions";
+
+interface Props {
+  colorOptions: ComponentProps<typeof SelectOnlyCombobox>["options"];
+  currentPot: ComponentProps<typeof PotsDetailCard>["pot"];
+}
+
+const { colorOptions, currentPot } = Astro.props;
+---
+
+<DialogModal
+  description="If your saving targets change, feel free to update your pots."
+  id={`edit-pot-${currentPot.id}`}
+  title="Edit Pot"
+>
+  <Form
+    action={actions.pots.editPot}
+    data-edit-pot-form
+    enctype="multipart/form-data"
+    method="POST"
+  >
+    <input id="pot_id" name="id" type="hidden" value={currentPot.id} />
+    <Input
+      autocomplete="off"
+      id="pot_name_edit"
+      label="Name"
+      name="name"
+      value={currentPot.name}
+    />
+    <Input
+      autocomplete="off"
+      id="pot_target_edit"
+      label="Target"
+      name="target"
+      prefix="$"
+      value={currentPot.target}
+    />
+    {
+      colorOptions && colorOptions.length > 0 && (
+        <Select
+          currentlySelected={currentPot.colors.label}
+          formControlId="theme_id_edit"
+          id="pot_theme_edit"
+          label="Theme"
+          name="theme_id"
+          options={colorOptions}
+        />
+      )
+    }
+    <Button>Save Changes</Button>
+  </Form>
+</DialogModal>

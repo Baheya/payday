@@ -64,4 +64,49 @@ export const pots = {
       }
     },
   }),
+  editPot: defineAction({
+    input: z.object({
+      name: z.string().optional(),
+      theme_id: z.coerce.number().optional(),
+      target: z.coerce.number().optional(),
+      id: z.coerce.number(),
+    }),
+    accept: "form",
+    handler: async (input, { request, cookies }) => {
+      try {
+        const supabase = createSbClient({ request, cookies });
+        const { data: userData, error: userError } =
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          await supabase.auth.getUser();
+        if (userError) {
+          throw new ActionError({
+            code: "UNAUTHORIZED",
+            message: "User must be logged in.",
+            stack: userError.stack,
+          });
+        }
+        const inputWithUserId = { ...input, user_id: userData.user?.id };
+
+        const { data, error } = await supabase
+          .from("pots")
+          .update([inputWithUserId])
+          .eq("id", inputWithUserId.id)
+          .select("name");
+        if (error) {
+          return {
+            success: false,
+            message: `Something went wrong! Error: ${error.message}`,
+          };
+        }
+
+        return {
+          success: true,
+          message: `The budget for ${data[0].name} has been updated.`,
+        };
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  }),
 };
