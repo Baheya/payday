@@ -2,10 +2,10 @@
 import type { actions } from "astro:actions";
 import type { ActionReturnType } from "astro:actions";
 
-import Button from "#components/Button/Button.astro";
+import DialogButton from "#components/Dialog/DialogButton.astro";
+import Graph from "#components/Graph/Graph.astro";
 import Heading from "#components/Heading/Heading.astro";
 import Menu from "#components/Menu/Menu.astro";
-import { setCurrency } from "#lib/utils.ts";
 
 import style from "./style.module.css";
 
@@ -17,7 +17,7 @@ interface Props {
 
 const { pot } = Astro.props;
 
-const amountSaved = ((pot.total / pot.target) * 100).toFixed(2);
+const amountSaved = ((pot.saved / pot.target) * 100).toFixed(2);
 
 const styleAttribute = pot.colors.value && {
   style: {
@@ -42,21 +42,13 @@ const styleAttribute = pot.colors.value && {
       ]}
     />
   </div>
-  <div class={style.details}>
-    <div class={style.labels}>
-      <p class:list={[style.label, style.small]}>Total Saved</p>
-      <p class={style.amount}>{setCurrency(pot.total)}</p>
-    </div>
-    <div class={style.graph}><div class={style.inner}></div></div>
-    <div class={style.labels}>
-      <p class:list={[style.percentage, style.xsmall]}>{amountSaved}%</p>
-      <p class:list={[style.label, style.xsmall]}>
-        Target of {setCurrency(pot.target)}
-      </p>
-    </div>
-  </div>
+  <Graph saved={pot.saved} target={pot.target} theme={pot.colors.value} />
   <div class={style.buttons}>
-    <Button variant="secondary">+ Add Money</Button>
-    <Button variant="secondary">Withdraw</Button>
+    <DialogButton modalId={`add-to-pot-${pot.id}`} variant="secondary"
+      >+ Add Money</DialogButton
+    >
+    <DialogButton modalId={`withdraw-from-pot-${pot.id}`} variant="secondary"
+      >Withdraw</DialogButton
+    >
   </div>
 </li>

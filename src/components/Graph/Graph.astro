@@ -1,0 +1,61 @@
+---
+import { setCurrency } from "#lib/utils.ts";
+
+import style from "./style.module.css";
+
+interface Props {
+  saved: number;
+  target: number;
+  theme: string;
+  newAmount?: boolean;
+}
+
+const { saved, target, theme, newAmount = false } = Astro.props;
+
+const defaultAmount = 10;
+const amountSaved = ((saved / target) * 100).toFixed(2);
+const newAmountSaved =
+  newAmount && (((defaultAmount + saved) / target) * 100).toFixed(2);
+const newAmountIncrease =
+  newAmount && ((defaultAmount / target) * 100).toFixed(2);
+
+const styleAttribute = {
+  style: {
+    "--theme": `var(--${theme})`,
+    "--saved": `${amountSaved}%`,
+    "--increase": `${newAmountIncrease}%`,
+  },
+};
+---
+
+<div
+  class={style.details}
+  {...styleAttribute}
+  data-pots-graph
+  data-saved-amount={saved}
+  data-target-amount={target}
+>
+  <div class={style.labels}>
+    <p class:list={[style.label, style.small]}>
+      {newAmount ? "New Amount" : "Total Saved"}
+    </p>
+    <p class={style.amount} data-new-amount-currency-output>
+      {setCurrency(newAmount ? saved + defaultAmount : saved)}
+    </p>
+  </div>
+  <div class={style.graph}>
+    <div class={style.inner}></div>
+    {newAmount && <div class={style.increase} />}
+  </div>
+  <div class={style.labels}>
+    <p
+      class:list={[style.percentage, style.xsmall, newAmount && style.green]}
+      data-new-amount-percent-increase-output
+    >
+      {newAmount ? newAmountSaved : amountSaved}%
+    </p>
+    <p class:list={[style.label, style.xsmall]}>
+      Target of {setCurrency(target)}
+    </p>
+  </div>
+</div>
