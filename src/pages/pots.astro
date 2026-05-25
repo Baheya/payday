@@ -1,6 +1,7 @@
 ---
 import AddNewPot from "#components/AddNewPot/AddNewPot.astro";
 import Alert from "#components/Alert/Alert.astro";
+import DeletePot from "#components/DeletePot/DeletePot.astro";
 import EditPot from "#components/EditPot/EditPot.astro";
 import Heading from "#components/Heading/Heading.astro";
 import PotsDetailCard from "#components/PotsDetailCard/PotsDetailCard.astro";
@@ -40,6 +41,7 @@ const colorOptions = colorsData?.map((color) => ({
 const actionsResults = [
   Astro.getActionResult(actions.pots.addNewPot),
   Astro.getActionResult(actions.pots.editPot),
+  Astro.getActionResult(actions.pots.deletePot),
 ];
 ---
 
@@ -74,6 +76,7 @@ const actionsResults = [
               <>
                 <PotsDetailCard pot={pot} />
                 <EditPot colorOptions={colorOptions} currentPot={pot} />
+                <DeletePot currentPot={pot} />
               </>
             ))}
           </ul>
