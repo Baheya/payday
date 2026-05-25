@@ -1,0 +1,62 @@
+.label {
+  color: var(--grey-500);
+}
+
+.small {
+  @mixin text-sm;
+}
+
+.xsmall {
+  @mixin text-xs;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--spacing-200);
+}
+
+.labels {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.graph {
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  height: var(--spacing-100);
+  border-radius: var(--spacing-50);
+
+  background-color: var(--beige-100);
+}
+
+.inner {
+  width: var(--saved);
+  height: 100%;
+  border-radius: inherit;
+  background-color: var(--theme);
+}
+
+form .inner {
+  border-radius: var(--spacing-50) 0 0 var(--spacing-50);
+}
+
+.increase {
+  width: var(--increase);
+  height: 100%;
+  border-radius: 0 var(--spacing-50) var(--spacing-50) 0;
+  background-color: var(--green);
+}
+
+.percentage {
+  font-weight: 700;
+}
+
+.amount {
+  @mixin text-xl;
+
+  font-weight: 700;
+}

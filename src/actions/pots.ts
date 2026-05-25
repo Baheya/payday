@@ -25,7 +25,7 @@ export const pots = {
       name: z.string(),
       theme_id: z.coerce.number(),
       target: z.coerce.number(),
-      total: z.coerce.number(),
+      saved: z.coerce.number(),
     }),
     accept: "form",
     handler: async (input, { request, cookies }) => {
@@ -102,7 +102,7 @@ export const pots = {
 
         return {
           success: true,
-          message: `The budget for ${data[0].name} has been updated.`,
+          message: `The Pot for ${data[0].name} has been updated.`,
         };
       } catch (error) {
         console.error(error);
@@ -144,7 +144,56 @@ export const pots = {
 
         return {
           success: true,
-          message: `The budget for ${data[0].name} has been deleted.`,
+          message: `The Pot for ${data[0].name} has been deleted.`,
+        };
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  }),
+  addToPot: defineAction({
+    input: z.object({
+      amount_to_add: z.coerce.number(),
+      id: z.coerce.number(),
+      current_savings: z.coerce.number(),
+    }),
+    accept: "form",
+    handler: async (input, { request, cookies }) => {
+      try {
+        const supabase = createSbClient({ request, cookies });
+        const { data: userData, error: userError } =
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          await supabase.auth.getUser();
+        if (userError) {
+          throw new ActionError({
+            code: "UNAUTHORIZED",
+            message: "User must be logged in.",
+            stack: userError.stack,
+          });
+        }
+        const totalAmountSaved = input.amount_to_add + input.current_savings;
+        const inputWithUserId = {
+          saved: totalAmountSaved,
+          id: input.id,
+          user_id: userData.user?.id,
+        };
+
+        const { data, error } = await supabase
+          .from("pots")
+          .update([inputWithUserId])
+          .eq("id", inputWithUserId.id)
+          .select("name");
+        if (error) {
+          return {
+            success: false,
+            message: `Something went wrong! Error: ${error.message}`,
+          };
+        }
+
+        return {
+          success: true,
+          message: `The saved amount in Pot ${data[0].name} has been updated.`,
         };
       } catch (error) {
         console.error(error);

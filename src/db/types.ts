@@ -144,25 +144,25 @@ export type Database = {
         Row: {
           id: number;
           name: string;
+          saved: number;
           target: number;
           theme_id: number;
-          total: number;
           user_id: string;
         };
         Insert: {
           id?: number;
           name: string;
+          saved?: number;
           target: number;
           theme_id: number;
-          total?: number;
           user_id?: string;
         };
         Update: {
           id?: number;
           name?: string;
+          saved?: number;
           target?: number;
           theme_id?: number;
-          total?: number;
           user_id?: string;
         };
         Relationships: [
