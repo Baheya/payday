@@ -1,11 +1,11 @@
 ---
 import AddNewPot from "#components/AddNewPot/AddNewPot.astro";
-import AddToPot from "#components/AddToPot/AddToPot.astro";
 import Alert from "#components/Alert/Alert.astro";
 import DeletePot from "#components/DeletePot/DeletePot.astro";
 import EditPot from "#components/EditPot/EditPot.astro";
 import Heading from "#components/Heading/Heading.astro";
 import PotsDetailCard from "#components/PotsDetailCard/PotsDetailCard.astro";
+import PotTransaction from "#components/PotTransaction/PotTransaction.astro";
 import DefaultLayout from "#layouts/DefaultLayout.astro";
 import { createSbClient } from "#lib/supabase.ts";
 import { actions } from "astro:actions";
@@ -44,6 +44,7 @@ const actionsResults = [
   Astro.getActionResult(actions.pots.editPot),
   Astro.getActionResult(actions.pots.deletePot),
   Astro.getActionResult(actions.pots.addToPot),
+  Astro.getActionResult(actions.pots.withdrawFromPot),
 ];
 ---
 
@@ -79,7 +80,8 @@ const actionsResults = [
                 <PotsDetailCard pot={pot} />
                 <EditPot colorOptions={colorOptions} currentPot={pot} />
                 <DeletePot currentPot={pot} />
-                <AddToPot currentPot={pot} />
+                <PotTransaction currentPot={pot} transaction="add" />
+                <PotTransaction currentPot={pot} transaction="withdraw" />
               </>
             ))}
           </ul>

@@ -1,0 +1,138 @@
+---
+import type PotsDetailCard from "#components/PotsDetailCard/PotsDetailCard.astro";
+import type { ComponentProps } from "astro/types";
+
+import Button from "#components/Button/Button.astro";
+import DialogModal from "#components/Dialog/DialogModal.astro";
+import Form from "#components/Form/Form.astro";
+import Graph from "#components/Graph/Graph.astro";
+import Input from "#components/Input/Input.astro";
+import { actions } from "astro:actions";
+
+interface Props {
+  currentPot: ComponentProps<typeof PotsDetailCard>["pot"];
+  transaction: "add" | "withdraw";
+}
+
+const { currentPot, transaction = "add" } = Astro.props;
+
+const isAdding = transaction === "add";
+const id = isAdding
+  ? `add-to-pot-${currentPot.id}`
+  : `withdraw-from-pot-${currentPot.id}`;
+const title = isAdding
+  ? `Add to ${currentPot.name}`
+  : `Withdraw from ${currentPot.name}`;
+const action = isAdding ? actions.pots.addToPot : actions.pots.withdrawFromPot;
+---
+
+<DialogModal
+  description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus  hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque, aliquet."
+  id={id}
+  title={title}
+>
+  <Form
+    action={action}
+    data-pot-transaction-form
+    enctype="multipart/form-data"
+    method="POST"
+  >
+    <input id="pot_id" name="id" type="hidden" value={currentPot.id} />
+    <input
+      id="current_savings"
+      name="current_savings"
+      type="hidden"
+      value={currentPot.saved}
+    />
+    <Graph
+      saved={currentPot.saved}
+      target={currentPot.target}
+      theme={currentPot.colors.value}
+      type={isAdding ? "increase" : "decrease"}
+    />
+    {
+      isAdding ? (
+        <Input
+          autocomplete="off"
+          id="pot_amount_to_add"
+          label="Amount to Add"
+          name="amount_to_add"
+          prefix="$"
+          value="10"
+        />
+      ) : (
+        <Input
+          autocomplete="off"
+          id="pot_amount_to_withdraw"
+          label="Amount to Withdraw"
+          name="amount_to_withdraw"
+          prefix="$"
+          value="10"
+        />
+      )
+    }
+    <Button>Confirm Addition</Button>
+  </Form>
+</DialogModal>
+
+<script>
+  import { calculatePercentage, setCurrency } from "#lib/utils.ts";
+
+  document
+    .querySelectorAll<HTMLFormElement>("[data-pot-transaction-form]")
+    .forEach((form) => {
+      const newAmountInput =
+        form.querySelector<HTMLInputElement>('input[type="text"]');
+      const potsGraph = form.querySelector<HTMLDivElement>("[data-pots-graph]");
+      const newAmountCurrencyTextNode =
+        form.querySelector<HTMLParagraphElement>(
+          "p[data-new-amount-currency-output]",
+        );
+      const updatedSavingsPercentageTextNode =
+        form.querySelector<HTMLParagraphElement>(
+          "p[data-updated-savings-percentage-output]",
+        );
+      const targetAmountValue = potsGraph?.getAttribute("data-target-amount");
+      const currentlySavedAmountValue =
+        potsGraph?.getAttribute("data-saved-amount");
+
+      newAmountInput?.addEventListener("input", (e) => {
+        if (
+          currentlySavedAmountValue &&
+          targetAmountValue &&
+          updatedSavingsPercentageTextNode &&
+          newAmountCurrencyTextNode &&
+          e.target &&
+          e.target instanceof HTMLInputElement
+        ) {
+          const newAmountInputValue = parseInt(e.target.value) || 0;
+          const increasedSavings =
+            newAmountInputValue + parseInt(currentlySavedAmountValue);
+          const decreasedSavings =
+            parseInt(currentlySavedAmountValue) - newAmountInputValue;
+          const updatedSavingsPercentage = calculatePercentage(
+            newAmountInput.name === "amount_to_add"
+              ? increasedSavings
+              : decreasedSavings,
+            parseInt(targetAmountValue),
+          );
+          const graphIncreasePercentage = calculatePercentage(
+            newAmountInputValue,
+            parseInt(targetAmountValue),
+          );
+          const newAmountCurrency = setCurrency(
+            newAmountInput.name === "amount_to_add"
+              ? increasedSavings
+              : decreasedSavings,
+          );
+
+          updatedSavingsPercentageTextNode.textContent = `${updatedSavingsPercentage}%`;
+          newAmountCurrencyTextNode.textContent = newAmountCurrency;
+          potsGraph?.style.setProperty(
+            "--increase",
+            `${graphIncreasePercentage}%`,
+          );
+        }
+      });
+    });
+</script>

@@ -49,3 +49,6 @@ export const debounce = <F extends (...args: Parameters<F>) => ReturnType<F>>(
     timeout = setTimeout(() => func(...args), delay);
   };
 };
+
+export const calculatePercentage = (part: number, whole: number) =>
+  ((part / whole) * 100).toFixed(2);

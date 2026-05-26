@@ -1,5 +1,5 @@
 ---
-import { setCurrency } from "#lib/utils.ts";
+import { calculatePercentage, setCurrency } from "#lib/utils.ts";
 
 import style from "./style.module.css";
 
@@ -7,23 +7,26 @@ interface Props {
   saved: number;
   target: number;
   theme: string;
-  newAmount?: boolean;
+  type?: "increase" | "decrease";
 }
 
-const { saved, target, theme, newAmount = false } = Astro.props;
+const { saved, target, theme, type } = Astro.props;
 
 const defaultAmount = 10;
-const amountSaved = ((saved / target) * 100).toFixed(2);
-const newAmountSaved =
-  newAmount && (((defaultAmount + saved) / target) * 100).toFixed(2);
-const newAmountIncrease =
-  newAmount && ((defaultAmount / target) * 100).toFixed(2);
+const increasedSavings = saved + defaultAmount;
+const decreasedSavings = saved - defaultAmount;
+const currentAmountSavedPercentage = calculatePercentage(saved, target);
+const newAmountSavedPercentage =
+  type === "increase"
+    ? calculatePercentage(increasedSavings, target)
+    : calculatePercentage(decreasedSavings, target);
+const newAmountIncreasePercentage = calculatePercentage(defaultAmount, target);
 
 const styleAttribute = {
   style: {
     "--theme": `var(--${theme})`,
-    "--saved": `${amountSaved}%`,
-    "--increase": `${newAmountIncrease}%`,
+    "--saved": `${currentAmountSavedPercentage}%`,
+    ...(type && { "--increase": `${newAmountIncreasePercentage}%` }),
   },
 };
 ---
@@ -37,22 +40,40 @@ const styleAttribute = {
 >
   <div class={style.labels}>
     <p class:list={[style.label, style.small]}>
-      {newAmount ? "New Amount" : "Total Saved"}
+      {type === "increase" ? "New Amount" : "Total Saved"}
     </p>
     <p class={style.amount} data-new-amount-currency-output>
-      {setCurrency(newAmount ? saved + defaultAmount : saved)}
+      {
+        setCurrency(
+          type === "increase"
+            ? saved + defaultAmount
+            : type === "decrease"
+              ? saved - defaultAmount
+              : saved,
+        )
+      }
     </p>
   </div>
   <div class={style.graph}>
     <div class={style.inner}></div>
-    {newAmount && <div class={style.increase} />}
+    {
+      type === "increase" ? (
+        <div class={style.increase} />
+      ) : (
+        type === "decrease" && <div class={style.decrease} />
+      )
+    }
   </div>
   <div class={style.labels}>
     <p
-      class:list={[style.percentage, style.xsmall, newAmount && style.green]}
-      data-new-amount-percent-increase-output
+      class:list={[
+        style.percentage,
+        style.xsmall,
+        type === "increase" ? style.green : type === "decrease" && style.red,
+      ]}
+      data-updated-savings-percentage-output
     >
-      {newAmount ? newAmountSaved : amountSaved}%
+      {type ? newAmountSavedPercentage : currentAmountSavedPercentage}%
     </p>
     <p class:list={[style.label, style.xsmall]}>
       Target of {setCurrency(target)}

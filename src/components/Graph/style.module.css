@@ -23,7 +23,9 @@
 }
 
 .graph {
+  overflow: hidden;
   display: flex;
+  column-gap: 1px;
   align-items: center;
 
   width: 100%;
@@ -51,6 +53,13 @@ form .inner {
   background-color: var(--green);
 }
 
+.decrease {
+  width: var(--increase);
+  height: 100%;
+  border-radius: 0 var(--spacing-50) var(--spacing-50) 0;
+  background-color: var(--red);
+}
+
 .percentage {
   font-weight: 700;
 }
@@ -59,4 +68,12 @@ form .inner {
   @mixin text-xl;
 
   font-weight: 700;
+}
+
+.green {
+  color: var(--green);
+}
+
+.red {
+  color: var(--red);
 }
