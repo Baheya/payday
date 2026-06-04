@@ -1,6 +1,5 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "ignoreDeprecations": "6.0",
   "include": [
     ".astro/types.d.ts",
     ".astro/actions.d.ts",
@@ -12,6 +11,7 @@
   ],
   "exclude": ["dist"],
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "skipLibCheck": true,

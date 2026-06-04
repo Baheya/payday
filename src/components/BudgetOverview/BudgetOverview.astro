@@ -25,15 +25,12 @@ const expensesTotalSpend = expenses?.reduce(
 );
 
 const generatedGradientStops = expenses?.reduce((acc, expense) => {
-  let gradientStart;
-
   const budgetColor = expense.colors.value;
   const gradientEnd =
     (Math.abs(expense.totalSpent || 0) / expensesTotalSpend) * 100;
   const gradient =
     acc +
-    `${!acc ? "" : ", "}var(--${budgetColor}) ${gradientStart || 0}% ${gradientEnd.toFixed(0)}%`;
-  gradientStart = gradientEnd;
+    `${!acc ? "" : ", "}var(--${budgetColor}) 0% ${gradientEnd.toFixed(0)}%`;
   return gradient;
 }, "");
 
