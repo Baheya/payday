@@ -54,6 +54,26 @@ export const transactions = {
       }
     },
   }),
+  getRecurringBills: defineAction({
+    handler: async (__, { request, cookies }) => {
+      try {
+        const supabase = createSbClient({ request, cookies });
+
+        const { data, error } = await supabase
+          .from("transactions")
+          .select("*")
+          .eq("recurring", true);
+
+        if (error) {
+          throw error;
+        }
+        return data;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    },
+  }),
 };
 
 export type GetTransactions = ActionReturnType<

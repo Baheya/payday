@@ -1,0 +1,56 @@
+---
+import type { ActionReturnType } from "astro:actions";
+import type { actions } from "astro:actions";
+
+import { Image } from "@unpic/astro";
+import { setCurrency, transformDate } from "#lib/utils.ts";
+
+import style from "./style.module.css";
+
+interface Props {
+  recurringBills: NonNullable<
+    ActionReturnType<typeof actions.transactions.getRecurringBills>["data"]
+  >;
+}
+
+const { recurringBills } = Astro.props;
+---
+
+<div class={style.container}>
+  <ul class={style.list}>
+    <li class:list={[style.item, style.labels]}>
+      <p class={style.label}>Name</p><p class={style.label}>Due Date</p><p
+        class:list={[style.label, style.amount]}
+      >
+        Amount
+      </p>
+    </li>
+    {
+      recurringBills.map((bill) => (
+        <li class={style.item}>
+          <div class={style.header}>
+            <Image
+              alt=""
+              class={style.image}
+              height={40}
+              layout="fixed"
+              src={bill.avatar}
+              width={40}
+            />
+            <p class={style.text}>{bill.name}</p>
+          </div>
+          <p class={style.date}>{transformDate(bill.date)}</p>
+          <p
+            class:list={[
+              style.text,
+              Math.sign(bill.amount) === -1 && style.red,
+              style.amount,
+            ]}
+          >
+            {setCurrency(Math.abs(bill.amount))}
+          </p>
+        </li>
+      ))
+    }
+  </ul>
+</div>

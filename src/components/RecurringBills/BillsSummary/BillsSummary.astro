@@ -1,0 +1,30 @@
+---
+import style from "./style.module.css";
+---
+
+<li class={style.summary}>
+  <p class:list={[style.bold, style.text]}>Summary</p>
+  <ul class={style.list}>
+    <li class={style.item}>
+      <p class:list={[style.label, style.text]}>Paid Bills</p><p
+        class:list={[style.bold, style.text]}
+      >
+        4 ($190.00)
+      </p>
+    </li>
+    <li class={style.item}>
+      <p class:list={[style.label, style.text]}>Total Upcoming</p><p
+        class:list={[style.bold, style.text]}
+      >
+        4 ($190.00)
+      </p>
+    </li>
+    <li class={style.item}>
+      <p class:list={[style.label, style.red, style.text]}>Due Soon</p><p
+        class:list={[style.bold, style.text, style.red]}
+      >
+        4 ($190.00)
+      </p>
+    </li>
+  </ul>
+</li>
