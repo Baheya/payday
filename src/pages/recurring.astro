@@ -1,0 +1,58 @@
+---
+import Heading from "#components/Heading/Heading.astro";
+import BillsList from "#components/RecurringBills/BillsList/BillsList.astro";
+import BillsSummary from "#components/RecurringBills/BillsSummary/BillsSummary.astro";
+import BillsTotal from "#components/RecurringBills/BillsTotal/BillsTotal.astro";
+import DefaultLayout from "#layouts/DefaultLayout.astro";
+import { actions } from "astro:actions";
+
+const { data: recurringBills, error } = await Astro.callAction(
+  actions.transactions.getRecurringBills,
+  {},
+);
+
+if (error) {
+  console.error(error);
+}
+---
+
+<DefaultLayout title="Recurring Bills">
+  <section>
+    <Heading as="h1" size="xl">Recurring Bills</Heading>
+    <ul>
+      <BillsTotal />
+      <BillsSummary />
+      {
+        recurringBills && recurringBills.length > 0 && (
+          <BillsList recurringBills={recurringBills} />
+        )
+      }
+    </ul>
+  </section>
+</DefaultLayout>
+
+<style>
+  section {
+    margin-block-start: var(--spacing-400);
+  }
+
+  ul {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    gap: var(--spacing-300);
+    margin-block-start: var(--spacing-400);
+
+    @media (--md-viewport) {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    @media (--lg-viewport) {
+      grid-template-columns: 1fr 2fr;
+      grid-template-rows: auto 1fr;
+      align-items: flex-start;
+    }
+  }
+</style>

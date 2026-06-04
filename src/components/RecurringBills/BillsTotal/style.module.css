@@ -1,0 +1,28 @@
+.total {
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--spacing-400);
+
+  padding: var(--spacing-300);
+  border-radius: var(--spacing-150);
+
+  color: var(--white);
+
+  background-color: var(--grey-900);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--spacing-150);
+}
+
+.small {
+  @mixin text-sm;
+}
+
+.emphasis {
+  @mixin text-xl;
+
+  font-weight: 700;
+}

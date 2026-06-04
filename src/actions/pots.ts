@@ -4,7 +4,7 @@ import { z } from "astro:content";
 
 export const pots = {
   getAllPots: defineAction({
-    handler: async (__dirname, { request, cookies }) => {
+    handler: async (__, { request, cookies }) => {
       try {
         const supabase = createSbClient({ request, cookies });
 
