@@ -181,7 +181,6 @@ export class Menu extends HTMLElement {
 
   onFocusin() {
     this.classList.add("focus");
-    console.log(document.activeElement);
   }
 
   onFocusout() {
@@ -191,6 +190,7 @@ export class Menu extends HTMLElement {
   onButtonKeydown(event: KeyboardEvent) {
     const key = event.key;
     let flag = false;
+    console.log(event.key);
 
     switch (key) {
       case " ":
