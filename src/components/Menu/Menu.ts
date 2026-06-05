@@ -181,6 +181,7 @@ export class Menu extends HTMLElement {
 
   onFocusin() {
     this.classList.add("focus");
+    console.log(document.activeElement);
   }
 
   onFocusout() {
@@ -196,11 +197,9 @@ export class Menu extends HTMLElement {
       case "Enter":
       case "ArrowDown":
       case "Down":
-        console.log(document.activeElement);
         this.openPopup();
         this.setFocusToFirstMenuitem();
         flag = true;
-        console.log(document.activeElement);
         break;
 
       case "Esc":
