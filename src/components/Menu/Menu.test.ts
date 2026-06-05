@@ -13,11 +13,11 @@ describe("Menu component", () => {
       const menuitems = screen.getByRole("menuitem");
       const menu = screen.getByRole("menu");
 
-      await userEvent.keyboard("{Tab}{/Tab}");
+      await userEvent.keyboard("{Tab}");
       menuButton.element().focus();
       await expect.element(menuButton).toHaveFocus();
       await expect.element(menuButton).toHaveAttribute("aria-haspopup", "true");
-      await userEvent.keyboard("{Enter}{/Enter}");
+      await userEvent.keyboard("{Enter}");
       await expect.element(menu).toHaveAttribute("data-menu-open", "true");
       await expect.element(menuitems.first()).toHaveFocus();
       await expect.element(menuitems.last()).not.toHaveFocus();
