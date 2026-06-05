@@ -156,20 +156,13 @@ export class Menu extends HTMLElement {
     if (this.menuNode instanceof HTMLElement) {
       this.menuNode?.setAttribute("data-menu-open", "true");
       this.buttonNode?.setAttribute("aria-expanded", "true");
-      // this.menuNode?.focus();
-      // this.setFocusToFirstMenuitem();
     }
   }
 
   closePopup() {
     if (this.isOpen()) {
       this.buttonNode?.setAttribute("aria-expanded", "false");
-      // this.menuNode?.setAttribute("aria-activedescendant", "");
-      // for (let i = 0; i < this.menuitemNodes.length; i++) {
-      //   this.menuitemNodes[i].removeAttribute("data-menuitem-focus");
-      // }
       this.menuNode?.setAttribute("data-menu-open", "false");
-      // this.buttonNode?.focus();
     }
   }
 
@@ -190,7 +183,6 @@ export class Menu extends HTMLElement {
   onButtonKeydown(event: KeyboardEvent) {
     const key = event.key;
     let flag = false;
-    console.log(event.key);
 
     switch (key) {
       case " ":
