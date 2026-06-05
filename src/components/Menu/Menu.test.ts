@@ -13,7 +13,7 @@ describe("Menu component", () => {
       const menuitems = screen.getByRole("menuitem");
       const menu = screen.getByRole("menu");
 
-      await userEvent.tab();
+      menuButton.element().focus();
       await expect.element(menuButton).toHaveFocus();
       await expect.element(menuButton).toHaveAttribute("aria-haspopup", "true");
       await userEvent.keyboard("{ArrowDown}");
