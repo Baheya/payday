@@ -183,7 +183,6 @@ export class Menu extends HTMLElement {
   onButtonKeydown(event: KeyboardEvent) {
     const key = event.key;
     let flag = false;
-    console.log(key);
 
     switch (key) {
       case " ":
