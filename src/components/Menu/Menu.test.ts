@@ -14,9 +14,13 @@ describe("Menu component", () => {
       const menu = screen.getByRole("menu");
 
       menuButton.element().focus();
+      console.log("active element: ");
+      console.log(document.activeElement);
       await expect.element(menuButton).toHaveFocus();
       await expect.element(menuButton).toHaveAttribute("aria-haspopup", "true");
       await userEvent.keyboard("{Enter}{/Enter}");
+      console.log("active element: ");
+      console.log(document.activeElement);
       await expect.element(menu).toHaveAttribute("data-menu-open", "true");
       await expect.element(menuitems.first()).toHaveFocus();
       await expect.element(menuitems.last()).not.toHaveFocus();
@@ -27,11 +31,7 @@ describe("Menu component", () => {
         .element(menuButton)
         .toHaveAttribute("aria-expanded", "false");
 
-      console.log("active element: ");
-      console.log(document.activeElement);
       await userEvent.keyboard("{ArrowDown}{/ArrowDown}");
-      console.log("active element: ");
-      console.log(document.activeElement);
       await expect.element(menuitems.first()).toHaveFocus();
       await expect.element(menuitems.last()).not.toHaveFocus();
       await expect.element(menu).toHaveAttribute("data-menu-open", "true");
