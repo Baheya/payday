@@ -16,10 +16,10 @@ describe("Menu component", () => {
       await userEvent.tab();
       await expect.element(menuButton).toHaveFocus();
       await userEvent.keyboard("{ArrowDown}");
-      await expect.element(menu).toHaveAttribute("data-menu-open", "true");
-      await expect.element(menuButton).toHaveAttribute("aria-expanded", "true");
       await expect.element(menuitems.first()).toHaveFocus();
       await expect.element(menuitems.last()).not.toHaveFocus();
+      await expect.element(menu).toHaveAttribute("data-menu-open", "true");
+      await expect.element(menuButton).toHaveAttribute("aria-expanded", "true");
 
       await userEvent.keyboard("{Escape}{/Escape}");
       await expect.element(menu).toHaveAttribute("data-menu-open", "false");
