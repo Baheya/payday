@@ -16,11 +16,9 @@ describe("Menu component", () => {
       menuButton.element().focus();
       await expect.element(menuButton).toHaveFocus();
       await expect.element(menuButton).toHaveAttribute("aria-haspopup", "true");
-      await userEvent.keyboard("{ArrowDown}{/ArrowDown}");
-      await expect.element(menuitems.first()).toHaveFocus();
-      await expect.element(menuitems.last()).not.toHaveFocus();
+      await userEvent.keyboard("{Space}{/Space}");
       await expect.element(menu).toHaveAttribute("data-menu-open", "true");
-      await expect.element(menuButton).toHaveAttribute("aria-expanded", "true");
+      await expect.element(menuitems.first()).toHaveFocus();
 
       await userEvent.keyboard("{Escape}{/Escape}");
       await expect.element(menu).toHaveAttribute("data-menu-open", "false");
@@ -28,9 +26,15 @@ describe("Menu component", () => {
         .element(menuButton)
         .toHaveAttribute("aria-expanded", "false");
 
-      await userEvent.keyboard("{Space}{/Space}");
-      await expect.element(menu).toHaveAttribute("data-menu-open", "true");
+      console.log("active element: ");
+      console.log(document.activeElement);
+      await userEvent.keyboard("{ArrowDown}{/ArrowDown}");
+      console.log("active element: ");
+      console.log(document.activeElement);
       await expect.element(menuitems.first()).toHaveFocus();
+      await expect.element(menuitems.last()).not.toHaveFocus();
+      await expect.element(menu).toHaveAttribute("data-menu-open", "true");
+      await expect.element(menuButton).toHaveAttribute("aria-expanded", "true");
 
       await userEvent.keyboard("{Escape}{/Escape}");
 
