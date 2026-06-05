@@ -11,5 +11,7 @@ export default getViteConfig({
       headless: true,
       instances: [{ browser: "chromium" }],
     },
+    isolate: true,
+    fileParallelism: true,
   },
 });
