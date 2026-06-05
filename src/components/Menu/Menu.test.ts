@@ -15,6 +15,7 @@ describe("Menu component", () => {
 
       await userEvent.tab();
       await expect.element(menuButton).toHaveFocus();
+      await expect.element(menuButton).toHaveAttribute("aria-haspopup", "true");
       await userEvent.keyboard("{ArrowDown}");
       await expect.element(menuitems.first()).toHaveFocus();
       await expect.element(menuitems.last()).not.toHaveFocus();

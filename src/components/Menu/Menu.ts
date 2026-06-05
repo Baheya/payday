@@ -11,7 +11,7 @@ export class Menu extends HTMLElement {
   constructor() {
     super();
 
-    this.buttonNode = this.querySelector("button");
+    this.buttonNode = this.querySelector<HTMLButtonElement>("[aria-haspopup]");
     this.menuNode = this.querySelector('[role="menu"]');
     this.currentMenuitem = null;
     this.menuitemNodes = [];
@@ -196,9 +196,11 @@ export class Menu extends HTMLElement {
       case "Enter":
       case "ArrowDown":
       case "Down":
+        console.log(document.activeElement);
         this.openPopup();
         this.setFocusToFirstMenuitem();
         flag = true;
+        console.log(document.activeElement);
         break;
 
       case "Esc":
