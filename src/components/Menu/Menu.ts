@@ -11,7 +11,7 @@ export class Menu extends HTMLElement {
   constructor() {
     super();
 
-    this.buttonNode = this.querySelector("button");
+    this.buttonNode = this.querySelector<HTMLButtonElement>("[aria-haspopup]");
     this.menuNode = this.querySelector('[role="menu"]');
     this.currentMenuitem = null;
     this.menuitemNodes = [];
@@ -156,20 +156,13 @@ export class Menu extends HTMLElement {
     if (this.menuNode instanceof HTMLElement) {
       this.menuNode?.setAttribute("data-menu-open", "true");
       this.buttonNode?.setAttribute("aria-expanded", "true");
-      // this.menuNode?.focus();
-      // this.setFocusToFirstMenuitem();
     }
   }
 
   closePopup() {
     if (this.isOpen()) {
       this.buttonNode?.setAttribute("aria-expanded", "false");
-      // this.menuNode?.setAttribute("aria-activedescendant", "");
-      // for (let i = 0; i < this.menuitemNodes.length; i++) {
-      //   this.menuitemNodes[i].removeAttribute("data-menuitem-focus");
-      // }
       this.menuNode?.setAttribute("data-menu-open", "false");
-      // this.buttonNode?.focus();
     }
   }
 
