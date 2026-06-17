@@ -17,7 +17,7 @@
     "@astrojs/netlify": "^7.0.12",
     "@hcaptcha/vanilla-hcaptcha": "^1.1.4",
     "@unpic/astro": "^1.0.2",
-    "astro": "^6.4.4",
+    "astro": "^6.4.6",
     "minisearch": "^7.2.0"
   },
   "overrides": {
