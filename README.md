@@ -1,6 +1,6 @@
 # payday
 
-A personal project built to explore modern Astro patterns, native web platform APIs, and collaborative development workflows.
+A personal project built to explore modern Astro patterns, native web platform APIs, and collaborative development workflows. This is still a work in progress.
 
 ## What it is
 
